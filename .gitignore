@@ -1,0 +1,8 @@
+todo.md
+system/.custom
+config/.mutt/account
+config/.mutt/cache
+config/.mutt/*.asc
+config/.mutt/*.json
+config/htop
+bin/libshower/__pycache__

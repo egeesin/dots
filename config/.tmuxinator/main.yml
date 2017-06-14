@@ -1,0 +1,164 @@
+# ~/.tmuxinator/main.yml
+name: "ege-tmux"
+root: ~/
+
+# Optional tmux socket
+#socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# tmux_command: byobu
+
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
+
+# Runs after everything. Use it to attach to tmux with custom options etc.
+# post: tmux -CC attach -t main
+windows:
+#    - ' ': 
+#    - '  ': 
+#    - '  ':
+#    - ' start  ':
+#    - '  ': 
+#    - '  ': 
+#    - '   ': 
+#    - '⌘  ': 
+#    - '◈  ': 
+#    - '⬡  ': 
+#    - '  ':
+#    - '💻  ':
+#    - ' ⬢   ': 
+    - ' term': 
+        layout: even-horizontal
+        panes:
+            - 
+            - ranger
+#    - ' ':
+#    - '¹ ':
+#    - 'tools':
+#    - '🔧 tools':
+#    - 'Tools':
+    - ' tools':
+        layout: tiled
+        panes:
+            - figlet -f mini "E N G  t o  T U R"; trans en:tr -I
+            - figlet -f mini "C a l c u l a t o r"; bc -q
+            - figlet -f mini "T U R  t o  E N G"; trans tr:en -I
+            - 
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - '² ':
+#    - 'chat':
+#    - '💬 chat':
+#    - 'Chat':
+    - ' chat':
+        layout: even-horizontal
+        panes:
+            - weechat
+            # - slacker
+            #- discorder
+#    - ' ':
+#    - ' ':
+#    - '³ ':
+#    - 'reddit':
+#    - '🤖 reddit':
+#    - 'Reddit':
+    - ' rddt':
+        layout: even-horizontal
+        panes:
+            - rtv
+            - turses
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - '⁴ ':
+#    - 'vim':
+#    - '✏️ vim':
+#    - 'Vim':
+    - ' vim':
+        layout: main-horizontal
+        panes:
+            - nvim -c NERDTreeTabsOpen -p $HOME/.extra/doc/clinotes.md $HOME/.extra/doc/todo.md $HOME/.extra/doc/caplog.md 
+
+#    - '⁵ ':
+#    - 'games':
+#    - '🕹 games':
+#    - 'Games':
+    - ' game':
+        layout: 73e8,155x38,0,0{28x38,0,0,6,45x38,29,0,19,80x38,75,0,27}
+        panes:
+            - '2048'
+            - vitetris --nomenu || tetris --nomenu
+            - typespeed
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - '⁶ ':
+#    - 'today':
+#    - '🗓 today':
+#    - 'Today':
+    - ' today':
+        #layout: 53d3,155x37,0,0[155x15,0,0{77x15,0,0,5,77x15,78,0,17},155x22,0,16,18]
+        layout: tiled
+        panes:
+            - tty-clock -s -c -t -C 6
+            - calcurse
+              #- wego && moeda 1 usd try
+            - cowthink -f stegosaurus.cow $("$HOME/.dotfiles/bin/shower-thoughts") | lolcat
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - '⁷ ':
+#    - 'browser':
+#    - '🌐 browser':
+#    - 'Browse':
+    - ' www':
+        layout: 8a1d,155x37,0,0[155x24,0,0{52x24,0,0,25,102x24,53,0,27},155x12,0,25,26]
+        panes:
+            - w3m ~/.extra/backup/bookmark*.html 
+            - w3m https://start.duckduckgo.com
+            - stig
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - ' ':
+#    - '⁸ ':
+#    - 'news':
+#    - '📫 news':
+#    - 'News':
+    - ' news':
+        layout: 9b7d,155x37,0,0{90x37,0,0,8,64x37,91,0,22}
+        #layout: even-horizontal
+        panes:
+            - newsbeuter -u $DOTFILES_DIR/etc/feeds/all
+            - mutt
+#    - ' ': 
+#    - ' ':
+#    - ' ':
+#    - ' ': 
+#    - '⁹ ':
+#    - 'music':
+#    - '🎧 music':
+#    - 'Music':
+    - ' media': 
+        layout: main-horizontal
+        panes: 
+            - ncmpcpp
+            - vis || cava
+            - mpsyt
+startup_window: 6

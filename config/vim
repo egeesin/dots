@@ -1,0 +1,677 @@
+" vim: set ft=vim: 
+"       _                    
+"__   _(_)_ __ ___  _ __ ___ 
+"\ \ / / | '_ ` _ \| '__/ __|
+" \ V /| | | | | | | | | (__ 
+"(_)_/ |_|_| |_| |_|_|  \___|
+" 
+" Credits: https://dougblack.io/words/a-good-vimrc.html
+"          https://www.outcoldman.com/en/archive/2015/09/13/keep-your-sh-together/ 
+"          https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
+
+set nocompatible              " get rid of Vi compatibility mode. SET FIRST! 
+filetype off
+
+inoremap kj <esc>
+
+" Semi-colon is also colon.
+nnoremap ; :
+vnoremap ; :
+
+" Search history
+cnoremap <C-N> <Down>
+cnoremap <C-P> <Up>
+
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
+endif
+"
+" Load plugins
+call plug#begin('~/.local/share/nvim/site/plugged')
+"call plug#begin('~/.vim/plugged')
+Plug 'itchyny/lightline.vim'
+Plug 'edkolev/promptline.vim'
+Plug 'edkolev/tmuxline.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ryanoasis/vim-devicons'
+Plug 'sjl/gundo.vim'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'darfink/vim-plist'
+Plug 'rbgrouleff/bclose.vim'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'mattn/emmet-vim'
+Plug 'jamessan/vim-gnupg'
+Plug 'matze/vim-move'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-surround'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'junegunn/vim-easy-align'
+Plug 'vimwiki/vimwiki'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'PotatoesMaster/i3-vim-syntax'
+Plug 'will133/vim-dirdiff'
+" May not support neovim -> Plug 'junegunn/vim-github-dashboard'
+call plug#end()
+
+" General
+set shell=zsh
+set number relativenumber                   " show line numbers
+set numberwidth=5
+"autocmd InsertEnter * :set number
+"autocmd InsertLeave * :set relativenumber
+set backspace=indent,eol,start  "Allow backspace in insert mode
+set history=1000                "Store lots of :cmdline history
+if has("cmdline_info")
+	set ruler					" show the ruler
+	set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
+	set showcmd                     "Show incomplete cmds down the bottom
+endif
+set visualbell                  "No sounds
+set autoread                    "Reload files changed outside vim
+set laststatus=2			  " last window always has a statusline
+set hidden                      "Hide buffer instead of closing it
+set pastetoggle=<F2>            "Paste without being smart
+set mouse=a mousehide           "Enable mouse support / Hide mouse cursor while typing
+set ttyfast
+set tabpagemax=12
+" Instead of failing a command because of unsaved changes, instead raise a
+" dialogue asking if you wish to save changed files.
+set confirm
+
+" Don't copy the contents of an overwritten selection.
+vnoremap p "_dP
+
+" Use textmate-style whitespace characters
+"set listchars=tab:▸\ ,eol:¬
+
+" automatically rebalance windows on vim resize
+autocmd VimResized * :wincmd =
+
+" Fix Cursor in TMUX
+if exists('$TMUX')
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
+" quickly close quickfix
+map <leader>C :ccl<CR><CR>
+
+" quickly save
+"map <leader>w :w<CR><CR>
+
+" Tab Shortcuts
+" map <leader>t :tabnew<CR>
+nnoremap tt  :tabnew<CR>
+nnoremap th  :tabfirst<CR>
+nnoremap tk  :tabnext<CR>
+nnoremap tj  :tabprev<CR>
+nnoremap tl  :tablast<CR>
+nnoremap td  :tabclose<CR>
+nnoremap tm  :tabm<Space>
+
+" Note: To close tab -> ZZ
+"
+" Use visual bell instead of beeping when doing something wrong
+set visualbell
+
+" And reset the terminal code for the visual bell. If visualbell is set, and
+" this line is also included, vim will neither flash nor beep. If visualbell
+" is unset, this does nothing.
+set t_vb=
+" Set the command window height to 2 lines, to avoid many cases of having to
+" press <Enter> to continue
+set cmdheight=1
+
+" character encoding
+if !&readonly && &modifiable
+  set fileencoding=utf-8              " the encoding written to file
+endif
+set encoding=utf-8                    " the encoding displayed
+
+" Key mappings
+let mapleader = ","           " changing leader key
+let maplocalleader = ","           " changing leader key
+nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <space> za
+
+" Move vertically by visual line
+"nnoremap j gj
+"nnoremap k gk
+
+"nnoremap B ^
+"nnoremap E $
+" move to beginning/end of line
+"nnoremap $ <nop>
+
+"nnoremap ^ <nop>
+" doesn't do anything
+nnoremap gV `[v`]
+" Gundo
+nnoremap <leader>u :GundoToggle<CR>
+
+"nnoremap <leader>s :mksession<CR>
+" Super save (saves session, so you can reopen it with vim -S)
+"nnoremap <leader>ev :vsp $MYVIMRC<CR>
+"nnoremap <leader>ez :vsp ~/.zshrc<CR>
+"nnoremap <leader>sv :source $MYVIMRC<CR>
+
+
+" Swap file and backups
+set noswapfile
+set nobackup
+set nowb
+"au FocusLost * :wa
+
+" Mutt
+au BufRead /tmp/mutt-* set tw=72
+
+
+
+" set backup
+" set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+" set backupskip=/tmp/*,/private/tmp/*
+" set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+" set writebackup
+
+"
+" Persistent undo
+"
+if has('persistent_auto')
+	silent !mkdir ~/.vim/undodir > /dev/null 2>&1
+	set undodir=~/.vim/undodir
+	set undofile
+endif
+"
+" Indentation
+" 
+set autoindent
+set smartindent
+set smarttab                  " use tabs at the start of a line, spaces elsewhere
+set ts=4 sw=4 noet            " tab & shift spacing 
+set softtabstop=4             " unify
+set shiftround                " always indent/outdent to the nearest tabstop
+
+" Enable loading the plugin/indent files for specific file types
+if has('autocmd')
+    filetype plugin indent on
+endif
+
+"
+" Wrapping
+"
+set nowrap                    " don't wrap text
+set linebreak                 " wrap lines at convenient points
+
+"
+" Folding
+"
+set nofoldenable              " don't fold by default
+set foldnestmax=10            " 10 nested fold max
+set foldlevelstart=10         " Open most folds by default
+" toggle foldenable
+set foldmethod=indent         " Fold based on indent level
+
+"
+" Search
+"
+set hlsearch                  " highlight search results
+set incsearch                 " search as characters are entered
+set ignorecase                " make searches case-insensitive
+set showmatch                 " Highlight parenthesis
+set smartcase
+
+"
+" Colors
+"
+if has('syntax') && !exists('g:syntax_on')
+    syntax enable
+endif
+" If syntax doesn't work, try this -> sudo ln -s /usr/local/share/vim/vim74/syntax/syntax.vim /usr/share/vim/vim74/syntax/syntax.vim"
+set cursorline                " highlight current line
+"autocmd InsertEnter * highlight  CursorLine ctermbg=16 ctermfg=None
+"autocmd InsertLeave * highlight  CursorLine ctermbg=00 ctermfg=None
+colorscheme solarized
+set background=dark
+"
+" Scrolling
+"
+set scrolloff=4
+set sidescrolloff=15
+set sidescroll=1
+
+" Spliting Panes
+set splitbelow
+set splitright
+"nnoremap <C-j> <C-W><C-j>
+"nnoremap <C-k> <C-W><C-k>
+"nnoremap <C-l> <C-W><C-l>
+"nnoremap <C-h> <C-W><C-h>
+
+" Easier Esc
+inoremap jk <esc>
+inoremap kj <esc>
+
+
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <C-\> :TmuxNavigatePrevious<cr>
+
+" vv -> vertical split / VV -> horizontal split
+nnoremap <silent> \\ <C-w>v 
+nnoremap <silent> -- <C-w>s 
+
+" Move lines in Visual Mode
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+"
+" Completion
+"
+set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
+set wildmode=longest,full
+set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
+set wildignore+=*vim/backups*
+set wildignore+=*sass-cache*
+set wildignore+=*DS_Store*
+set wildignore+=vendor/rails/**
+set wildignore+=vendor/cache/**
+set wildignore+=*.gem
+set wildignore+=log/**
+set wildignore+=tmp/**
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg,*.svg
+set wildignore+=*.swp,*.pyc,*.bak,*.class,*.orig
+set wildignore+=.git,.hg,.bzr,.svn
+
+" Dynamic cursor
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+"
+" Autogroups
+"
+augroup configgroup
+	autocmd!
+	autocmd VimEnter * highlight clear SignColumn
+	autocmd BufWritePre *.php,*.py,*.js,*.txt,*.hs,*.java,*.md
+		\:call <SID>StripTrailingWhitespaces()
+	autocmd FileType java setlocal noexpandtab
+	autocmd FileType java setlocal list
+	autocmd FileType java setlocal listchars=tab:▸\ ,eol:¬
+	autocmd FileType java setlocal formatprg=par\ -w80\ -T4
+	autocmd FileType php setlocal expandtab
+	autocmd FileType php setlocal list
+	autocmd FileType php setlocal listchars=tab:▸\ ,eol:¬
+	autocmd FileType php setlocal formatprg=par\ -w80\ -T4
+	autocmd FileType ruby setlocal tabstop=4
+	autocmd FileType ruby setlocal shiftwidth=4
+	autocmd FileType ruby setlocal softtabstop=4
+	autocmd FileType ruby setlocal commentstring=#\ %s
+	autocmd FileType python setlocal commentstring=#\ %s
+	autocmd BufEnter *.cls setlocal filetype=java
+	autocmd BufEnter *.zsh-theme setlocal filetype=zsh
+	autocmd BufEnter Makefile setlocal noexpandtab
+	autocmd BufEnter *.sh setlocal tabstop=4
+	autocmd BufEnter *.sh setlocal shiftwidth=4
+	autocmd BufEnter *.sh setlocal softtabstop=4
+    autocmd BufRead,BufNewFile *mutt-* setfiletype mail
+	autocmd BufEnter *i3/config setlocal filetype=i3
+augroup END
+
+" Save pointer location between sessions.
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+if ! has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
+	set guifont=Iosevka\ Nerd\ Font\ Complete:h16 " Set the font to use.
+	set guioptions-=T  "remove menu bar
+	set guicursor+=a:block-blinkon0      " Use non-blinking block cursor.
+	
+	inoremap <silent> <S-Insert> <Esc>"*p`]a
+	inoremap <silent> <M-v> <Esc>"+p`]a
+endif
+
+"
+" Ranger.vim
+"
+let g:ranger_map_keys = 0
+map <leader>r :Ranger<CR>
+
+"
+" fzf
+" 
+"
+let g:fzf_layout = { 'down': '~40%' }
+" neovim only
+let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': '-tabnew' }
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+" Rg integration
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+set grepprg=rg\ --vimgrep
+
+" Add fzf to statusline (Neovim-only)
+function! s:fzf_statusline()
+	" Override statusline as you like
+	highlight fzf1 ctermfg=161 ctermbg=251
+	highlight fzf2 ctermfg=23 ctermbg=251
+	highlight fzf3 ctermfg=237 ctermbg=251
+	setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
+
+
+"
+" NERDTree
+"
+"
+" Automatically opens NERDTree if no files specified
+autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+map <Leader>n <plug>NERDTreeTabsToggle<CR>
+"map <C-o> :NERDTreeToggle<CR> 
+let NERDTreeShowHidden=1
+let NERDTreeMinimalUI=1
+let NERDTreeKeepTreeInNewTab=1
+let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr', '.DS_Store']
+
+let g:NERDTreeDirArrowExpandable = ''
+let g:NERDTreeDirArrowCollapsible = ''
+
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+let g:NERDTreeShowIgnoredStatus = 1
+
+"
+" Syntastic
+" Enable autochecks
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+
+" Change icons
+let g:syntastic_error_symbol = "✗"
+let g:syntastic_warning_symbol = "⚠"
+
+" check json files with jshint
+let g:syntastic_filetype_map = { "json": "javascript", }
+
+" For go we only want to use format (build is slow)
+let g:syntastic_go_checkers = [ 'gofmt' ]
+
+" C/C++
+let g:syntastic_cpp_checkers = [ ]
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = '-Wall -Wextra -Werror'
+let g:syntastic_c_checkers = [ ]
+let g:syntastic_c_compiler = 'clang++'
+let g:syntastic_c_compiler_options = '-Wall -Wextra -Werror'
+
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_mode_map = {
+    \ "mode": "passive",
+    \ "active_filetypes": ["css", "html", "sass", "haml"]}
+"    \ "passive_filetypes": ["puppet"] }
+" Manuel checking => :SyntasticCheck
+" vim:foldmethod=marker:foldlevel=0
+
+"
+" Limelight
+"
+nmap <Leader>l <Plug>(Limelight)
+xmap <Leader>l <Plug>(Limelight)
+
+" Color name (:help cterm-colors) or ANSI code
+let g:limelight_conceal_ctermfg = 10
+let g:limelight_default_coefficient = 0.7
+let g:limelight_paragraph_span = 1
+" Beginning/end of paragraph
+"   When there's no empty line between the paragraphs
+"   and each paragraph starts with indentation
+let g:limelight_bop = '^\s'
+let g:limelight_eop = '\ze\n^\s'
+
+"
+" Goyo.vim integration
+"
+"autocmd! User GoyoEnter Limelight
+"autocmd! User GoyoLeave Limelight!
+
+"
+" vim-gitgutter
+"
+nmap ]h <Plug>GitGutterNextHunk
+nmap [h <Plug>GitGutterPrevHunk
+nmap <Leader>ha <Plug>GitGutterStageHunk
+nmap <Leader>hr <Plug>GitGutterUndoHunk
+nmap <Leader>hv <Plug>GitGutterPreviewHunk
+omap ih <Plug>GitGutterTextObjectInnerPending
+omap ah <Plug>GitGutterTextObjectOuterPending
+xmap ih <Plug>GitGutterTextObjectInnerVisual
+xmap ah <Plug>GitGutterTextObjectOuterVisual
+" Disable all of them
+"let g:gitgutter_map_keys = 0
+" To get rid of lag:
+" let g:gitgutter_realtime = 0
+" let g:gitgutter_eager = 0
+" let g:gitgutter_sign_added = 'xx'
+" let g:gitgutter_sign_modified = 'yy'
+" let g:gitgutter_sign_removed = 'zz'
+" let g:gitgutter_sign_removed_first_line = '^^'
+" let g:gitgutter_sign_modified_removed = 'ww'
+
+"
+" vim-indent-guides
+"
+let indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=008 ctermbg=008
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=000 ctermbg=008
+
+
+"
+" Translate-Shell Integration
+"
+set keywordprg=trans\ :tr
+" Type K to translate selected word.
+
+
+" ************************************** "
+" Vim + Prompt + Tmux bar customization
+"
+" Vim / Lightline.vim
+"
+let g:lightline = {
+    \ 'colorscheme': 'solarized',
+    \ 'mode_map': { 'c': 'NORMAL' },
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ],
+    \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+    \ },
+    \ 'component_function': {
+    \   'modified': 'LightlineModified',
+    \   'readonly': 'LightlineReadonly',
+    \   'fugitive': 'LightlineFugitive',
+    \   'filename': 'LightlineFilename',
+    \   'fileformat': 'LightlineFileformat',
+    \   'filetype': 'LightlineFiletype',
+    \   'fileencoding': 'LightlineFileencoding',
+    \   'mode': 'LightlineMode',
+    \ },
+    \ 'component_expand': {
+    \   'syntastic': 'SyntasticStatuslineFlag',
+    \ },
+    \ 'component_type': {
+    \   'syntastic': 'error',
+    \ },
+    \ 'subseparator': { 'left': '│', 'right': '│' }
+    \ }
+
+function! LightlineModified()
+    return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightlineReadonly()
+    return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
+endfunction
+
+function! LightlineFilename()
+    return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
+
+function! LightlineFugitive()
+    if &ft !~? 'vimfiler\|gundo' && exists("*fugitive#head")
+        let branch = fugitive#head()
+        return branch !=# '' ? ''.branch : ''
+    endif
+    return ''
+endfunction
+
+function! LightlineFileformat()
+    return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightlineFiletype()
+    return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineFileencoding()
+    return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+endfunction
+
+function! LightlineMode()
+    return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+augroup reload_vimrc
+    autocmd!
+    autocmd bufwritepost $MYVIMRC nested source $MYVIMRC
+augroup END
+
+augroup AutoSyntastic
+    autocmd!
+    autocmd BufWritePost *.c,*.cpp call s:syntastic()
+augroup END
+
+function! s:syntastic()
+    SyntasticCheck
+    call lightline#update()
+endfunction
+
+"" ZSH / Promptline.vim
+" To update theme, :PromptlineSnapshot! ~/.dotfiles/system/.promptline
+" Note: MB4 has not battery, if you're using MB4, comment battery slice. 
+let g:promptline_theme = 'lightline'
+let g:promptline_powerline_symbols = 0
+let g:promptline_preset = {
+    \'a' : [ promptline#slices#user() ],
+    \'c' : [ promptline#slices#cwd() ],
+    \'y' : [ promptline#slices#vcs_branch() ],
+    \'z' : [ promptline#slices#battery() ],
+    \'warn' : [ promptline#slices#last_exit_code() ]}
+let g:promptline_symbols = {
+    \ 'left'       : '',
+    \ 'left_alt'   : '│',
+    \ 'dir_sep'    : ' / ',
+    \ 'truncation' : '…',
+    \ 'vcs_branch' : '',
+    \ 'space'      : ' '}
+
+"" Tmux / Tmuxline.vim
+" To apply theme, :Tmuxline
+" To save theme, :TmuxlineSnapshot! ~/.dotfiles/system/.tmuxline
+" In long term, status utf8 errors may disturb you. After you saved your
+" customization, delete this line.
+let g:tmuxline_theme = 'lightline'
+let g:tmuxline_separators = {
+    \ 'left' : '',
+    \ 'left_alt': '│',
+    \ 'right' : '',
+    \ 'right_alt' : '│',
+    \ 'space' : ' '}
+" #I => Window Number
+" #W => Window Name
+" #S => Session Name
+" #H => Local Name
+let g:tmuxline_preset = {
+	\'a'    : '#([[ "$(uname)" == "Linux" ]] && echo "   "; [[ "$(uname)" == "Darwin" ]] && echo "  " )',
+    \'win'  : '#W',
+    \'cwin' : ['#W#F'],
+	\'x'    : ["⚡ #(battery-level)  #(uptime | awk '{print $3}'|sed 's/,//')"],
+    \'y'    : ['  ʷ%W %a %d/%m  %I:%M'],
+    \'z'    : '  #H'}
+" Note: MB4 has not battery, if you're using MB4, comment battery-level. 

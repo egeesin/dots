@@ -1,0 +1,159 @@
+# vim: set ft=tmux:
+#  _                        
+# | |_ _ __ ___  _   ___  __
+# | __| '_ ` _ \| | | \ \/ /
+# | |_| | | | | | |_| |>  < 
+#  \__|_| |_| |_|\__,_/_/\_\
+                          
+bind R source-file ~/.tmux.conf
+
+# Set prefix
+set-option -g prefix C-a 
+# Tmuxline
+source-file ~/.dotfiles/system/.tmuxline
+
+# TPM Plugins
+if "test ! -d ~/.tmux/plugins/tpm" \
+   "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
+# To install plugins: Prefix - I
+# To update plugins: Prefix - U
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'tmux-plugins/tmux-open'
+set -g @plugin 'tmux-plugins/tmux-copycat'
+
+set -g @shell_mode 'vi'
+
+# Rename your terminals
+set -g set-titles on
+
+# Set the default terminal mode to 256color mode
+set -g default-terminal "xterm-256color"
+set -g terminal-overrides ',xterm-256color:Tc'
+# Allows for faster key repetition
+set -s escape-time 0
+
+# Scroll History
+set -g history-limit 30000
+
+# Status bar customization
+#
+#set -g status-bg black
+#set -g status-fg white
+set -g status-interval 5
+set -g status-left-length 90
+set -g status-right-length 60
+#set -g status-left "#[fg=blue]#(whoami) #[fg=white]| #[fg=Blue]\#(hostname - s) #[fg=white]| #[fg=yellow]#(curl ipecho.net/plain;echo)"
+set -g window-status-current-attr "bold"
+set -g status-justify centre
+set -g status-position top
+#set -g status-right " \"#{=21:pane_title}\" %b %d %H:%M"
+
+# enable activity alerts
+#setw -g monitor-activity on
+#set -g visual-activity on
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+  | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+is_fzf="ps -o state= -o comm= -t '#{pane_tty}' \
+  | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?fzf$'"
+
+bind -n C-h run "($is_vim && tmux send-keys C-h) || \
+                 tmux select-pane -L"
+
+bind -n C-j run "($is_vim && tmux send-keys C-j)  || \
+                 ($is_fzf && tmux send-keys C-j) || \
+                 tmux select-pane -D"
+
+bind -n C-k run "($is_vim && tmux send-keys C-k) || \
+                 ($is_fzf && tmux send-keys C-k)  || \
+                 tmux select-pane -U"
+
+bind -n C-l run "($is_vim && tmux send-keys C-l) || \
+                 tmux select-pane -R"
+
+bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
+
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r H resize-pane -L 5
+bind -r L resize-pane -R 5
+bind z resize-pane -Z
+
+# Easier window switch
+bind C-p previous-window
+bind C-n next-window
+
+# Universal clipboard
+setw -g mode-keys vi
+bind-key -Tcopy-mode-vi 'v' send -X begin-selection
+bind-key -Tcopy-mode-vi 'Escape' send -X cancel
+#bind-key ] run-shell "xclip -sel clip -o | tmux load-buffer - ; tmux paste-buffer" 
+#bind-key -Tcopy-mode-vi 'y' send -X copy-pipe-and-cancel "xclip"
+#bind-key -Tcopy-mode-vi 'y' copy-pipe-and-cancel "xclip -selection clipboard >/dev/null"
+#bind-key -Tcopy-mode-vi 'y' send -X copy-selection
+#bind-key -Tcopy-mode-vi 'y' send -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
+# older than 10.10
+#bind -t vi-copy v begin-selection
+#bind -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
+
+# Xclip edition
+# bind C-p run "xclip -o | tmux load-buffer - ; tmux paste-buffer"
+# bind C-y run "tmux save-buffer - | xclip -i"<Paste>
+
+# Mouse mode 
+set -g mouse on
+#
+# Toggle mouse on with ^B m
+# bind m \
+#   set -g mouse on
+#   display 'Mouse: ON'
+#  Toggle mouse off with ^B M
+# bind M \
+#   set -g mouse off
+#   display 'Mouse: OFF'
+
+# Scrolling
+# make scrolling with wheels work
+bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
+bind -n WheelDownPane select-pane -t= \; send-keys -M
+
+ # set pane colors - highlight the active pane
+set-option -g pane-border-fg colour010 #base02
+set-option -g pane-active-border-fg colour006 #base01
+
+# Don't prompt to kill panes/windows.
+bind-key x kill-pane
+bind-key X kill-window
+setw -g automatic-rename on
+set -g renumber-windows on
+# bind c new-window -c "#{pane_current_path}"
+if "[[ `tmux -V` == *1.9* ]]" 'unbind c; bind c new-window -c "#{pane_current_path}"'
+
+# split panes using | and -
+bind-key \ split-window -h -c "#{pane_current_path}"
+bind-key - split-window -v -c "#{pane_current_path}"
+unbind '"'
+unbind %
+
+# full-window split
+bind-key | split-window -fh -c "#{pane_current_path}"
+bind-key _ split-window -fv -c "#{pane_current_path}"
+
+# don't rename windows automatically
+set-option -g allow-rename off
+
+## Credit: youtube.com/user/gotbletu
+bind-key O capture-pane \; save-buffer /tmp/tmux-buffer \; \
+	new-window -n "  +" '$SHELL -c "urlscan -c < /tmp/tmux-buffer"'
+
+## Saved layouts
+#bind-key M-m new-window -n music -c $HOME \; \
+#   send-keys 'clear && figlet Radio' 'Enter' \; \
+#   split-window -v -p 50 -t 1 \; \
+#   send-keys 'cmus' 'Enter' \; \
+#   split-window -h -p 71 -t 1 \; \
+#   send-keys 'clear && figlet Search Music' 'Enter' \; \
+#   select-pane -t 2
+
+# make sure this line keep at bottom
+run '~/.tmux/plugins/tpm/tpm'

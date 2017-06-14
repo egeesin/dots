@@ -1,0 +1,18 @@
+# Warning: prepend-path, is-executable etc. commands described in .function file. This file must not sourced before .function!
+# Prepend new items to path (if directory exists)
+prepend-path "/usr/local/share/npm/bin"
+#prepend-path "$(ruby -rubygems -e 'puts Gem.user_dir")/bin:$HOME/go/bin:
+is-executable brew && prepend-path "$(brew --prefix coreutils)/libexec/gnubin"
+prepend-path "$HOME/.rvm/bin"
+prepend-path "/opt/local/bin"
+prepend-path "/opt/local/sbin"
+prepend-path "/Library/Frameworks/Python.framework/Versions/3.5/bin"
+prepend-path "$HOME/Library/Python/2.7/bin"
+prepend-path "/usr/local/opt/bc/bin"
+prepend-path "/usr/local/opt/ncurses/bin"
+prepend-path "/usr/local/opt/openssl/bin"
+# Remove duplicates
+PATH=`echo -n $PATH | awk -v RS=: '{ if (!arr[$0]++) {printf("%s%s",!ln++?"":":",$0)}}'`
+#export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
+
+export PATH

@@ -1,0 +1,148 @@
+# Warning: This file must not source before .function!
+
+# Global aliases
+
+# Use aliases with sudo
+alias sudo='sudo '
+
+if $(is-supported "alias -g"); then
+  alias -g G="| grep -i"
+  alias -g H="| head"
+  alias -g T="| tail"
+alias -g L="| less"
+fi
+
+alias v="nvim -p"
+
+# Quick directory movement
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+# Copy current working directory path (Mac version)
+alias cpwd="pwd|tr -d '\n'|pbcopy"
+
+# Go to the last directory you were in
+alias back='cd $OLDPWD'
+
+# aliases with familiar name
+alias .files="ranger --cmd='set show_hidden true'"
+alias files="ranger --cmd='set show_hidden false'"
+alias news='newsbeuter -u $DOTFILES_DIR/etc/feeds/all'
+alias music="ncmpcpp"
+alias tube="mpsyt"
+alias torr="stig"
+alias clock='tty-clock -s -c -t -C 6'
+alias web='w3m'
+alias startmux='tmuxinator main'
+alias resetdisplay='~/.extra/mbp11x/screelayout/default.sh'
+
+alias mpdtroubleshoot="mpd --stdout --no-daemon --verbose"
+
+
+# fuck.
+eval $(thefuck --alias)
+
+# ls
+LS_COLORS=`is-supported "ls --color" --color -G`
+LS_TIMESTYLEISO=`is-supported "ls --time-style=long-iso" --time-style=long-iso`
+LS_GROUPDIRSFIRST=`is-supported "ls --group-directories-first" --group-directories-first`
+alias l="ls -lahA $LS_COLORS $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
+alias ll="ls -lA $LS_COLORS"
+alias lt="ls -lhAtr $LS_COLORS $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
+alias ld="ls -ld $LS_COLORS */"
+unset LS_COLORS LS_TIMESTYLEISO LS_GROUPDIRSFIRST
+
+# List declared aliases, functions
+alias listaliases="alias | sed 's/=.*//'"
+alias listfunctions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'" # show non _prefixed functions
+
+# Default options
+alias cal="cal -m" # week starts with monday
+alias df="df -h"
+alias du="du -h"
+alias free="free -h"
+alias streamlink="streamlink -p mpv"
+#alias 2048='2048 blackwhite'
+alias cmatrix="cmatrix -C blue"
+# alias dtrx="dtrx -r $1"
+# alias rsync="rsync -vh"
+# alias json="json -c"
+# alias psgrep="psgrep -i"
+
+
+# Streamlink Aliases
+alias cnnturk="streamlink 'https://www.youtube.com/watch?v=4oUdVy4TdmU' 360p" # resolution: 360p 480p 720p...
+alias cnnturkalt="streamlink 'http://www.cnnturk.com/canli-yayin' 500k" # resolution: 300k 500k 750k 1000k 1250k
+alias kanald="streamlink 'https://www.kanald.com.tr/canli-yayin' 492k" # resolution: 331k 492k 852k 1013k 1301k
+alias tv8="streamlink 'https://www.tv8.com.tr/canli-yayin' 576p" # resolution: 576p 864p
+
+# OpenVPN Aliases
+alias vpnca="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-CA1/vpnbook-ca1-tcp443.ovpn"
+alias vpnde="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-DE1/vpnbook-de233-tcp443.ovpn"
+alias vpnus="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-US1/vpnbook-us1-tcp443.ovpn"
+alias vpneu="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-Euro1/vpnbook-euro1-tcp443.ovpn"
+alias vpnus2="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-US2/vpnbook-us2-tcp443.ovpn"
+alias vpneu2="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-Euro2/vpnbook-euro2-tcp443.ovpn"
+
+# Shortcuts to configuration files
+alias xres="nvim ~/.dotfiles/config/xres && xrdb ~/.Xresources"
+alias aliasrc="nvim ~/.dotfiles/system/alias"
+alias aliaslinuxrc="nvim ~/.dotfiles/system/alias_tux"
+alias aliasmacrc="nvim ~/.dotfiles/system/alias_mac"
+alias zshrc="nvim ~/.dotfiles/runcom/zshrc && . ~/.zshrc"
+alias vimrc="nvim ~/.dotfiles/config/vim"
+alias tmuxconf="nvim ~/.dotfiles/config/tmux"
+
+# Exclude MacOS specific files in ZIP archives
+alias zip="zip -x *.DS_Store -x *__MACOSX* -x *.AppleDouble*"
+
+# We-Get aliases
+alias findtpb="you-get --target the_pirate_bay --search"
+alias find1337="you-get --target 1337x --search"
+alias findeztv="you-get --target eztv --search"
+alias findyts="you-get --target yts --search"
+
+# Self-written notes of command line tools
+alias clinotes='nvim ~/.extra/doc/clinotes.md'
+alias todo='nvim ~/.extra/doc/todo.md'
+
+# npm shortcuts (for global)
+alias npmi="npm i -g "
+alias npmr="npm un -g"
+alias npmu="npm up -g"
+
+# tpm shortcuts
+alias tpmi="~/.tmux/plugins/tpm/bin/install_plugins"
+alias tpmu="~/.tmux/plugins/tpm/bin/update_plugins"
+alias tpmuall="~/.tmux/plugins/tpm/bin/update_plugins all"
+alias tpmr="~/.tmux/plugins/tpm/bin/clean_plugins"
+
+# Network
+#alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+#alias ipl="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+
+# Request using GET, POST, etc. method
+for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
+  alias "$method"="lwp-request -m '$method'"
+done
+
+# Recursively remove Apple meta files
+alias cleanupds="find . -type f -name '*.DS_Store' -ls -exec /bin/rm {} \;"
+alias cleanupad="find . -type d -name '.AppleD*' -ls -exec /bin/rm -r {} \;"
+
+# print the path with each directory separated by a newline
+alias path="echo -e ${PATH//:/\\n}"
+
+# make less properly handle colored output
+alias lessr="less -R"
+
+# Translate Shell (trans)
+#alias cevir="trans {=tr} $1" # detect language, then translate to Turkish
+#alias translate="trans {=en} $1" # detect language, then translate to English
+
+# Just for fun.
+alias thx='figlet np'
+
+# figlet it
+alias now="date +%T | figlet"

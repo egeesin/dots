@@ -1,0 +1,66 @@
+# General
+#browser "open %u"
+browser "xdg-open %u"
+#browser "$BROWSER %u &> /dev/null &"
+
+html-renderer "w3m -T text/html"
+external-url-viewer "urlscan"
+auto-reload yes
+refresh-on-startup yes
+reload-time 20
+
+player "mpv"
+error-log "~/.newsbeuter/error.log"
+save-path "~/Desktop/saved"
+download-path "~/.tmp/rss"
+goto-next-feed yes
+
+article-sort-order date-asc
+show-read-feeds no
+show-read-articles yes
+
+delete-read-articles-on-quit yes
+external-url-viewer "urlview"
+confirm-exit no
+
+# Highlight Settings (Doesn't work properly. Need an 2.10 or 3.0 release)
+#highlight article "^(Feed|Title|Author|Link|Date):" white default bold
+#highlight feedlist "(Marvel|Quora)" default red bold
+#highlight feedlist "Android" default green default
+#highlight feedlist "CSS-Tricks" black red bold
+#highlight feedlist "(Google|Apple|Mac|macOS|iOS|tvOS|watchOS)" default blue default
+#highlight feedlist "Pyrocynical" cyan magenta default
+#highlight feedlist "Muselk" black magenta default
+notify-beep yes
+notify-always yes
+notify-xterm yes
+notify-format "newsbeuter: %n unread articles within %f unread feeds"
+notify-program "terminal-notifier"
+
+# reload-only-visible-feeds yes
+# suppress-first-reload yes
+# reload-only-visible-feeds yes
+
+# Vim like navigation
+bind-key j down
+bind-key k up 
+bind-key h left
+bind-key l right 
+bind-key m toggle-show-read-feeds
+#macro q set browser "mpv --loop-file --cache-file=TMP %u &> /dev/null &" ; open-in-browser ; set browser "$BROWSER %u &> /dev/null &"
+
+
+# set the default browser; this variable is already set in my bashrc/zshrc
+
+# macros
+# macro S edit-flags 's'
+##macro y open-in-browser ; toggle-article-read 'read'
+#macro y down ; down ; down ; down ; down
+
+# Colors - Solarized Dark
+color listnormal          color014 default 
+color listfocus           color007 color008
+color listfocus_unread    color007 color008 bold
+color info                color007 color002 bold #feedly green
+color background          color014 default
+color article             color014 default

@@ -1,0 +1,4 @@
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+#export GTK_IM_MODULE=xim
+export GDK_USE_XFT=1
+export XMODIFIERS="@im=none"

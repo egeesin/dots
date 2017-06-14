@@ -1,0 +1,380 @@
+
+[Config]
+Version 2.0.0
+ResizableSkin LateNight
+Skin 
+Locale 
+
+[Controls]
+Tooltips 
+
+[Config]
+Path /usr/share/mixxx/
+
+[InternalClock]
+bpm 124
+
+[Master]
+delay 0
+headDelay 0
+duckStrength 90
+duckMode 1
+keylock_engine 1
+enabled 1
+mono_mixdown 0
+talkover_mix 0
+
+[Recording]
+FileSize 
+
+[Shoutcast]
+enabled 
+
+[Library]
+WriteAudioTags 0
+
+[Channel1]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 33.3 RPM
+
+[Controls]
+RateRamp 
+RateRampSensitivity 100
+
+[Channel2]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 33.3 RPM
+
+[Channel3]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 33.3 RPM
+
+[Channel4]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 33.3 RPM
+
+[Sampler1]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 
+
+[Sampler2]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 
+
+[Sampler3]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 
+
+[Sampler4]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 
+
+[PreviewDeck1]
+keylock 0
+quantize 0
+vinylcontrol_speed_type 
+
+[VinylControl]
+cueing_ch1 0
+mode_ch1 1
+cueing_ch2 0
+mode_ch2 1
+cueing_ch3 0
+mode_ch3 1
+cueing_ch4 0
+mode_ch4 1
+
+[Auto DJ]
+Transition 10
+
+[Browse]
+QuickLinks 
+
+[Library]
+ShowBansheeLibrary 1
+
+[Banshee]
+Database 
+
+[Library]
+ShowITunesLibrary 1
+RowHeight 
+Font 
+
+[BPM]
+BPMRangeStart 70
+BPMRangeEnd 140
+AnalyzeEntireSong 1
+
+[Waveform]
+FrameRate 30
+EndOfTrackWarningTime 30
+VSync 0
+DefaultZoom 3
+ZoomSynchronization 0
+WaveformType 12
+VisualGain_0 1
+VisualGain_1 1
+VisualGain_2 1
+VisualGain_3 1
+OverviewNormalized 0
+
+[Library]
+RescanOnStartup 0
+UseRelativePathOnExport 0
+ShowRhythmboxLibrary 1
+ShowTraktorLibrary 1
+TrackLoadAction 0
+
+[Controls]
+RateDir 0
+RateRange 9
+PositionDisplay 0
+keylockMode 
+RateTempLeft 4.0
+RateTempRight 2.000000
+RatePermLeft 0.50
+RatePermRight 0.05
+AllowTrackLoadToPlayingDeck 
+CueDefault 0
+CueRecall 
+
+[Config]
+StartInFullscreen 
+
+[Controls]
+SpeedAutoReset 1
+
+[Waveform]
+WaveformOverviewType 
+
+[Auto DJ]
+Requeue 0
+MinimumAvailable 20
+UseIgnoreTime 0
+IgnoreTime 23:59
+EnableRandomQueue 0
+RandomQueueMinimumAllowed 5
+EnableRandomQueueBuff 0
+
+[Mixer Profile]
+EQsOnly yes
+EffectForGroup_[Channel1] org.mixxx.effects.bessel8lvmixeq
+QuickEffectForGroup_[Channel1] org.mixxx.effects.filter
+EffectForGroup_[Channel2] org.mixxx.effects.bessel8lvmixeq
+QuickEffectForGroup_[Channel2] org.mixxx.effects.filter
+EffectForGroup_[Channel3] org.mixxx.effects.bessel8lvmixeq
+QuickEffectForGroup_[Channel3] org.mixxx.effects.filter
+EffectForGroup_[Channel4] org.mixxx.effects.bessel8lvmixeq
+QuickEffectForGroup_[Channel4] org.mixxx.effects.filter
+SingleEQEffect yes
+EffectForGroup_[Master] none
+HiEQFrequency 2484
+HiEQFrequencyPrecise 2484.999990
+LoEQFrequency 246
+LoEQFrequencyPrecise 246.469196
+EqAutoReset 0
+EnableEQs 
+xFaderCurve 1
+xFaderMode 0
+xFaderReverse 0
+
+[Vamp]
+AnalyserBeatPluginID qm-tempotracker:0
+AnalyserBeatLibrary libmixxxminimal
+
+[BPM]
+BPMDetectionEnabled 1
+BeatDetectionFixedTempoAssumption 1
+FixedTempoOffsetCorrection 1
+ReanalyzeWhenSettingsChange 0
+FastAnalysisEnabled 0
+
+[Vamp]
+AnalyserKeyPluginID qm-keydetector:2
+AnalyserKeyLibrary libmixxxminimal
+
+[Key]
+KeyDetectionEnabled 1
+FastAnalysisEnabled 0
+ReanalyzeWhenSettingsChange 0
+KeyNotation Traditional
+
+[ReplayGain]
+InitialReplayGainBoost 0
+InitialDefaultBoost -6
+ReplayGainEnabled 1
+ReplayGainAnalyserEnabled 1
+
+[Recording]
+Directory /home/ege/Music/Mixxx/Recordings
+Encoding WAV
+Title 
+Author 
+Album 
+CueEnabled 
+
+[Shoutcast]
+servertype Icecast2
+mountpoint 
+host 
+port 8000
+login 
+password 
+stream_name 
+stream_website http://www.mixxx.org
+stream_desc This stream is online for testing purposes!
+stream_genre Live Mix
+stream_public 0
+ogg_dynamicupdate 0
+bitrate 128
+format MP3
+channels 2
+metadata_charset 
+enable_metadata 0
+custom_artist 
+custom_title 
+metadata_format $artist - $title
+
+[Keyboard]
+Enabled 1
+
+[ScriptDebugger]
+Enabled 
+
+[Spinny1]
+show_spinny 1
+
+[Spinny2]
+show_spinny 1
+
+[Spinny3]
+show_spinny 1
+
+[Spinny4]
+show_spinny 1
+
+[Microphone]
+show_microphone 0
+
+[MicrophoneRack]
+show 0
+
+[EffectRack1]
+show 1
+
+[Samplers]
+show_samplers 0
+
+[Vinylcontrol]
+show_vinylcontrol 0
+
+[PreviewDeck]
+show_previewdeck 0
+
+[Master]
+show_mixer 1
+show_eqs 1
+show_mics 0
+view_curpage 2
+
+[Library]
+show_coverart 1
+show_current 1
+
+[Master]
+show_4decks 0
+
+[Spinny]
+show_spinnies 0
+
+[Library]
+VScrollBarPos 0
+
+[VinylControl]
+show_vinylcontrol 0
+
+[Library]
+SupportedFileExtensions mp3,ogg,opus,aiff,aif,wav,flac,m4a,mp4
+
+[Preferences]
+geometry 
+
+[Channel1]
+vinylcontrol_vinyl_type Serato CV02 Vinyl, Side A
+
+[Channel2]
+vinylcontrol_vinyl_type Serato CV02 Vinyl, Side A
+
+[Channel3]
+vinylcontrol_vinyl_type Serato CV02 Vinyl, Side A
+
+[Channel4]
+vinylcontrol_vinyl_type Serato CV02 Vinyl, Side A
+
+[Channel1]
+vinylcontrol_lead_in_time 0
+
+[Channel2]
+vinylcontrol_lead_in_time 0
+
+[Channel3]
+vinylcontrol_lead_in_time 0
+
+[Channel4]
+vinylcontrol_lead_in_time 0
+
+[VinylControl]
+show_signal_quality 0
+gain 1
+
+[Soundcard]
+Samplerate 44100
+
+[Controls]
+PitchAndKeylockMode 0
+
+[Auto DJ]
+RequeueBuff 
+MinimumAvailableBuff 
+IgnoreTimeBuff 
+UseIgnoreTimeBuff 
+RandomQueueMinimumAllowedBuff 
+
+[BPM]
+BPMAboveRangeEnabled 
+
+[Channel1]
+vinylcontrol_enabled 0
+
+[Channel2]
+vinylcontrol_enabled 0
+
+[Channel3]
+vinylcontrol_enabled 0
+
+[Channel4]
+vinylcontrol_enabled 0
+
+[ControllerPreset]
+Gaming_Keyboard_G410_3232_0 /home/ege/.mixxx/controllers/Gaming_Keyboard_G410_3232_0.hid.xml
+
+[Controller]
+Gaming_Keyboard_G410_3232_0 
+
+[ControllerPreset]
+Gaming_Keyboard_G410_3232_1 /home/ege/.mixxx/controllers/Gaming_Keyboard_G410_3232_1.hid.xml
+
+[Controller]
+Gaming_Keyboard_G410_3232_1 
+
+[Playlist]
+Directory 

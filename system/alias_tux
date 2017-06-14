@@ -1,0 +1,38 @@
+alias pac="pacman $1"
+alias pacs="sudo pacman -S"
+alias pacr="sudo pacman -Rns"
+alias pacup="sudo pacman -Syu"
+alias pacupforce="sudo pacman -Syyu --force"
+
+alias aur="pacaur $1"
+alias aurs="pacaur -a -S"
+alias aurr="pacaur -a -Rns"
+alias aurup="pacaur -a -Syu"
+
+alias pipi "sudo pip install"
+alias pip2i "sudo pip2 install"
+alias pip3i "sudo pip3 install"
+alias pipr "sudo pip uninstall"
+alias pipr "sudo pip uninstall"
+alias pipup "sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U"
+
+# Note: If you are not home, then you should manually choose another point.
+alias battery="upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep -E 'state|to\ full|percentage'"
+
+# Copy the current working directory to the clipboard. (Linux version)
+alias cpwd="pwd | xclip -selection clipboard"
+
+# redshift
+alias lightsoff="redshift -x"
+alias lightson="redshift -o"
+
+# VNC Aliases
+alias startvnc="sudo systemctl start x0vncserver.service"
+alias stopvnc="sudo systemctl stop x0vncserver.service"
+alias startlegacy="vncviewer -passwd ~/.extra/secret/vnc/passwd DotWhenNoCursor=1 192.168.2.144:5900"
+alias startarch="vncviewer -passwd ~/.extra/secret/vnc/passwd DotWhenNoCursor=1 192.168.2.229:5900"
+
+# spotify HiDPI
+# alias spotify="spotify --force-device-scale-factor=1.5"
+
+alias tetris="vitetris --nomenu"

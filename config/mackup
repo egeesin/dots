@@ -1,0 +1,11 @@
+[storage]
+engine = file_system 
+path = .extra/backup/ 
+
+[applications_to_sync]
+1password-4
+appcleaner
+handbrake
+messages
+poedit
+sublime-text-3

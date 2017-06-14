@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+
+BIN_NAME=$(basename "$0")
+COMMAND_NAME=$1
+SUB_COMMAND_NAME=$2
+sub_help () {
+  echo "Usage: $BIN_NAME <command>"
+  echo
+  echo "Commands:"
+  echo "   help        This help message"
+  echo "   edit        Open dotfiles in editor ($EDITOR_ALT)"
+  echo "   reload      Reload shell configuration"
+  echo "   link        Relink configurations"
+  echo "   test        Run tests"
+  echo "   up          Update packages and pkg managers (npm, pip, macOS, brew, gem, pacman, pacaur)"
+  echo "   clean       Clean up caches (brew, npm, gem, rvm)"
+  echo "   defaults    Apply macOS system defaults"
+  echo "   dock        Apply macOS dock placements"
+  echo "   install     Install packages listed from the dotfiles/install (e.g. dot install npm)"
+}
+
+sub_edit () {
+	sh -c "$EDITOR $HOME/.dotfiles"
+}
+
+sub_reload () {
+	. $HOME/.dotfiles/runcom/zshrc && echo "Shell configuration reloaded."
+}
+sub_link () {
+	. $HOME/.dotfiles/link.sh
+}
+sub_test () {
+	bats $HOME/.dotfiles/test/*.bats
+}
+sub_up () {
+	if [[ "$(uname -s)" == "Darwin" ]]; then
+		sudo softwareupdate -i -a
+		pip2 install --upgrade pip
+		pip3 install --upgrade pip
+		pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
+		gem update --system
+		gem update
+		brew update
+		brew upgrade
+	elif [[ "$(uname -s)" == "Linux" ]]; then
+		sudo pip2 install --upgrade pip
+		sudo pip3 install --upgrade pip
+		sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
+		sudo pacman -Syu
+		pacaur -a -Syu 
+	fi
+	npm i -g npm
+	npm up -g
+}
+
+sub_clean () {
+	if [[ "$(uname -s)" == "Darwin" ]]; then
+		brew cleanup
+		brew cask cleanup
+		rvm cleanup all
+		gem cleanup
+	elif [[ "$(uname -s)" == "Linux" ]]; then
+		pacman -Sc
+		pacaur -Sc
+	fi
+	npm cache verify
+	find . -type f -name '*.DS_Store' -ls -exec /bin/rm {} \;
+	find . -type d -name '.AppleD*' -ls -exec /bin/rm -r {} \;
+}
+
+sub_defaults () {
+	if [[ "$(uname -s)" == "Darwin" ]]; then
+		for DEFAULTS_FILE in "${HOME}"/.dotfiles/macos/defaults*.sh; do
+			echo "Applying ${DEFAULTS_FILE}" && . "${DEFAULTS_FILE}"
+		done
+		echo "Done. Some changes may require a logout/restart to take effect."
+	elif [[ "$(uname -s)" == "Linux" ]]; then
+		echo "This command is available for macOS."
+	fi
+}
+
+sub_dock () {
+	if [[ "$(uname -s)" == "Darwin" ]]; then
+		. "${HOME}/.dotfiles/macos/dock.sh" && echo "Dock reloaded."
+	elif [[ "$(uname -s)" == "Linux" ]]; then
+		echo "This command is available for macOS."
+	fi
+}
+
+sub_install () {
+	local SCRIPT="${HOME}/.dotfiles/install/${SUB_COMMAND_NAME}.sh"
+		[ -f "$SCRIPT" ] && . "$SCRIPT" || echo "Unable to find script to install ${SUB_COMMAND_NAME}"
+}
+
+# Make sure to keep this in sync with the available public commands
+
+sub_completion () {
+	echo "help edit reload link test up clean defaults dock install"
+}
+
+case $COMMAND_NAME in
+	"" | "-h" | "--help")
+		sub_help
+		;;
+	*)
+		shift
+		sub_${COMMAND_NAME} $@
+		if [ $? = 127 ]; then
+			echo "'$COMMAND_NAME' is not a known command or has errors." >&2
+			sub_help
+			exit 1
+		fi
+		;;
+esac

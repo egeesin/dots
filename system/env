@@ -1,0 +1,54 @@
+# Defaults
+export TERM='xterm-256color'
+export EDITOR='nvim'
+export VISUAL='nvim'
+export PAGER='less'
+export MAILCAPS=${HOME}'/.mailcap'
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    export BROWSER='/Applications/Vivaldi.app'
+elif [[ "$(uname -s)" == "Linux" ]]; then
+	export BROWSER='$(which vivaldi)'
+fi
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Timezone
+export TZ='Europe/Istanbul'
+
+export ARCHFLAGS="-arch x86_64"
+
+# .secrets
+export PASSWORD_STORE_DIR=~/.extra/secret/pass
+export GNUPGHOME=~/.extra/secret/gnupg
+
+# History
+export HISTSIZE=32768;
+export HISTFILESIZE="${HISTSIZE}";
+export SAVEHIST=4096
+export HISTCONTROL=ignoredups:erasedups
+
+# Enable colors
+export CLICOLOR=1
+
+# cheat-cli syntax highlighting
+export CHEATCOLORS=true
+
+# Prefer US English and use UTF-8.
+export LC_ALL='en_US.UTF-8';
+export LANG='en_US.UTF-8';
+
+# Highlight section titles in manual pages.
+export LESS_TERMCAP_md="${yellow}"
+
+# RTV variables
+RTV_URLVIEWER='urlscan';
+
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+# Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
+export PYTHONIOENCODING='UTF-8';

@@ -1,0 +1,381 @@
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+# Note: I used key codes instead of syms, because I'm a touch typist and I want to be able to control my workspace even if keyboard layout is different. If you don't know what keycodes are, install 'xorg-xev' package.
+
+set $alt Mod1
+set $sup Mod4
+set $nsi --no-startup-id
+set $update && killall -SIGUSR1 i3status
+floating_modifier $sup
+bindcode $sup+36 exec i3-sensible-terminal
+#focus_follows_mouse no
+
+bindcode $sup+Shift+54 reload
+bindcode $sup+Shift+27 restart
+bindcode $sup+Shift+26 exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+new_window none
+
+
+# Color Profile
+exec_always $nsi xcalib -d :0 ~/.extra/mbp11x/colorprofile.icc 
+# Wallpaper Customization 
+exec_always $nsi feh --bg-fill ~/.extra/wallpaper.jpg
+# Compostior Settings
+exec $nsi compton -CGb --config ~/.config/compton.conf
+
+# Font Customization
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+#font xft: SF Compact Text Regular 12
+font xft:Iosevka Nerd Font Bold 16px
+# Before i3 v4.8, we used to recommend this one as the default:
+#font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+
+# Workspace
+set $ws1  " 1 "
+set $ws2  " 2 "
+set $ws3  " 3 "
+set $ws4  " 4 "
+set $ws5  " 5 "
+set $ws6  " 6 "
+set $ws7  " 7 "
+set $ws8  " 8 "
+set $ws9  " 9 "
+set $ws10 " 0 "
+
+# Monitor
+set $d1 "eDP1"
+set $d2 "HDMI2"
+
+# Workspaces
+
+## Variables 
+bindcode $sup+10 workspace $ws1
+bindcode $sup+11 workspace $ws2
+bindcode $sup+12 workspace $ws3
+bindcode $sup+13 workspace $ws4
+bindcode $sup+14 workspace $ws5
+bindcode $sup+15 workspace $ws6
+bindcode $sup+16 workspace $ws7
+bindcode $sup+17 workspace $ws8
+bindcode $sup+18 workspace $ws9
+bindcode $sup+19 workspace $ws10
+bindcode $sup+23 workspace back_and_forth
+
+## Move focused container to workspace
+bindcode $sup+Shift+10 move container to workspace $ws1
+bindcode $sup+Shift+11 move container to workspace $ws2
+bindcode $sup+Shift+12 move container to workspace $ws3
+bindcode $sup+Shift+13 move container to workspace $ws4
+bindcode $sup+Shift+14 move container to workspace $ws5
+bindcode $sup+Shift+15 move container to workspace $ws6
+bindcode $sup+Shift+16 move container to workspace $ws7
+bindcode $sup+Shift+17 move container to workspace $ws8
+bindcode $sup+Shift+18 move container to workspace $ws9
+bindcode $sup+Shift+19 move container to workspace $ws10
+
+## Workspace Monitor Outputs
+workspace $ws1 output $d2
+workspace $ws2 output $d2
+workspace $ws3 output $d2
+workspace $ws4 output $d2
+workspace $ws5 output $d2
+workspace $ws6 output $d1
+workspace $ws7 output $d1
+workspace $ws8 output $d1
+workspace $ws9 output $d1
+workspace $ws10 output $d2
+
+# Application Launcher 
+
+#bindsym $sup+d exec rofi -show run -lines 8 -eh 2 -width 34 -padding 40 -opacity "85" -bw 0 -font "Courier Prime Sans 18"
+#bindsym XF86LaunchB exec rofi -show run -lines 8 -eh 2 -width 34 -padding 40 -opacity "85" -bw 0 -font "Courier Prime Sans 18"
+bindcode $sup+65 exec $nsi rofi -show run 
+bindsym XF86LaunchB exec $nsi rofi -show run
+bindsym XF86LaunchA exec $nsi rofi -show window
+# bindcode $sup+65 exec dmenu_run
+bindcode $sup+33 exec $nsi rofi-pass --last-used 
+bindcode 124 exec $nsi ~/.dotfiles/config/i3/blocks/shutdown-menu -p rofi
+
+bindcode $sup+58 exec $nsi ~/.dotfiles/config/i3/blocks/monitor-manager 
+
+# Window Management
+
+## Kill Window
+bindcode $sup+24 kill
+
+## Changing focus
+bindcode $sup+43 focus left
+bindcode $sup+44 focus down
+bindcode $sup+45 focus up
+bindcode $sup+46 focus right
+
+bindcode $sup+113 focus left
+bindcode $sup+116 focus down
+bindcode $sup+111 focus up
+bindcode $sup+114 focus right
+
+## Move focused window
+bindcode $sup+Shift+43 move left
+bindcode $sup+Shift+44 move down
+bindcode $sup+Shift+45 move up
+bindcode $sup+Shift+46 move right
+
+bindcode $sup+Shift+113 move left
+bindcode $sup+Shift+116 move down
+bindcode $sup+Shift+111 move up
+bindcode $sup+Shift+114 move right
+
+## split in horizontal orientation sup+\
+bindcode $sup+51 split h  
+
+## split in vertical orientation sup+-
+bindcode $sup+20 split v
+
+## enter fullscreen mode for the focused container
+bindcode $sup+41 fullscreen toggle
+
+## exits fullscreen but not really (picture in picture mode)
+bindcode $sup+29 fullscreen disable; floating enable; resize set 448 252; sticky enable; move window to position 1515 20
+
+## change container layout (stacked, tabbed, toggle split)
+#bindcode $sup+39 layout stacking
+bindcode $sup+28 layout tabbed
+bindcode $sup+26 layout toggle split
+
+## toggle tiling / floating
+bindcode $sup+Shift+39 floating toggle
+
+## change focus between tiling / floating windows
+bindcode $sup+39 focus mode_toggle
+
+## focus the parent container
+bindcode $sup+38 focus parent
+
+## focus the child container
+bindcode $sup+40 focus child 
+
+# Application Assignments
+
+assign [class="Thunar"]                               $ws1
+
+assign [class="^Subl3$"]                              $ws4
+assign [class="^Gimp$"]                               $ws4
+assign [class="^Inkscape$"]                           $ws4
+assign [class="^krita$"]                              $ws4
+assign [class="^libreoffice*"]                        $ws4
+assign [class="^Scribus$"]                            $ws4
+assign [class="^fontforge$"]                          $ws4
+
+assign [class="^Lutris$"]                             $ws5
+assign [class="^Steam$"]                              $ws5
+assign [class="^hl2_linux$"]                          $ws5
+assign [class="^net-minecraft-launcher-Main$"]        $ws5
+assign [class="^Minecraft"]                           $ws5
+
+assign [class="^Conky$"]                              $ws6
+
+assign [class="^Vimb$"]                               $ws7
+assign [class="^Vivaldi-stable$"]                     $ws7
+assign [class="^Google-chrome*"]                      $ws7
+assign [class="^Chromium$"]                           $ws7
+assign [class="^Firefox$"]                            $ws7
+
+assign [class="^discord$"]                            $ws8
+assign [class="^Thunderbird$"]                        $ws8
+
+assign [class="^Pitivi$"]                             $ws9
+#assign [class="^mpv$"]                                $ws9
+assign [class="^Mixxx$"]                              $ws9
+assign [class="^Pavucontrol$"]                        $ws9
+
+# Modes
+mode "Resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindcode 43 resize shrink  width  10 px or 10 ppt
+        bindcode 44 resize grow    height 10 px or 10 ppt
+        bindcode 45 resize shrink  height 10 px or 10 ppt
+        bindcode 46 resize grow    width  10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindcode 113 resize shrink width  10 px or 10 ppt
+        bindcode 116 resize grow   height 10 px or 10 ppt
+        bindcode 111 resize shrink height 10 px or 10 ppt
+        bindcode 114 resize grow   width  10 px or 10 ppt
+
+        # back to normal: Enter or Escape(CTRL)
+        bindcode 36 mode "default"
+
+		# I commented this because I swapped Escape with Control_L
+        #bindcode 9 mode "default"
+        bindcode 37 mode "default"
+}
+
+bindcode $sup+27 mode "Resize"
+
+
+# Laptop-Specific Shortcut
+
+## Screen Brightness 
+bindsym XF86MonBrightnessUp exec $nsi xbacklight -inc 5
+bindsym XF86MonBrightnessDown exec $nsi xbacklight -dec 5
+
+## Media 
+bindsym XF86AudioRaiseVolume exec $nsi amixer -D pulse sset Master 5%+ $update 
+bindsym XF86AudioLowerVolume exec $nsi amixer -D pulse sset Master 5%- $update 
+bindsym XF86AudioMute exec $nsi        amixer -D pulse sset Master 1+ toggle $update
+# bindsym XF86AudioLowerVolume exec $nsi pulseaudio-ctl down $update
+# bindsym XF86AudioRaiseVolume exec $nsi pulseaudio-ctl up $update
+# bindsym XF86AudioMute exec $nsi pulseaudio-ctl mute $update
+
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+## Keyboard Backlit 
+bindsym XF86KbdBrightnessUp exec kbdlight up
+bindsym XF86KbdBrightnessDown exec kbdlight down
+
+# Custom colors
+set_from_resource $darkred     color1  #000000
+set_from_resource $darkgreen   color2  #000000
+set_from_resource $darkyellow  color3  #000000
+set_from_resource $darkblue    color4  #000000
+set_from_resource $darkmagenta color5  #000000
+set_from_resource $darkcyan    color6  #000000
+set_from_resource $darkwhite   color7  #000000
+set_from_resource $red         color9  #000000
+set_from_resource $green       color10 #000000
+set_from_resource $yellow      color11 #000000
+set_from_resource $blue        color12 #000000
+set_from_resource $magenta     color13 #000000
+set_from_resource $cyan        color14 #000000
+set_from_resource $white       color15 #000000
+
+# Use custom colors for black
+set $darkblack   #073642
+set $black       #002b36
+set $sub         #839496
+
+#
+# Show-Hide-Customize Window Title Bars 
+#
+
+# Show all
+for_window [class="^.*"] border normal 2
+
+# Hide selected
+for_window [class="(?i)URxvt"] border pixel 2
+for_window [class="(?i)Steam"] border pixel 2
+for_window [class="(?i)mpv"] border pixel 2
+for_window [class="(?i)Vivaldi-stable"] border pixel 2
+for_window [class="(?i)Google-chrome-unstable"] border pixel 2
+for_window [window_type="dialog"] border pixel 2
+for_window [window_type="menu"] border pixel 2
+
+# Customize
+for_window [class=".*"] title_format "<span> %title</span>"
+for_window [class="(?i)Thunar"] title_format "<span>  %title</span>"
+for_window [class="(?i)URxvt"] title_format "<span>  %title</span>"
+for_window [class="(?i)feh"] title_format "<span>  %title</span>"
+for_window [class="(?i)Wine"] title_format "<span>  %title</span>"
+
+for_window [class="(?i)krita"] title_format "<span>  %title</span>"
+for_window [class="(?i)Gimp"] title_format "<span>  %title</span>"
+for_window [class="(?i)Inkscape"] title_format "<span>   %title</span>"
+
+for_window [class="(?i)Minecraft"] title_format "<span>  %title</span>"
+for_window [class="(?i)Steam"] title_format "<span>  %title</span>"
+for_window [class="(?i)hl2_linux"] title_format "<span>  %title</span>"
+for_window [class="(?i)Lutris"] title_format "<span>  %title</span>"
+
+for_window [class="(?i)mpv"] title_format "<span>  %title</span>"
+for_window [class="(?i)mplayer"] title_format "<span>  %title</span>"
+for_window [class="(?i)Mixxx"] title_format "<span>  %title</span>"
+for_window [class="(?i)iTunes"] title_format "<span>  %title</span>"
+for_window [class="(?i)Spotify"] title_format "<span>  %title</span>"
+for_window [class="(?i)Pitivi"] title_format "<span>  %title</span>"
+for_window [class="(?i)Pinentry"] title_format "<span>  %title</span>"
+for_window [class="(?i)Zathura"] title_format "<span>  %title</span>"
+for_window [class="(?i)Mcomix"] title_format "<span>  %title</span>"
+for_window [class="(?i)Subl3"] title_format "<span>  %title</span>"
+
+for_window [class="(?i)Thunderbird"] title_format "<span >  %title</span>"
+
+for_window [class="(?i)Vimb"] title_format "<span >  %title</span>"
+for_window [class="(?i)qutebrowser"] title_format "<span >  %title</span>"
+for_window [class="(?i)Firefox"] title_format "<span >  %title</span>"
+for_window [class="(?i)Google-chrome-unstable"] title_format "<span >  %title</span>"
+for_window [class="(?i)Chromium"] title_format "<span >  %title</span>"
+for_window [class="(?i)Google-chrome-stable"] title_format "<span >  %title</span>"
+for_window [class="(?i)Vivaldi-stable"] title_format "<span >  %title</span>"
+
+#smart_gaps on 
+#smart_borders on 
+
+#
+# Open applications in specific workspace
+#
+
+# for_window [class="Steam"]                             floating enable
+# for_window [class="Steam.exe"]                         floating enable
+for_window [class="Arandr"]                            floating enable
+for_window [class="mpv"]                               floating enable
+for_window [class="feh"]                               floating enable
+for_window [class="^net-minecraft-launcher-Main$"]     floating enable
+for_window [class="^Minecraft"]                        floating enable
+for_window [class="Mainwindow.py"]                     floating enable
+
+for_window [class="Pavucontrol"]                       floating enable
+for_window [window_role="Preferences"]                 floating enable
+for_window [window_type="dialog"]                      floating enable
+for_window [window_type="menu"]                        floating enable
+
+# Gaps
+gaps inner 4
+gaps outer 6 
+# Workspace Specific Gaps
+# workspace $w1 gaps inner 15
+
+# Window colors           border        background   text         indicator    child_border
+client.focused            $darkcyan     $darkcyan    $black       $darkgreen   $darkcyan
+client.focused_inactive   $cyan         $yellow      $black       $darkgreen   $green
+client.unfocused          $green        $yellow      $black       $darkgreen   $darkblack
+client.urgent             $darkblue     $darkblue    $black       $darkgreen   $darkblue
+
+bar {      
+	status_command i3blocks -c ~/.config/i3/i3blocks.conf
+	position bottom
+	strip_workspace_numbers yes
+	
+	colors {
+		separator          $green
+		background         #000000
+		#background         $black
+		statusline         $cyan
+		
+		# Bar colors       border       background    text 
+		focused_workspace  $green       $darkblack    $darkwhite
+		active_workspace   $black       $black        $darkwhite
+		inactive_workspace $black       $black        $sub
+		urgent_workspace   $black       $black        $darkblue
+	}
+}
+
+## i3Lock Shortcut
+#bindcode $sup+shift+53 exec i3lock --color "$darkbg"
+
+# For higher DPI -> exec spotify --force-device-scale-factor=2 
+
+# Save for later
+#bindsym --release Print exec imgur-screenshot
+
+# i3 Lock
+#set $Locker i3lock-fancy
+
+# vim:filetype=i3
