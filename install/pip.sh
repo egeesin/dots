@@ -25,6 +25,7 @@ git+https://github.com/0xl3vi/we-get
 # macOS only
 if [ "$(uname -s)" == "Darwin" ]; then
 	pip install haxor-news
+	pip install turses
 	pip install cheat
 	pip install urlscan
 	pip3 install stig

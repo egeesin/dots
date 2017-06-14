@@ -34,6 +34,7 @@ ntfs-3g
 pass-import
 python-natsort
 python-urwidtrees-git
+python3-kitchen
 rofi-pass
 rtv
 ruby-bropages
@@ -55,6 +56,7 @@ ttf-emojione-color
 ttf-mac-fonts
 ttf-ms-fonts
 tty-clock-git
+turses
 urlscan-git
 urxvt-fullscreen
 urxvt-resize-font-git
