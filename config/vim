@@ -101,11 +101,11 @@ autocmd VimResized * :wincmd =
 
 " Fix Cursor in TMUX
 if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+	let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
 " quickly close quickfix
@@ -179,8 +179,6 @@ set nowb
 
 " Mutt
 au BufRead /tmp/mutt-* set tw=72
-
-
 
 " set backup
 " set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
@@ -352,7 +350,7 @@ if ! has('gui_running')
         au InsertEnter * set timeoutlen=0
         au InsertLeave * set timeoutlen=1000
     augroup END
-	set guifont=Iosevka\ Nerd\ Font\ Complete:h16 " Set the font to use.
+	set guifont=Iosevka\ Nerd\ Font:h16 " Set the font to use.
 	set guioptions-=T  "remove menu bar
 	set guicursor+=a:block-blinkon0      " Use non-blinking block cursor.
 	
@@ -535,9 +533,9 @@ xmap ah <Plug>GitGutterTextObjectOuterVisual
 "
 let indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=008 ctermbg=008
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=000 ctermbg=008
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=000 ctermbg=000
 
-
+									
 "
 " Translate-Shell Integration
 "
@@ -668,10 +666,10 @@ let g:tmuxline_separators = {
 " #S => Session Name
 " #H => Local Name
 let g:tmuxline_preset = {
-	\'a'    : '#([[ "$(uname)" == "Linux" ]] && echo "   "; [[ "$(uname)" == "Darwin" ]] && echo "  " )',
+	\'a'    : '#([[ "$(uname)" == "Linux" ]] && echo "   "; [[ "$(uname)" == "Darwin" ]] && echo "   " )',
     \'win'  : '#W',
     \'cwin' : ['#W#F'],
 	\'x'    : ["⚡ #(battery-level)  #(uptime | awk '{print $3}'|sed 's/,//')"],
-    \'y'    : ['  ʷ%W %a %d/%m  %I:%M'],
+    \'y'    : ['ʷ%W %a %d/%m  %I:%M'],
     \'z'    : '  #H'}
 " Note: MB4 has not battery, if you're using MB4, comment battery-level. 

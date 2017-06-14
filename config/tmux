@@ -10,7 +10,7 @@ bind R source-file ~/.tmux.conf
 # Set prefix
 set-option -g prefix C-a 
 # Tmuxline
-source-file ~/.dotfiles/system/.tmuxline
+source-file ~/.dotfiles/system/tmuxline
 
 # TPM Plugins
 if "test ! -d ~/.tmux/plugins/tpm" \
@@ -102,6 +102,8 @@ bind-key -Tcopy-mode-vi 'Escape' send -X cancel
 
 # Mouse mode 
 set -g mouse on
+set -g mouse-utf8 off
+
 #
 # Toggle mouse on with ^B m
 # bind m \
