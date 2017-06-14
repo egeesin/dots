@@ -1,12 +1,13 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
+#/usr/local/bin/python3
 
 """Shower Thoughts
 
 Usage:
-  shower_thoughts
-  shower_thoughts update
-  shower_thoughts open
-  shower_thoughts config (sort|limit|timeframe|subreddit) [<value>]
+  shower-thoughts
+  shower-thoughts update
+  shower-thoughts open
+  shower-thoughts config (sort|limit|timeframe|subreddit) [<value>]
 
 Options:
   -h --help     Show this screen.
@@ -95,7 +96,7 @@ class ShowerThoughts:
             self.connection.read()
             print(self.connection.randomThought())
         except Exception:
-            print("Unable to read database.  Try running \"shower_thoughts update\"")
+            print("Unable to read database.  Try running \"shower-thoughts update\"")
 
     def update(self):
         self.connection.pull()
