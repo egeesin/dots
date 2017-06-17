@@ -306,7 +306,7 @@ show_vinylcontrol 0
 SupportedFileExtensions mp3,ogg,opus,aiff,aif,wav,flac,m4a,mp4
 
 [Preferences]
-geometry 
+geometry 323,111,1039,649
 
 [Channel1]
 vinylcontrol_vinyl_type Serato CV02 Vinyl, Side A

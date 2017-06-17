@@ -1,3 +1,5 @@
+alias resetdisplay='~/.extra/mbp11x/screenlayout/default.sh'
+
 alias pac="pacman $1"
 alias pacs="sudo pacman -S"
 alias pacr="sudo pacman -Rns"
@@ -32,7 +34,11 @@ alias stopvnc="sudo systemctl stop x0vncserver.service"
 alias startlegacy="vncviewer -passwd ~/.extra/secret/vnc/passwd DotWhenNoCursor=1 192.168.2.144:5900"
 alias startarch="vncviewer -passwd ~/.extra/secret/vnc/passwd DotWhenNoCursor=1 192.168.2.229:5900"
 
+
 # spotify HiDPI
 # alias spotify="spotify --force-device-scale-factor=1.5"
 
 alias tetris="vitetris --nomenu"
+
+# List GTK2/3 themes (must-not-include-space-in-theme-name)
+alias listgtk='find $(find ~/.themes /usr/share/themes/ -wholename "*/gtk-3.0" | sed -e "s/^\(.*\)\/gtk-3.0$/\1/") -wholename "*/gtk-2.0" | sed -e "s/.*\/\(.*\)\/gtk-2.0/\1"/'

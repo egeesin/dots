@@ -35,7 +35,6 @@ alias torr="stig"
 alias clock='tty-clock -s -c -t -C 6'
 alias web='w3m'
 alias startmux='tmuxinator main'
-alias resetdisplay='~/.extra/mbp11x/screelayout/default.sh'
 
 alias mpdtroubleshoot="mpd --stdout --no-daemon --verbose"
 

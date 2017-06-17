@@ -10,7 +10,6 @@ bash-bats
 bsd-games
 cairo
 calcurse
-calibre
 cmatrix
 conky
 cowsay
@@ -43,7 +42,6 @@ libreoffice-still
 lm_sensors
 lolcat
 lxappearance
-mcomix
 mediainfo
 mixxx
 mpd
@@ -56,6 +54,7 @@ nitrogen
 nodejs
 npm
 openvpn
+osdstudio
 pass
 pavucontrol
 pitivi
@@ -108,5 +107,7 @@ xscreensaver
 you-get
 youtube-dl
 zathura
+zathura-pdf-poppler
+zathura-cb
 zip
 zsh

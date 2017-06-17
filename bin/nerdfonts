@@ -9,7 +9,7 @@ function print-decimal-unicode-range() {
   local bgColorBorder='\033[48;5;8m'
   local bgColorCode='\033[48;5;0m'
   local alternateBgColorCode='\033[48;5;8m'
-  local bgColorChar='\033[48;5;256m'
+  local bgColorChar='\033[48;5;236m'
   local alternateBgColorChar='\033[48;5;234m'
   local underline='\033[4m'
   local currentColorCode="${bgColorCode}"

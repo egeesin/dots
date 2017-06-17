@@ -56,13 +56,13 @@ for DOTFILE in "$DOTFILES_DIR"/system/{function,function-*,path,env,alias,comple
 done
 
 if [[ "$(uname -s)" = "Darwin" ]]; then
-  for DOTFILE in "$DOTFILES_DIR"/system/{env,alias,function}_mac; do
+  for DOTFILE in "$DOTFILES_DIR"/system/{path,env,alias,function}_mac; do
     [ -f "$DOTFILE" ] && . "$DOTFILE"
   done
 fi
 
 if [[ "$(uname -s)" = "Linux" ]]; then # Arch Linux, in this case.
-  for DOTFILE in "$DOTFILES_DIR"/system/{env,alias,function}_tux; do
+  for DOTFILE in "$DOTFILES_DIR"/system/{path,env,alias,function}_tux; do
     [ -f "$DOTFILE" ] && . "$DOTFILE"
   done
   export PATH="$PATH:$HOME/.rvm/bin"

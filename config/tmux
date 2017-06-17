@@ -102,7 +102,6 @@ bind-key -Tcopy-mode-vi 'Escape' send -X cancel
 
 # Mouse mode 
 set -g mouse on
-set -g mouse-utf8 off
 
 #
 # Toggle mouse on with ^B m

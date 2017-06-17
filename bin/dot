@@ -35,19 +35,19 @@ sub_test () {
 sub_up () {
 	if [[ "$(uname -s)" == "Darwin" ]]; then
 		sudo softwareupdate -i -a
+		brew update
+		brew upgrade
 		pip2 install --upgrade pip
 		pip3 install --upgrade pip
 		pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
 		gem update --system
 		gem update
-		brew update
-		brew upgrade
 	elif [[ "$(uname -s)" == "Linux" ]]; then
+		sudo pacman -Syu
+		pacaur -a -Syu 
 		sudo pip2 install --upgrade pip
 		sudo pip3 install --upgrade pip
 		sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
-		sudo pacman -Syu
-		pacaur -a -Syu 
 	fi
 	npm i -g npm
 	npm up -g

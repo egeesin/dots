@@ -22,6 +22,7 @@ la-capitaine-icon-theme-git
 lutris
 mcedit
 mdp
+megatools
 minecraft
 neofetch
 neomutt
@@ -35,6 +36,7 @@ pass-import
 python-natsort
 python-urwidtrees-git
 python3-kitchen
+qt5-styleplugins
 rofi-pass
 rtv
 ruby-bropages
@@ -65,5 +67,6 @@ vimb
 vitetris
 vivaldi
 xcalib
+xcursor-osx-elcap
 xscreensaver-aerial
 yank

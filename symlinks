@@ -5,7 +5,6 @@ calcurse-keys      .calcurse/keys
 curl               .curlrc
 editorconfig       .editorconfig
 haxornews          .haxornewsconfig
-htop               .config/htop/htoprc
 trans              .translate-shell/init.trans
 mplayer            .mplayer/config
 mpsyt              .config/mps-youtube/config
@@ -32,6 +31,7 @@ mackup             .mackup.cfg
 dunst              .config/dunst/dunstrc
 gtk2               .gtkrc-2.0
 gtk3               .config/gtk-3.0/settings.ini
+htop               .config/htop/htoprc
 i3                 .config/i3
 krita              .config/kritarc
 mixxx              .mixxx/mixxx.cfg

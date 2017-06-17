@@ -19,6 +19,7 @@ diff-so-fancy
 empty-trash-cli
 google-font-installer
 hget
+mapscii
 mediumcli
 moeda
 node-notifier
