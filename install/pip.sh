@@ -1,3 +1,8 @@
+if ! is-executable pip; then
+	echo "Skipped: pip packages (missing: pip)"
+	return
+fi
+
 packages=(
 Cython --install-option="--no-cython-compile"
 Pillow

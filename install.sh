@@ -6,14 +6,14 @@ ORG='\033[0;33m'
 LCYN='\033[0;36m'
 WHT='\033[1;37m'
 NC='\033[0m'
-echo -e "         Welcome to"
 echo ""
+echo -e "         Welcome to"
 echo -e "${WHT}  ege's${LBLU}  __ _ _"
 echo -e "${LBLU}        / _(_) | ___  ___ "
 echo -e "${LBLU}       | |_| | |/ _ \/ __|"
 echo -e "${LBLU}      _|  _| | |  __/\__ \ "
 echo -e "${LBLU}     (_)_| |_|_|\___||___/"
-# Inspired from webpro/dotfiles & olzraiti/dotfiles
+# Inspired from webpro, mathiasbynens, olzraiti
 
 ask() {
 	while true; do
@@ -27,7 +27,7 @@ ask() {
 			prompt="y/n"
 			default=
 		fi
-		read -p "$1 [$prompt] " REPLY </dev/tty
+		read -r -p "$1 [$prompt] " REPLY </dev/tty
 		if [ -z "$REPLY" ]; then
 			REPLY=$default
 		fi
@@ -37,16 +37,21 @@ ask() {
 		esac
 	done
 }
+
 # Directory variables
-export DOT_DIR X_DIR
+export DOT_DIR DOT_CACHE X_DIR
 DOT_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DOT_CACHE="$DOT_DIR/.cache.sh"
 X_DIR="$HOME/.extra"
 
+# Common functions
+. "$DOT_DIR/system/function"
+
 # Update dotfiles itself first
-[ -d "$DOT_DIR/.git" ] && git --work-tree="$DOT_DIR" --git-dir="$DOT_DIR/.git" pull origin master
+if is-executable git -a -d "$DOT_DIR/.git"; then git --work-tree="$DOT_DIR" --git-dir="$DOT_DIR/.git" pull origin master; fi
 
 # GPG & Pass
-if [ -d $X_DIR ]; then 
+if [[ -d "$X_DIR" ]]; then 
 	export GNUPGHOME="$X_DIR/secret/gnupg"
 	export PASSWORD_STORE_DIR="$X_DIR/secret/pass"
 fi
@@ -62,33 +67,22 @@ ln -sfv "$DOT_DIR/git/gitignore-global" ~/.gitignore_global
 # Download & install macOS-specific packages
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	echo ""
-	echo -e "${LCYN}█▓▒░░ ${WHT}Installing packages for ${LBLU}macOS${WHT}…\n"
-	export PATH="/usr/local/bin:$PATH"
-	command -v brew > /dev/null 2&>1 || ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	brew doctor
-	brew update
-	brew upgrade
-
-	brew bundle --file=$DOT_DIR/install/Brewfile
-	# Just in case doesn't work,
-	#. "$DOT_DIR/etc/brew.sh"
-	#. "$DOT_DIR/etc/cask.sh"
-
+	echo -e "${LCYN}█▓▒░░ ${WHT}Installing packages for ${LBLU}macOS${WHT}...\n"
+	. "$DOT_DIR/install/brew.sh"
 	. "$DOT_DIR/install/gem.sh"
-	echo -e "${LCYN}█▓▒░░ ${ORG}brew ${WHT}-> ${GRN}✔\n" 
-
+	echo -e "${LCYN}█▓▒░░ ${ORG}brew ${WHT}-> ${GRN}Done!\n" 
 
 # Download & install Linux-specific packages
 elif [[ "$(uname -s)" == "Linux" ]]; then
 	echo ""
-	echo -e "${LCYN}█▓▒░░ ${WHT}Downloading packages from ${LBLU}Arch repo and AUR${WHT}…\n"
+	echo -e "${LCYN}█▓▒░░ ${WHT}Downloading packages from ${LBLU}Arch repo and AUR${WHT}...\n"
 
-	[[ ! -x "pacaur" ]] && $DOT_DIR/install/pacaur-setup.sh
+	if is-executable pacaur; then "$DOT_DIR/install/pacaur-setup.sh"; fi
 
 	# multilib needs to activated before this lines!
 	sudo pacman -Syu --noconfirm
 
-	echo -e "${LCYN}█▓▒░░ ${WHT}Installing packages…\n"
+	echo -e "${LCYN}█▓▒░░ ${WHT}Installing packages...\n"
 
 	. "$DOT_DIR/install/pac.sh"
 
@@ -97,33 +91,34 @@ fi
 
 # Install npm/pip packages
 echo ""
-echo -e "${LCYN}█▓▒░░ ${WHT}Installing ${LRED}npm/pip ${WHT}packages…\n"
+echo -e "${LCYN}█▓▒░░ ${WHT}Installing ${LRED}npm/pip ${WHT}packages...\n"
 
 . "$DOT_DIR/install/npm.sh"
 . "$DOT_DIR/install/pip.sh"
 
 echo -e "${LCYN}█▓▒░░ ${LRED}npm/pip ${NC}-> ${GRN}Done!\n"
 
-# Run tests
-bats $DOT_DIR"/test/*.bats"
+# Run tests if bats exists
+if is-executable bats; then bats test/*.bats; else echo "Skipped: tests (missing: bats)"; fi
 
 echo ""
-echo -e "${LCYN}█▓▒░░ ${WHT}Symlinking configuration files…\n"
+echo -e "${LCYN}█▓▒░░ ${WHT}Symlinking configuration files...\n"
 . "$DOT_DIR/link.sh"
 echo -e "${LCYN}█▓▒░░ ${WHT}Configurations ${NC}-> ${GRN}Done!\n" 
 
 # Install extra stuff if X_DIR exists
-if [ -d "$X_DIR" -a -f "$X_DIR/install.sh" ]; then
+if [[ -d "$X_DIR" ]] & [[ -f "$X_DIR/install.sh" ]]; then
 	echo ""
-	echo -e "${WHT}█▓▒░░ Installing extra stuff…\n"
-	sudo $X_DIR/install.sh
+	echo -e "${WHT}█▓▒░░ Installing extra stuff...\n"
+	sudo "$X_DIR/install.sh"
+	[[ "$(uname -s)" == "Darwin" ]] && mackup -v restore
 	echo -e "${LCYN}█▓▒░░ ${WHT}Extra stuff ${NC}-> ${GRN}Done!\n" 
 fi
 
 # Install Zplug
 echo ""
-echo -e "${LCYN}█▓▒░░ ${WHT}Installing Zplug…\n"
-[[ ! -x "zplug" ]] && curl -sL https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+echo -e "${LCYN}█▓▒░░ ${WHT}Installing Zplug...\n"
+if is-executable zplug; then curl -sL https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh; fi
 echo -e "${LCYN}█▓▒░░ ${WHT}Zplug ${NC}-> ${GRN}Done!\n" 
 
 # Questions, questions…
@@ -137,7 +132,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 		brew services start transmission
 	fi
 	if ask "Do you want to change macOS settings & dock?" Y; then
-        mkdir -p ~/Pictures/Screenshots
+		mkdir -p ~/Pictures/Screenshots
 		. "$DOT_DIR/macos/defaults.sh"
 		. "$DOT_DIR/macos/defaults-chrome.sh"
 		. "$DOT_DIR/macos/dock.sh"
@@ -147,7 +142,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 	fi
 	chmod go-w '/usr/local/share'
 elif [[ "$(uname -s)" == "Linux" ]]; then
-    if ask "Do you want to enable and start Music Player Daemon?" Y; then
+	if ask "Do you want to enable and start Music Player Daemon?" Y; then
 		systemctl --user enable mpd.service
 		systemctl --user start mpd.service
 	fi
@@ -155,9 +150,12 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	    chsh -s /bin/zsh
 	fi
 fi
+echo ""
 echo -e "${LCYN}█▓▒░░ ${GRN}Dotfiles installation completed.\n" 
 echo ""
-echo -e "If it's your first time you execute install.sh, reboot the machine to see full progress."
-echo -e "If you having issues, want to participate my work, please don't hesitate. https://github.com/egeesin/dotfiles/issues" 
+echo -e "If it's your first time you execute install.sh, reboot the machine"
+echo -e "to see full progress."
+echo -e "If you having issues, want to participate my work, please don't hesitate."
+echo -e "${WHT}https://github.com/egeesin/dotfiles/issues" 
 echo ""
-echo -e "Thanks for trying my dotfiles. *-*" 
+echo -e "${LCYN}Thanks for trying my dotfiles. *_*" 

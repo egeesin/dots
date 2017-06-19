@@ -1,9 +1,11 @@
-# git.sh - github.com/egeesin
+#!/usr/bin/env bash
+
+# install/git.sh - github.com/egeesin
 
 # Ranger Devicons plugin
 if [[ ! -f ~/.config/ranger/devicons.py ]]; then
 	git clone https://github.com/alexanderjeurissen/ranger_devicons.git
-	cd ranger_devicons
+	cd ranger_devicons || exit
 	make install
 	cd -
 fi
@@ -14,7 +16,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 	# deps: ncurses, fftw
 	if [[ ! -x "vis" ]]; then
 		git clone https://github.com/dpayne/cli-visualizer
-		cd cli-visualizer
+		cd cli-visualizer || exit
 		./install.sh
 		cd -
 	fi
@@ -22,15 +24,14 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 	# pass-import
 	if [[ ! -x "pass-import" ]]; then
 		git clone https://github.com/roddhjav/pass-import/
-		cd pass-import
+		cd pass-import || exit
 		sudo make PREFIX=/usr/local install
 		cd -
-	fi
 
 	# Slacker
 	if [[ ! -x "slacker" ]]; then
 		git clone https://github.com/TidalLabs/Slacker.git
-    	cd Slacker
+    	cd Slacker || exit
     	sudo make PREFIX=/usr/local install
     	cd -
 	fi

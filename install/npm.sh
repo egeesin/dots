@@ -1,6 +1,8 @@
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	brew install nvm
-	. "${DOTFILES_DIR}/system/.nvm.macos"
+	export BREW_PREFIX_NVM=$(brew --prefix nvm)
+	set-config "BREW_PREFIX_NVM" "$BREW_PREFIX_NVM" "$DOT_CACHE"
+	. "${DOTFILES_DIR}/system/nvm.macos"
 elif [[ "$(uname -s)" == "Linux" ]]; then
 	pacaur -a -S nvm
 	. /usr/share/nvm/init-nvm.sh

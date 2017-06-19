@@ -2,7 +2,6 @@
 dockutil --no-restart --remove all
 dockutil --no-restart --add '' --type spacer --section apps
 dockutil --no-restart --add "/Applications/Launchpad.app"
-dockutil --no-restart --add "/Applications/Messages.app"
 dockutil --no-restart --add "/Applications/iTunes.app"
 dockutil --no-restart --add "/Applications/Photos.app"
 dockutil --no-restart --add "/Applications/iBooks.app"

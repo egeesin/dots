@@ -6,11 +6,23 @@ is-executable getconf && PATH=$(`command -v getconf` PATH)
 prepend-path "/bin"
 prepend-path "/usr/bin"
 prepend-path "/usr/local/bin"
-prepend-path "/usr/local/sbin"
+[[ "$(uname -s)" = "Darwin" ]] && is-executable brew && prepend-path "$BREW_PREFIX_COREUTILS/libexec/gnubin"
 prepend-path "$DOTFILES_DIR/bin"
 prepend-path "$HOME/bin"
 prepend-path "/sbin"
 prepend-path "/usr/sbin"
+prepend-path "/usr/local/sbin"
+if [[ "$(uname -s)" = "Darwin" ]]; then
+	prepend-path "$HOME/.rvm/bin"
+	prepend-path "/opt/local/bin"
+	prepend-path "/opt/local/sbin"
+	prepend-path "/usr/local/share/npm/bin"
+	prepend-path "/Library/Frameworks/Python.framework/Versions/3.5/bin"
+	prepend-path "$HOME/Library/Python/2.7/bin"
+	prepend-path "/usr/local/opt/bc/bin"
+	prepend-path "/usr/local/opt/ncurses/bin"
+	prepend-path "/usr/local/opt/openssl/bin"
+fi
 is-executable go && export GOPATH="$HOME/go"
 prepend-path "$GOROOT/bin"
 prepend-path "$GOPATH/bin"
@@ -18,4 +30,5 @@ prepend-path "$GOPATH/bin"
 # Remove duplicates (preserving prepended items) -  Source: http://unix.stackexchange.com/a/40755
 PATH=`echo -n $PATH | awk -v RS=: '{ if (!arr[$0]++) {printf("%s%s",!ln++?"":":",$0)}}'`
 
+# Wrap up
 export PATH

@@ -1,3 +1,6 @@
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
 ## Auto Completion
 setopt extended_glob
 zstyle :compinstall filename '/Users/ege/.zshrc'
@@ -36,38 +39,45 @@ set convert-meta off
 # Settings
 #
 
-# Resolve DOTFILES_DIR (assuming ~/.dotfiles on distros without readlink and/or $BASH_SOURCE/$0)
+# Resolve DOT_DIR (assuming ~/.dotfiles on distros without readlink and/or $BASH_SOURCE/$0)
 READLINK=$(which greadlink || which readlink)
 CURRENT_SCRIPT=$BASH_SOURCE
 
 if [[ -n $CURRENT_SCRIPT && -x "$READLINK" ]]; then
-  SCRIPT_PATH=$($READLINK -f "$CURRENT_SCRIPT")
-  DOTFILES_DIR=$(dirname "$(dirname "$SCRIPT_PATH")")
+	SCRIPT_PATH=$($READLINK -f "$CURRENT_SCRIPT")
+	DOT_DIR=$(dirname "$(dirname "$SCRIPT_PATH")")
 elif [ -d "$HOME/.dotfiles" ]; then
-  DOTFILES_DIR="$HOME/.dotfiles"
+	DOT_DIR="$HOME/.dotfiles"
 else
-  echo "Unable to find dotfiles, exiting."
-  return # `exit 1` would quit the shell itself
+	echo "Unable to find dotfiles, exiting."
+	return # `exit 1` would quit the shell itself
 fi
+
+DOT_CACHE="$DOT_DIR/.cache.sh"
+[ -f "$DOT_CACHE" ] && . "$DOT_CACHE"
 
 # Finally we can source the dotfiles (order matters)
-for DOTFILE in "$DOTFILES_DIR"/system/{function,function-*,path,env,alias,completion,grep,prompt,promptline,nvm,rvm,custom}; do
-  [ -f "$DOTFILE" ] && . "$DOTFILE"
+for DOTFILE in "$DOT_DIR"/system/{function,function-*,path,env,alias,completion,grep,prompt,promptline,nvm,rvm,custom}; do
+	[ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 
-if [[ "$(uname -s)" = "Darwin" ]]; then
-  for DOTFILE in "$DOTFILES_DIR"/system/{path,env,alias,function}_mac; do
-    [ -f "$DOTFILE" ] && . "$DOTFILE"
-  done
+if [ "$(uname -s)" = "Darwin" ]; then
+	for DOTFILE in "$DOT_DIR"/system/{function,env,alias,nvm}_mac; do
+		[ -f "$DOTFILE" ] && . "$DOTFILE"
+	done
 fi
 
-if [[ "$(uname -s)" = "Linux" ]]; then # Arch Linux, in this case.
-  for DOTFILE in "$DOTFILES_DIR"/system/{path,env,alias,function}_tux; do
-    [ -f "$DOTFILE" ] && . "$DOTFILE"
-  done
-  export PATH="$PATH:$HOME/.rvm/bin"
+if [ "$(uname -s)" = "Linux" ]; then # Arch Linux, in this case.
+	for DOTFILE in "$DOT_DIR"/system/{function,env,alias}_tux; do
+		[ -f "$DOTFILE" ] && . "$DOTFILE"
+	done
+	export PATH="$PATH:$HOME/.rvm/bin"
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 fi
+
+# Clean up
+unset READLINK CURRENT_SCRIPT SCRIPT_PATH DOTFILE
+
 
 [[ "$(uname -s)" = "Darwin" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 
@@ -80,7 +90,7 @@ zplug "zlsun/solarized-man"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 if zplug check || zplug install; then
-    zplug load 
+	zplug load 
 fi
 zplug load 
 
@@ -94,7 +104,8 @@ compinit
 if [[ -z $TMUX && -z $SSH_CONNECTION && -z $DISPLAY && $XDG_VTNR -eq 1 ]]; then
 	exec startx
 else
-	export GPG_TTY=`tty`
+	export GPG_TTY
+	GPG_TTY=$(tty)
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

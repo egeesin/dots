@@ -118,8 +118,9 @@ alias tpmuall="~/.tmux/plugins/tpm/bin/update_plugins all"
 alias tpmr="~/.tmux/plugins/tpm/bin/clean_plugins"
 
 # Network
-#alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-#alias ipl="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en1"
+alias ipl="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 
 # Request using GET, POST, etc. method
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do

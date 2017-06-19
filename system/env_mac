@@ -1,7 +1,8 @@
 # Some app locations
-export ATOM_PATH="$HOME/Applications"
-export CHROME_BIN="$HOME/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-export CHROME_CANARY_BIN="$HOME/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+export ATOM_PATH="/Applications"
+export CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+export CHROME_CANARY_BIN="/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+export FIREFOX_BIN="/Applications/Firefox.app/Contents/MacOS/firefox-bin"
 
 # Don't clear the screen after quitting a manual page.
 export MANPAGER='less -x';
