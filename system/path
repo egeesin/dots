@@ -7,7 +7,7 @@ prepend-path "/bin"
 prepend-path "/usr/bin"
 prepend-path "/usr/local/bin"
 [[ "$(uname -s)" = "Darwin" ]] && is-executable brew && prepend-path "$BREW_PREFIX_COREUTILS/libexec/gnubin"
-prepend-path "$DOTFILES_DIR/bin"
+prepend-path "$DOT_DIR/bin"
 prepend-path "$HOME/bin"
 prepend-path "/sbin"
 prepend-path "/usr/sbin"
@@ -23,7 +23,7 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	prepend-path "/usr/local/opt/ncurses/bin"
 	prepend-path "/usr/local/opt/openssl/bin"
 fi
-is-executable go && export GOPATH="$HOME/go"
+export GOPATH="$HOME/.go"
 prepend-path "$GOROOT/bin"
 prepend-path "$GOPATH/bin"
 

@@ -1,7 +1,5 @@
 # General
-#browser "open %u"
-browser "xdg-open %u"
-#browser "$BROWSER %u &> /dev/null &"
+browser "open %u"
 
 html-renderer "w3m -T text/html"
 external-url-viewer "urlscan"

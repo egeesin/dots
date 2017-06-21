@@ -22,6 +22,7 @@ bind pager k previous-line
 bind alias,index,browser,query G last-entry
 bind pager G bottom
 
+bind alias,index,browser,query,pager g noop
 bind alias,index,browser,query gg first-entry
 bind pager gg top
 

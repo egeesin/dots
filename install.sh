@@ -64,13 +64,17 @@ ln -sfv "$DOT_DIR/runcom/gemrc" ~/.gemrc
 ln -sfv "$DOT_DIR/git/gitconfig" ~/.gitconfig
 ln -sfv "$DOT_DIR/git/gitignore-global" ~/.gitignore_global
 
+# GOPATH
+export GOPATH="$HOME/.go"
+export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
+
 # Download & install macOS-specific packages
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	echo ""
 	echo -e "${LCYN}█▓▒░░ ${WHT}Installing packages for ${LBLU}macOS${WHT}...\n"
 	. "$DOT_DIR/install/brew.sh"
 	. "$DOT_DIR/install/gem.sh"
-	echo -e "${LCYN}█▓▒░░ ${ORG}brew ${WHT}-> ${GRN}Done!\n" 
+	echo -e "${LCYN}█▓▒░░ ${ORG}Homebrew packages ${NC}-> ${GRN}Done!\n" 
 
 # Download & install Linux-specific packages
 elif [[ "$(uname -s)" == "Linux" ]]; then
@@ -79,59 +83,75 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 
 	if is-executable pacaur; then "$DOT_DIR/install/pacaur-setup.sh"; fi
 
-	# multilib needs to activated before this lines!
+	# Before start the installation, uncomment multilib (for steam, wine) and archlinuxfr just in case
+	[[ -d $X_DIR ]] && install -m 644 -o root -g root $X_DIR/mbp11x/etc/pacman.conf -t /etc
+
 	sudo pacman -Syu --noconfirm
 
 	echo -e "${LCYN}█▓▒░░ ${WHT}Installing packages...\n"
 
 	. "$DOT_DIR/install/pac.sh"
 
-	echo -e "${LCYN}█▓▒░░ ${LBLU}pacman/pacaur ${NC}-> ${GRN}Done!\n" 
+	echo -e "${LCYN}█▓▒░░ ${LBLU}Official and AUR packages ${NC}-> ${GRN}Installed!\n" 
 fi
 
 # Install npm/pip packages
 echo ""
-echo -e "${LCYN}█▓▒░░ ${WHT}Installing ${LRED}npm/pip ${WHT}packages...\n"
 
 . "$DOT_DIR/install/npm.sh"
 . "$DOT_DIR/install/pip.sh"
 
-echo -e "${LCYN}█▓▒░░ ${LRED}npm/pip ${NC}-> ${GRN}Done!\n"
+echo -e "${LCYN}█▓▒░░ ${LRED}Node and Python packages${NC}-> ${GRN}Installed!\n"
 
 # Run tests if bats exists
-if is-executable bats; then bats test/*.bats; else echo "Skipped: tests (missing: bats)"; fi
+if is-executable bats; then bats test/*.bats; else echo -e "${WHT}█▓▒░░ ${WHT}Tests ${NC}-> ${WHT}Skipped (bats not found)\n"; fi
 
 echo ""
 echo -e "${LCYN}█▓▒░░ ${WHT}Symlinking configuration files...\n"
-. "$DOT_DIR/link.sh"
-echo -e "${LCYN}█▓▒░░ ${WHT}Configurations ${NC}-> ${GRN}Done!\n" 
+if [[ "$(ls -1 $DOT_DIR/config/ | wc -l)" == "$(cat $DOT_DIR/symlinks | wc -l)" ]]; then
+	# Count configs depending on OS
+	[[ "$(uname -s)" == "Darwin" ]] && echo -e "${GRN}█▓▒░░ ${WHT}$(cat $DOT_DIR/symlinks | grep -v '_tux' | wc -l)${NC} files are available to link.\n"
+	[[ "$(uname -s)" == "Linux" ]] && echo -e "${GRN}█▓▒░░ ${WHT}$(cat $DOT_DIR/symlinks | grep -v '_mac' | wc -l)${NC} files are available to link.\n"
+	. "$DOT_DIR/link.sh"
+echo -e "${LCYN}█▓▒░░ ${WHT}Configurations ${NC}-> ${GRN}Linked!\n" 
+else
+	echo ""
+	echo -e "${ORG}ERR: ${WHT}Unspecified configs in dotfiles/symlinks. Please check and update ~/.dotfiles/symlinks"
+	echo -e "After installation process, reset machine, open the shell, then type ${LCYN}dot link" 
+	echo -e "${WHT}So you can use your favorite CLI tools with your configuration." 
+	echo ""
+	echo -e "${LRED}█▓▒░░ ${WHT}Configurations ${NC}-> ${ORG}Failed\n" 
+fi
 
 # Install extra stuff if X_DIR exists
 if [[ -d "$X_DIR" ]] & [[ -f "$X_DIR/install.sh" ]]; then
 	echo ""
 	echo -e "${WHT}█▓▒░░ Installing extra stuff...\n"
 	sudo "$X_DIR/install.sh"
-	[[ "$(uname -s)" == "Darwin" ]] && mackup -v restore
-	echo -e "${LCYN}█▓▒░░ ${WHT}Extra stuff ${NC}-> ${GRN}Done!\n" 
+	[[ "$(uname -s)" == "Darwin" ]] && mackup -v restore; echo -e "${LCYN}█▓▒░░ ${WHT}Mackup ${NC}-> ${GRN}Done!\n" 
+	echo -e "${LCYN}█▓▒░░ ${WHT}Extra stuff ${NC}-> ${GRN}Installed!\n" 
+else
+	echo "No .extra directory, skipping."
+	echo -e "${WHT}█▓▒░░ ${WHT}Extra stuff ${NC}-> ${WHT}Skipped (Directory not found)\n" 
 fi
 
 # Install Zplug
 echo ""
-echo -e "${LCYN}█▓▒░░ ${WHT}Installing Zplug...\n"
+echo -e "${LCYN}█▓▒░░ ${WHT}Installing ZPlug...\n"
 if is-executable zplug; then curl -sL https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh; fi
-echo -e "${LCYN}█▓▒░░ ${WHT}Zplug ${NC}-> ${GRN}Done!\n" 
+echo -e "${LCYN}█▓▒░░ ${WHT}ZPlug ${NC}-> ${GRN}Installed!\n" 
 
 # Questions, questions…
 echo ""
 echo -e "${LCYN}█▓▒░░ ${WHT}One last step…\n"
 if [[ "$(uname -s)" == "Darwin" ]]; then
-    if ask "Do you want to set MPD?" Y; then
+    if ask "Do you want Music Player Daemon?" Y; then
 		brew services start mpd
 	fi
-	if ask "Do you want to set Transmission Daemon?" Y; then
+	if ask "Do you want Transmission Daemon, BitTorrent client?" Y; then
 		brew services start transmission
 	fi
-	if ask "Do you want to change macOS settings & dock?" Y; then
+	if ask "Do you want to change system defaults and dock placement?" Y; then
 		mkdir -p ~/Pictures/Screenshots
 		. "$DOT_DIR/macos/defaults.sh"
 		. "$DOT_DIR/macos/defaults-chrome.sh"
@@ -142,7 +162,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 	fi
 	chmod go-w '/usr/local/share'
 elif [[ "$(uname -s)" == "Linux" ]]; then
-	if ask "Do you want to enable and start Music Player Daemon?" Y; then
+	if ask "Do you want Music Player Daemon?" Y; then
 		systemctl --user enable mpd.service
 		systemctl --user start mpd.service
 	fi
@@ -152,8 +172,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 fi
 echo ""
 echo -e "${LCYN}█▓▒░░ ${GRN}Dotfiles installation completed.\n" 
-echo ""
-echo -e "If it's your first time you execute install.sh, reboot the machine"
+echo -e "${NC}If it's your first time you execute install.sh, reboot the machine"
 echo -e "to see full progress."
 echo -e "If you having issues, want to participate my work, please don't hesitate."
 echo -e "${WHT}https://github.com/egeesin/dotfiles/issues" 

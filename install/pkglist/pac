@@ -63,9 +63,11 @@ poppler
 python-aiohttp
 python-async-timeout
 python-blinker
+python-docopt
 python-mock
 python-multidict
 python-pbr
+python-requests
 python-yarl
 python2-pip
 ranger

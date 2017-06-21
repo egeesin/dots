@@ -116,7 +116,7 @@ windows:
             - tty-clock -s -c -t -C 6
             - calcurse
               #- wego && moeda 1 usd try
-            - cowthink -f stegosaurus.cow $("$HOME/.dotfiles/bin/shower-thoughts") | lolcat
+            - cowthink -f stegosaurus.cow $(python3 $DOT_DIR/bin/shower-thoughts) | lolcat
 #    - ' ':
 #    - ' ':
 #    - ' ':
@@ -145,7 +145,7 @@ windows:
         layout: 9b7d,155x37,0,0{90x37,0,0,8,64x37,91,0,22}
         #layout: even-horizontal
         panes:
-            - newsbeuter -u $DOTFILES_DIR/etc/feeds/all
+            - newsbeuter -u $DOT_DIR/etc/feeds/all
             - mutt
 #    - ' ': 
 #    - ' ':
