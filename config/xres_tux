@@ -1,11 +1,11 @@
 !{{{Fonts
-Xft.autohint: 0
-Xft.lcdfilter: lcddefault
-Xft.hinting: 1
+Xft.dpi: 96 
 Xft.antialias: 1
 Xft.rgba: rgb
-Xft.hintstyle: hintlight
-Xft.dpi: 96 
+Xft.hinting: 1
+Xft.autohint: 0
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
 !!}}}
 
 ! find /usr/share/icons ~/.icons -type d -name "cursors"
@@ -14,19 +14,19 @@ Xcursor.theme: OSX-ElCap
 
 URxvt*termName: rxvt-unicode
 
-URxvt.font:           xft:Iosevka Nerd Font:size=12:antialias=true:hinting=true,\
+URxvt.font:           xft:Hack:size=12:antialias=true:hinting=true,\
 					  xft:DejaVu Sans Mono:antialias=true:hinting=true,\
 					  xft:Symbola,\
 					  xft:EmojiOne Color
-URxvt.boldFont:       xft:Iosevka Nerd Font:size=12:bold:antialias=true:hinting=true,\
+URxvt.boldFont:       xft:Hack:size=12:bold:antialias=true:hinting=true,\
 					  xft:DejaVu Sans Mono:antialias=true:hinting=true,\
 					  xft:Symbola,\
 					  xft:EmojiOne Color
-URxvt.italicFont:     xft:Iosevka Nerd Font:size=12:italic:antialias=true:hinting=true,\
+URxvt.italicFont:     xft:Hack:size=12:italic:antialias=true:hinting=true,\
 					  xft:DejaVu Sans Mono:antialias=true:hinting=true,\
 					  xft:Symbola,\
 					  xft:EmojiOne Color
-URxvt.boldItalicFont: xft:Iosevka Nerd Font:size=12:bold:italic:antialias=true:hinting=true,\
+URxvt.boldItalicFont: xft:Hack:size=12:bold:italic:antialias=true:hinting=true,\
 					  xft:DejaVu Sans Mono:antialias=true:hinting=true,\
 					  xft:Symbola,\
 					  xft:EmojiOne Color
@@ -50,7 +50,7 @@ URxvt*borderless: 1
 URxvt.internalBorder: 12
 URxvt.externalBorder: 0
 URxvt.iso14755: false
-URxvt.fading: 5
+!!URxvt.fading: 5
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
 
@@ -141,7 +141,7 @@ URxvt.matcher.rend.0: Uline fg16
 ! Disables Bell
 URxvt.insecure: false
 
-URxvt*geomety: 96x36
+URxvt*geomety: 80x24
 URxvt*colorUL: #b58900 
 
 URxvt.perl-ext-common: default,matcher,vtwheel,fullscreen,resize-font,clipboard,url-select,keyboard-select
@@ -159,32 +159,8 @@ URxvt.keysym.M-s: perl:keyboard-select:search
 
 URxvt*skipBuiltinGlyphs: true
 
-! Rofi Color Palette
-
-rofi.color-enabled: true
-rofi.color-window: #002b37, #002b37, #003642
-rofi.color-normal: #002b37, #819396, #002b37, #003642, #819396
-rofi.color-active: #002b37, #008ed4, #002b37, #003642, #008ed4
-rofi.color-urgent: #002b37, #da4281, #002b37, #003642, #da4281
-rofi.lines: 8
-rofi.eh: 1
-rofi.width: 33
-rofi.padding: 32
-rofi.opacity: 85
-rofi.bw: 0
-rofi.font: SF Compact Text Light 24 
-rofi.separator-style: solid
-rofi.hide-scrollbar: true
-rofi.kb-remove-word-back: Control+w
-rofi.kb-remove-word-forward: Alt+d
-rofi.kb-mode-next: Control+r
-rofi.kb-mode-previous: Control+shift+r
-rofi.kb-clear-line: Control+l
-rofi.kb-row-first: Home,KP_Home,Control+u
-
-
 !XTERM
-XTerm*faceName: Iosevka Nerd Font
+XTerm*faceName: Mono
 XTerm*faceSize: 12
 !alt key fix
 XTerm*eightBitInput: false

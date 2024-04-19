@@ -1,17 +1,38 @@
-# Get named var (usage: get "VAR_NAME")
+#!/bin/zsh
+# sourced=0
+# if [ -n "$ZSH_EVAL_CONTEXT" ]; then
+# 	case $ZSH_EVAL_CONTEXT in *:file) sourced=1;; esac
+# elif [ -n "$KSH_VERSION" ]; then
+# 	[ "$(cd $(dirname -- $0) && pwd -P)/$(basename -- $0)" != "$(cd $(dirname -- ${.sh.file}) && pwd -P)/$(basename -- ${.sh.file})" ] && sourced=1
+# elif [ -n "$BASH_VERSION" ]; then
+# 	(return 0 2>/dev/null) && sourced=1
+# else # All other shells: examine $0 for known shell binary filenames
+# 	# Detects `sh` and `dash`; add additional shell filenames as needed.
+# 	case ${0##*/} in sh|dash) sourced=1;; esac
+# fi
+# if [[ $sourced = 1 ]]; then
+# 	echo "system/env already sourced exiting..."
+# 	return 1
+# fi
 
+# Important Functions for dots Setup
+# (Don't delete them if you going to use it install.sh later)
 get() {
   echo "${!1}"
 }
-
-# Executable
-
-is-executable() {
-  local BIN=$(command -v "$1" 2>/dev/null)
-  if [[ ! $BIN == "" && -x $BIN ]]; then true; else false; fi
+print_platform() {
+	echo "  Current Platform"
+	echo " —————————————————————————————"
+	echo "  OS/Kernel:    $currentos"
+	echo "  Version:      $osversion"
+	echo "  Architecture: $archbits"
 }
-
-is-supported() {
+is_executable() {
+	BIN=$(command -v "$1" 2>/dev/null)
+	local BIN
+	if [ ! "$BIN" = "" ] && [ -x "$BIN" ]; then true; else false; fi
+}
+is_supported() {
   if [ $# -eq 1 ]; then
 	if eval "$1" > /dev/null 2>&1; then true; else false; fi
   else
@@ -22,130 +43,86 @@ is-supported() {
 	fi
   fi
 }
-
-# Add to path
-prepend-path() {
-  [ -d $1 ] && PATH="$1:$PATH"
+prepend_path() {
+	[ -d "$1" ] && PATH="$1:$PATH"
 }
-
-# Update config file
-set-config() {
-  local KEY="$1"
-  local VALUE="$2"
-  local FILE="$3"
-  touch "$FILE"
-  if grep -q "$1=" "$FILE"; then
-	sed "s@$KEY=.*@$KEY=\"$VALUE\"@" -i "$FILE"
-  else
-	echo "export $KEY=$VALUE" >> "$FILE"
-  fi
+set_config() {
+	local KEY="$1"
+	local VALUE="$2"
+	local FILE="$3"
+	touch "$FILE"
+	if grep -q "$1=" "$FILE"; then
+		sed "s@$KEY=.*@$KEY=\"$VALUE\"@" -i "$FILE"
+	else
+		echo "export $KEY=$VALUE" >> "$FILE"
+	fi
 }
-
-# Show 256 TERM colors
-lscolors() {
-  local X=$(tput op)
-  local Y=$(printf %$((COLUMNS-6))s)
-  for i in {0..256}; do
-  o=00$i;
-  echo -e ${o:${#o}-3:3} $(tput setaf $i;tput setab $i)${Y// /=}$X;
-  done
+ask() {
+	while true; do
+		if [ "${2:-}" = "Y" ]; then
+			prompt="Y/n"
+			default=Y
+		elif [ "${2:-}" = "N" ]; then
+			prompt="y/N"
+			default=N
+		else
+			prompt="y/n"
+			default=
+		fi
+		read -r -p "$1 [$prompt] " REPLY </dev/tty
+		if [ -z "$REPLY" ]; then
+			REPLY=$default
+		fi
+		case "$REPLY" in
+			Y*|y*) return 0 ;;
+			N*|n*) return 1 ;;
+		esac
+	done
 }
 
 # Calculator
 calc() {
-  echo "$*" | bc -l;
+	echo "$*" | bc -l;
 }
 
-# Weather
-meteo() {
-  local CITY=${1:-Utrecht}
-  curl -4 "wttr.in/$CITY"
+function cdup {
+	newdir="${PWD/\/$1\/*/}/$1"
+	if [[ -d "$newdir" ]]
+	then
+		cd "$newdir"
+	else
+		echo "\"$newdir\" does not exist"
+	fi
 }
 
-# Create a git.io short URL
-function gitio() {
-  if [ -z "${1}" -o -z "${2}" ]; then
-	echo "Usage: \`gitio slug url\`";
-	return 1;
-  fi;
-  curl -i https://git.io/ -F "url=${2}" -F "code=${1}";
-}
-#  ▓▓▓▓▓▓▓▓▓▓
-# ░▓ author ▓ cirrus <cirrus@archlinux.info>
-# ░▓ code   ▓ https://gist.github.com/cirrusUK
-# ░▓ mirror ▓ http://cirrus.turtil.net
-# ░▓▓▓▓▓▓▓▓▓▓
-# ░░░░░░░░░░
-
-## WIKIPEDIA SEARCH FUNCTION ##
-wikipediaSearch() {
-echo -n -e "\n============================================\n\tWelcome to WikiPedia Search"; echo ""; i=1 ; for line in $(lynx --dump "http://en.wikipedia.org/w/index.php?title=Special%3ASearch&profile=default&search=$1&fulltext=Search" | grep http://en.wikipedia.org/wiki | cut -c7-); do echo $i $line; lines[$i]=$line ;  i=$(($i+1)); done ; echo -n -e "\n============================================\n\tPlease select the link to open - "; read answer; w3m ${lines[$answer]}
+function _cdup_complete {
+	local word=${COMP_WORDS[COMP_CWORD]}
+	local list
+	list=$(pwd | cut -c 2- | sed -e 's#/[^/]*$##g' -e 's/\([ ()]\)/\\\\\1/g')
+	IFS=/
+	list=$(compgen -W "$list" -- "$word")
+	IFS=$'\n'
+	COMPREPLY=("$list")
+	return 0
 }
 
-## ARCHWIKI SEARCH FUNCTION ##
-archSearch() {
-echo -n -e "\n============================================\n\tWelcome to Arch Wiki Search"; echo ""; i=1 ; for line in $(lynx --dump "https://wiki.archlinux.org/index.php?title=Special%3ASearch&profile=default&search=$1" | grep https://wiki.archlinux.org/ | cut -c7-); do echo $i $line; lines[$i]=$line ; i=$(($i+1)); done ; echo -n -e "\n============================================\n\tPlease select the link to open - "; read answer; w3m ${lines[$answer]}
-}
-
-# download the aur(4) package to the current directory, similar to cower -d from the old AUR, but using the officially supported method; git.
-# usage:
-# $ aurd <package-name>
-aurd() {
-	git clone https://aur4.archlinux.org/$1.git/
-	#git clone ssh://aur@aur4.archlinux.org/$1.git/
-}
-
-# download the aur(4) package to the current directory, cd, build (clean) and prompt to install.
-aurb() {
-	git clone https://aur4.archlinux.org/$1.git/ && cd $1 && makepkg -sci
-	#git clone ssh://aur@aur4.archlinux.org/$1.git/ && cd $1 && makepkg -sci
-}
-
-# update the package in the current directory
-auru() {
-	git pull && rm -f *.pkg.tar.xz || true && makepkg -sci
-}
-
-# Automatically do an ls after each cd
-cd() {
-  if [ -n "$1" ]; then
-	builtin cd "$@" && ls -a
-  else
-	builtin cd ~ && ls -a
-  fi
-}
-
-aurctl(){
-  curl -s https://aur.archlinux.org/packages/"${1:0:2}/$1/$1".tar.gz | tar xz
-}
-
-#pb pastebin || Usage: 'command | pb or  pb filename'
-pb () {
-  curl -F "c=@${1:--}" https://ptpb.pw/
-}
-pbs () {
-  gm import -window ${1:-root} /tmp/$$.png
-  pbx /tmp/$$.png
-}
-pbx () {
-  curl -sF "c=@${1:--}" -w "%{redirect_url}" 'https://ptpb.pw/?r=1' -o /dev/stderr | xsel -l /dev/null -b
-}
+# complete -F _cdup_complete cdup
 
 ## EXTRACT FUNCTION ## | Usage: extract <file>
 extract () {
-  if [ -f $1 ] ; then
-	  case $1 in
-		  *.tar.bz2)   tar xvjf $1    ;;
-		  *.tar.gz)    tar xvzf $1    ;;
-		  *.bz2)       bunzip2 $1     ;;
-		  *.rar)       rar x $1       ;;
-		  *.gz)        gunzip $1      ;;
-		  *.tar)       tar xvf $1     ;;
-		  *.tbz2)      tar xvjf $1    ;;
-		  *.tgz)       tar xvzf $1    ;;
-		  *.zip)       unzip $1       ;;
-		  *.Z)         uncompress $1  ;;
-		  *.7z)        7z x $1        ;;
+  if [ -f "$1" ] ; then
+	  case "$1" in
+		  *.tar.bz2)   tar xvjf "$1"    ;;
+		  *.tar.gz)    tar xvzf "$1"    ;;
+		  *.bz2)       bunzip2 "$1"     ;;
+		  *.rar)       rar x "$1"       ;;
+		  *.gz)        gunzip "$1"      ;;
+		  *.tar)       tar xvf "$1"     ;;
+		  *.tbz2)      tar xvjf "$1"    ;;
+		  *.tgz)       tar xvzf "$1"    ;;
+		  *.zip)       unzip "$1"       ;;
+		  *.Z)         uncompress "$1"  ;;
+		  *.7z)        7z x "$1"        ;;
 		  *)           echo "don't know how to extract '$1'..." ;;
 	  esac
   else
@@ -153,102 +130,8 @@ extract () {
   fi
 }
 
-#list servicesd
-listd() {
-  echo -e ${BLD}${RED}" --> SYSTEM LEVEL <--"${NRM}
-  find /etc/systemd/system -mindepth 1 -type d | sed '/getty.target/d' | xargs ls -gG --color
-  [[ $(find $HOME/.config/systemd/user -mindepth 1 -type d | wc -l) -eq 0 ]] ||
-	(echo -e ${BLD}${RED}" --> USER LEVEL <--"${NRM} ; \
-	find $HOME/.config/systemd/user -mindepth 1 -type d | xargs ls -gG --color)
-}
-
-# fix zsh annoying history behavior
-h() {
-	 if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi;
- }
-
-#cd to dir of defined file | Usage: cdf <file>
-cdf () {
-  cd "$(dirname "$(locate -i "$*" | head -n 1)")" ;
-}
-
-#wego weather function## | usage wttr `city`
-wttr () {
-curl http://wttr.in/$1
-}
-
-#web search tool | Usage: gsearch <value>
-function gsearch {
-Q="$@";
-GOOG_URL='https://www.google.com/search?tbs=li:1&q=';
-AGENT="Mozilla/4.0";
-stream=$(curl -A "$AGENT" -skLm 20 "${GOOG_URL}${Q//\ /+}" | grep -oP '\/url\?q=.+?&amp' | sed 's|/url?q=||; s|&amp||');
-echo -e "${stream//\%/\x}";
-}
-
-#Convert to .mp4 | Usage: ipod5g foo.mpg
-ipod5g () {
-HandBrakeCLI -i "$1" -o "${1%.*}.ipod5g.mp4" --preset="iPod"
-}
-
-#List Realtime Soccer Results | Usage: score
-score() {
- watch -n10 --no-title "w3m http://www.livescore.com/ |awk '/live [0-9H]+[^ ]/,/red cards/'" ;
-}
-
-#Is server up ? | Usage: down4me <www.foo.com>
-down4me() {
-curl -s "http://www.downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g';
-}
-
-#Sprunge Paste | Usage: sprunge <file>
-function sprunge() {
-  if (($#)); then
-if [[ -f $1 && -r $1 ]]; then
-curl -F 'sprunge=<-' http://sprunge.us < "$1"
-	else
-printf 'file %s does not exist or is not readable\n' "$1" >&2
-	  return 1
-	fi
-else
-curl -F 'sprunge=<-' http://sprunge.us
-  fi
-}
-
-# Compile and execute a C source on the fly
-csource() {
-  [[ $1 ]]    || { echo "Missing operand" >&2; return 1; }
-  [[ -r $1 ]] || { printf "File %s does not exist or is not readable\n" "$1" >&2; return 1; }
-  local output_path=${TMPDIR:-/tmp}/${1##*/};
-  gcc "$1" -o "$output_path" && "$output_path";
-  rm "$output_path";
-  return 0;
-}
-
-
-## DICTIONARY FUNCTIONS ##
-dwordnet () { curl dict://dict.org/d:${1}:wn; }
-dacron () { curl dict://dict.org/d:${1}:vera; }
-djargon () { curl dict://dict.org/d:${1}:jargon; }
-dfoldoc () { curl dict://dict.org/d:${1}:foldoc; }
-dthesaurus () { curl dict://dict.org/d:${1}:moby-thes; }
-engtur () { curl dict://dict.org/d:${1}:fd-eng-tur; }
-
-#internetinfo | Usage: ii
-function ii()   # get current host related info
-{
-	echo -e "\n${RED}Kernel Information:$NC " ; uname -a
-	echo -e "\n${RED}Users logged on:$NC " ; w -h
-	echo -e "\n${RED}Current date :$NC " ; date
-	echo -e "\n${RED}Machine stats :$NC " ; uptime
-	echo -e "\n${RED}Memory stats :$NC " ; free
-	echo -e "\n${RED}Disk Usage :$NC " ; df -Th
-	echo -e "\n${RED}LAN Information :$NC" ; netinfoLAN
-	echo
-}
-
 #netinfo - shows LAN network information for your system (part of ii)
-function netinfoLAN (){
+netinfoLAN (){
 echo "---------------------------------------------------"
 /sbin/ifconfig enp4s0 | awk /'inet/ {print $2}'
 /sbin/ifconfig enp4s0 | awk /'bcast/ {print $3}'
@@ -257,15 +140,11 @@ echo "---------------------------------------------------"
 echo "---------------------------------------------------"
 }
 
-#Transfer/share any file 5GB limit | Usage: transfer ~/foo/bar
-transfer() { if [ $# -eq 0 ]; then echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"; return 1; fi
-tmpfile=$( mktemp -t transferXXX ); if tty -s; then basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g'); curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile; else curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ; fi; cat $tmpfile; rm -f $tmpfile; }; alias transfer=transfer
-
 # copy | Usage: copy /source/file /destination/file
-copy() {
-	size=$(stat -c%s $1)
-	dd if=$1 &> /dev/null | pv -petrb -s $size | dd of=$2
-}
+# copy() {
+# 	size=$(stat -c%s $1)
+# 	dd if=$1 &> /dev/null | pv -petrb -s $size | dd of=$2
+# }
 
 # Run a command x times | Usage: runx <value>
 # http://www.stefanoforenza.com/how-to-repeat-a-shell-command-n-times/
@@ -278,299 +157,18 @@ runx() {
 	done
 }
 
-# mkdir & cd into it | Usage: mkcd
-mkcd() {
-  if [ ! -n "$1" ]; then
-	echo "Enter a name for this folder"
-  elif [ -d $1 ]; then
-	echo "\`$1' already exists"
-  else
-	mkdir $1 && cd $1
-  fi
-}
-
-#Fill screen with colours | Usage: colours
-nyan()
-{
-  _I=1
-  _J=0
-  _K=0
-  _WIDTH=$COLUMNS
-  _MARGIN=0
-  while true; do
-  _A=$(($RANDOM % 3))
-  _B=$(($RANDOM % 2))
-  _C=$(($RANDOM % 3))
-  case $_A in
-  0)
-	case $_B in
-	0)
-	  [ $_I -gt 1 ] && _I=$(($_I - 1))
-	;;
-	1)
-	  [ $_I -lt 6 ] && _I=$(($_I + 1))
-	;;
-	esac
-  ;;
-  1)
-	case $_B in
-	0)
-	  [ $_J -gt 0 ] && _J=$(($_J - 1))
-	;;
-	1)
-	  [ $_J -lt 5 ] && _J=$(($_J + 1))
-	;;
-	esac
-  ;;
-  2)
-	case $_B in
-	0)
-	  [ $_K -gt 0 ] && _K=$(($_K - 1))
-	;;
-	1)
-	  [ $_K -lt 5 ] && _K=$(($_K + 1))
-	;;
-	esac
-  ;;
-  esac
-  case $1 in
-	1)
-	  _DELTA=$2
-	  case $_C in
-		0)
-		  [ $_WIDTH -lt $(($COLUMNS - 2*$_DELTA)) ] && _WIDTH=$(($_WIDTH + 2*$_DELTA))
-		;;
-		1)
-		  [ $_WIDTH -gt $((1 + 2*$_DELTA)) ] && _WIDTH=$(($_WIDTH - 2*$_DELTA))
-		;;
-	  esac
-	  _MARGIN=$((($COLUMNS-$_WIDTH)/2))
-	;;
-	2)
-	  _WIDTH=$2
-	  _DELTA=$3
-	  case $_C in
-		0)
-		  [ $_MARGIN -le $(($COLUMNS - $_WIDTH - $_DELTA)) ] && _MARGIN=$(($_MARGIN + $_DELTA))
-		;;
-		1)
-		  [ $_MARGIN -ge $_DELTA ] && _MARGIN=$(($_MARGIN - $_DELTA))
-		;;
-	  esac
-	;;
-	*)
-	  _WIDTH=$COLUMNS
-	  _MARGIN=0
-	;;
-  esac
-  _NUMBER=$((15 + $_I + 6*$_J + 36*$_K))
-
-  echo -en "\e[0;49m"
-  if [ $_MARGIN -gt 0 ]; then
-	for _FOO in $(seq $_MARGIN); do
-	  echo -en " "
-	done
-  fi
-
-  printf "\e[0;48;5;${_NUMBER}m"
-  for _FOO in $(seq $_WIDTH); do
-	echo -en " "
-  done
-
-  echo -e "\e[0;49m"
-  done
-}
-
-#Search files & directories | Usage: search <file/dirs>
-search() {
-find . -iname "*$@*" | less;
-}
-
-#Grep process | Usage: psgrep <process>
-psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto;
-}
-
-# Google images search bash function  | Usage: images <foo>
-pics() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	xdg-open "http://www.google.co.uk/search?tbm=isch&hl=en&source=hp&biw=1366&bih=679&q=$search"
-	open "http://www.google.co.uk/search?tbm=isch&hl=en&source=hp&biw=1366&bih=679&q=$search"
-}
-
-# YouTube search bash function  | Usage: videos <foo>
-videos() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	xdg-open "http://www.youtube.com/results?search_query=$search"
-	open "http://www.youtube.com/results?search_query=$search"
-}
-
-# DuckDuckGo search bash function  | Usage: duck <foo>
-duck() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	xdg-open "https://start.duckduckgo.com/?q=$search?kae=d&kt=-apple-system%2C+BlinkMacSystemFont%2C+Segoe+UI%2C+Roboto%2C+Oxygen%2C+Ubuntu%2C+Cantarell%2C+Fira+Sans%2C+Droid+Sans%2C+Helvetica+Neue%2C+sans-serif&ka=-apple-system%2C+BlinkMacSystemFont%2C+Segoe+UI%2C+Roboto%2C+Oxygen%2C+Ubuntu%2C+Cantarell%2C+Fira+Sans%2C+Droid+Sans%2C+Helvetica+Neue%2C+sans-serif&ks=n&kf=1&km=m&k1=-1&k8=829496&kl=wt-wt&kx=829496&kai=-1&ky=003541&kz=-1&kp=-1&kaa=829496&ku=-1&k9=d1e1ea&kj=003541&kam=google-maps&kaj=m&k5=1&kac=-1&kw=w&kah=tr-tr&k7=002834&ko=-1&kv=-1&kak=-1&kk=-1"
-	open "https://start.duckduckgo.com/?q=$search?kae=d&kt=-apple-system%2C+BlinkMacSystemFont%2C+Segoe+UI%2C+Roboto%2C+Oxygen%2C+Ubuntu%2C+Cantarell%2C+Fira+Sans%2C+Droid+Sans%2C+Helvetica+Neue%2C+sans-serif&ka=-apple-system%2C+BlinkMacSystemFont%2C+Segoe+UI%2C+Roboto%2C+Oxygen%2C+Ubuntu%2C+Cantarell%2C+Fira+Sans%2C+Droid+Sans%2C+Helvetica+Neue%2C+sans-serif&ks=n&kf=1&km=m&k1=-1&k8=829496&kl=wt-wt&kx=829496&kai=-1&ky=003541&kz=-1&kp=-1&kaa=829496&ku=-1&k9=d1e1ea&kj=003541&kam=google-maps&kaj=m&k5=1&kac=-1&kw=w&kah=tr-tr&k7=002834&ko=-1&kv=-1&kak=-1&kk=-1"
-}
-# Urban Dictionary search bash function  | Usage: urban <foo>
-urban() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	xdg-open "http://www.urbandictionary.com/define.php?term=$search"
-	open "http://www.urbandictionary.com/define.php?term=$search"
-}
-# Wikipedia English search bash function   | Usage: wiki <foo>
-wiki() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	xdg-open "http://en.wikipedia.org/w/index.php?search=$search"
-	open "http://en.wikipedia.org/w/index.php?search=$search"
-}
-
-# Android Play Store search bash function | Usage: android <foo>
-android() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	xdg-open "http://play.google.com/store/search?q=$search"
-	open "http://play.google.com/store/search?q=$search"
-}
-
-# Soundcloud music bash search function  | Usage: soundcloud <foo>
-soundcloud() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	xdg-open "https://soundcloud.com/search?q=$search"
-	open "https://soundcloud.com/search?q=$search"
-}
-
-# StackOverflow bash search function  | Usage: so <foo>
-so() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	w3m "http://stackoverflow.com/search?q=$search"
-}
-
-# Pleer music bash search function  | Usage: pleer <foo>
-pleer() {
-	search=""
-	for term in $*; do
-		search="$search%20$term"
-	done
-	xdg-open "https://pleer.com/search?q=$search"
-	open "https://pleer.com/search?q=$search"
-}
-
-# Amazon DE search bash function  | Usage: amazon <foo>
-amazon() {
-  search=""
-  for term in $*; do
-	  search="$search%20$term"
-  done
-  xdg-open "http://www.amazon.de/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=$search&x=0&y=0"
-  open "http://www.amazon.de/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=$search&x=0&y=0"
-}
-
-# Dictionary | Usage define <foo>
-define() {
-  curl -s dict://dict.org/d:$1 | grep -v '^[0-9]'
-}
-
-# set volume
-vol ()
-{
-  pactl set-sink-volume 5 $1% ;
-}
-
-#encrypt <file> | Usage encrypt <file>
-function encrypt() {
-  [ -e "$1" ] || return 1
-  openssl des3 -salt -in "$1" -out "$1.$CRYPT_EXT"
-  [ -e "$1.$CRYPT_EXT" ] && shred -u "$1"
-}
-
-#decrypt <file.> | Usage decrypt <file.>
-function decrypt() {
-  [ -e "$1" ] || return 1
-  [ "${1%.$CRYPT_EXT}" != "$1" ] || return 2
-  openssl des3 -d -salt -in $1 -out ${1%.$CRYPT_EXT}
-  [ -e "${1%.$CRYPT_EXT}" ] && rm -f "$1"
-}
-
-#wallpaper changer
-fehpap() {
-  zenity --file-selection | xargs feh --bg-scale
-}
-
-unspacer() #remove spaces from files in current dir
-{          #replaces spaces with underscores
- for i in *
-  do
-   [ ! "$i" == "$(echo $i | tr '\ ' '_')" && mv ./"$i" ./$(echo $i | tr '\ ' '_')
-  done
-}
-
 # send link to podbeuter queue | usage podbeuter <podcasturl>
 podqueue() {
-  echo "$1 \"$HOME/Downloads/$(echo "$1" | awk -F'/' '{ print $NF }')\"" >> ~/.newsbeuter/queue ;
+  echo "$1 \"$HOME/Downloads/$(echo "$1" | awk -F'/' '{ print $NF }')\"" >> ~/.newsboat/queue ;
 }
 
 yt() {
   mpv ytdl://ytsearch10:"$1"
 }
 
-#rtmp sniffing
-sniff-start() {
-  sudo iptables -t nat -A OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT ;
-}
-
-sniff-capture() {
-  rtmpsrv ;
-}
-
-sniff-end() {
-  sudo iptables -t nat -D OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT ;
-}
-
-cmdfu() { curl "http://www.commandlinefu.com/commands/matching/$(echo "$@" \
-  | sed 's/ /-/g')/$(echo -n $@ | base64)/plaintext" ;
-}
-
- #Show used mirrors {archlinux}
-mymirrors() {
-  grep -v '^$\|^#' /etc/pacman.d/mirrorlist | awk '{print $3}' | awk -F '/' '{print $3}';
-}
-
-#URL Shortener  | Usage : short <url>
-short() {
-  curl -F"shorten=$*" https://0x0.st
-}
-
-#Upload-file | Usage : share /path/to/file.foo
-share() {
-  curl -F"file=@$*" https://0x0.st
-}
-
 ytconvert() {
   ffmpeg -i "$1" -c:v libx264 -crf 18 -preset slow -pix_fmt yuv420p -c:a copy "$2.mkv"
 }
-
 
 # this is notes for video: http://www.youtube.com/watch?v=ee4XzWuapsE
 
@@ -580,49 +178,65 @@ ytconvert() {
 # demo video: http://www.youtube.com/watch?v=ee4XzWuapsE
 # WebUI:	http://localhost:9091/transmission/web/
 # 		http://192.168.1.xxx:9091/transmission/web/
-tsm-clearcompleted() {
-		transmission-remote -l | grep 100% | grep Done | \
-		awk '{print $1}' | xargs -n 1 -I % transmission-remote -t % -r ;}
-tsm() { transmission-remote --list ;}
-	# numbers of ip being blocked by the blocklist
-	# credit: smw from irc #transmission
-tsm-count() { echo "Blocklist rules:" $(curl -s --data \
-	'{"method": "session-get"}' localhost:9091/transmission/rpc -H \
-	"$(curl -s -D - localhost:9091/transmission/rpc | grep X-Transmission-Session-Id)" \
-	| cut -d: -f 11 | cut -d, -f1) ;}
-# demo video: http://www.youtube.com/watch?v=TyDX50_dC0M
-tsm-blocklist() { $PATH_SCRIPTS/blocklist.sh ;}		# update blocklist
-tsm-daemon() { transmission-daemon ;}
-tsm-quit() { killall transmission-daemon ;}
-tsm-altspeedenable() { transmission-remote --alt-speed ;}	# limit bandwidth
-tsm-altspeeddisable() {	transmission-remote --no-alt-speed ;}	# dont limit bandwidth
-tsm-add() { transmission-remote --add "$1" ;}
-tsm-askmorepeers() { transmission-remote -t"$1" --reannounce ;}
-tsm-pause() { transmission-remote -t"$1" --stop ;}		# <id> or all
-tsm-start() { transmission-remote -t"$1" --start ;}		# <id> or all
-tsm-purge() { transmission-remote -t"$1" --remove-and-delete ;} # delete data also
-tsm-remove() { transmission-remote -t"$1" --remove ;}		# leaves data alone
-tsm-info() { transmission-remote -t"$1" --info ;}
-tsm-speed() { while true;do clear; transmission-remote -t"$1" -i | grep Speed;sleep 1;done ;}
+# tsm-clearcompleted() {
+# 		transmission-remote -l | grep 100% | grep Done | \
+# 		awk '{print $1}' | xargs -n 1 -I % transmission-remote -t % -r ;}
+# tsm() { transmission-remote --list ;}
+# 	# numbers of ip being blocked by the blocklist
+# 	# credit: smw from irc #transmission
+# tsm-count() { echo "Blocklist rules:" $(curl -s --data \
+# 	'{"method": "session-get"}' localhost:9091/transmission/rpc -H \
+# 	"$(curl -s -D - localhost:9091/transmission/rpc | grep X-Transmission-Session-Id)" \
+# 	| cut -d: -f 11 | cut -d, -f1) ;}
+# # demo video: http://www.youtube.com/watch?v=TyDX50_dC0M
+# tsm-blocklist() { $PATH_SCRIPTS/blocklist.sh ;}		# update blocklist
+# tsm-daemon() { transmission-daemon ;}
+# tsm-quit() { killall transmission-daemon ;}
+# tsm-altspeedenable() { transmission-remote --alt-speed ;}	# limit bandwidth
+# tsm-altspeeddisable() {	transmission-remote --no-alt-speed ;}	# dont limit bandwidth
+# tsm-add() { transmission-remote --add "$1" ;}
+# tsm-askmorepeers() { transmission-remote -t"$1" --reannounce ;}
+# tsm-pause() { transmission-remote -t"$1" --stop ;}		# <id> or all
+# tsm-start() { transmission-remote -t"$1" --start ;}		# <id> or all
+# tsm-purge() { transmission-remote -t"$1" --remove-and-delete ;} # delete data also
+# tsm-remove() { transmission-remote -t"$1" --remove ;}		# leaves data alone
+# tsm-info() { transmission-remote -t"$1" --info ;}
+# tsm-speed() { while true;do clear; transmission-remote -t"$1" -i | grep Speed;sleep 1;done ;}
 
 # https://github.com/fagga/transmission-remote-cli
 # demo video: http://www.youtube.com/watch?v=hLz7ditUwY8
-tsm-ncurse() { transmission-remote-cli ;}
-
-twitch(){
-	#xdg-open https://twitch.tv/"$1"/chat
-	streamlink -p mpv https://twitch.tv/"$1" 360p
-}
-
-
-
+# tsm-ncurse() { transmission-remote-cli ;}
+#
 #}}}
 
-# stopwatch(){
-#     date1=`date +%s`;
-#     while true; do
-#     days=$(( $(($(date +%s) - date1)) / 86400 ))
-#     echo -ne "$days day(s) and $(date -u --date @$((`date +%s` - $date1)) +%H:%M:%S)\r";
-#     sleep 0.1
-#     done
-# }
+twitch(){
+	RES=480p
+	[ "$2" ] && RES="$2"
+	MP="mpv"
+	URL=https://twitch.tv/"$1"
+	xdg-open "$URL/chat" || open "$URL/chat"
+	streamlink -p "$MP" "$URL" "$RES"
+}
+
+thicc() {
+	echo "$1" | sed 'y/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz/卂乃匚刀乇下厶卄工丁长乚从𠘨口尸㔿尺丂丅凵リ山乂丫乙卂乃匚刀乇下厶卄工丁长乚从𠘨口尸㔿尺丂丅凵リ山乂丫乙/'
+}
+
+stopwatch(){
+    date1=$(date +%s);
+    while true; do
+    days=$(( $(($(date +%s) - date1)) / 86400 ))
+    echo -ne "$days day(s) and $(date -u --date @$(($(date +%s) - $date1)) +%H:%M:%S)\r";
+    sleep 0.1
+    done
+}
+
+# `o` with no arguments opens the current directory, otherwise opens the given
+# location
+o() {
+	if [ $# -eq 0 ]; then
+		open .;
+	else
+		open "$@";
+	fi;
+}

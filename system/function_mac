@@ -55,6 +55,13 @@ show() {
   } | osascript;
 }
 
+# Reset dock to factory settings
+resetdock() {
+	defaults delete com.apple.dock;
+	killall Dock;
+}
+
+
 # Open query in Dash app
 
 dash() {
@@ -64,4 +71,12 @@ dash() {
     *) echo "Usage: dash [docset] query"; return 1;
   esac
   open "dash://$QUERY"
+}
+
+update-iosevka() {
+  rm -rf ~/.extra/font/iosevka-aegean-src/repo/1-iosekva
+  $EDITOR ~/.extra/font/iosevka-aegean-src/setup.sh
+  ~/.extra/font/iosevka-aegean-src/setup.sh
+  rm ~/Library/Fonts/iosevka-aegean*.ttf
+  mv ~/.extra/font/iosevka-aegean-src/repo/1-iosevka/dist/iosevka-aegean*/ttf/* ~/Library/Fonts/
 }

@@ -1,0 +1,1 @@
+@powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0sysTweaks.ps1" -include "%~dp0sysTweaks.psm1" -include "%~dp0miscTweaks.psm1" -preset "%~dpn0.preset"

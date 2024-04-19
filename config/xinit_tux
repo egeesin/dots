@@ -35,18 +35,25 @@ export XMODIFIERS="@im=none"
 export QT_QPA_PLATFORMTHEME=gtk2
 
 # Run in background
+~/.dots/bin/set-monitor
 xset +fp /usr/share/fonts/local
-xsetroot -solid black -cursor_name left_ptr -name "$(date +"%F %R")" &
-xset r rate 200 100 &
-udiskie -aNtq2 &
-pulseaudio --start & 
-thunar --daemon & 
-dropbox & 
-transmission-daemon & 
-~/.extra/mbp11x/screenlayout/default.sh &
-xcalib -d :0 ~/.extra/mbp11x/colorprofile.icc &
+xsetroot -solid '#586e75' -cursor_name left_ptr -name "$(date +"%F %R")" &
 feh --bg-fill ~/.extra/wallpaper.jpg &
-urxvtd -q -o -f
+# /usr/bin/urxvtd -q -o -f
+# sleep 2 && urxvtc -geometry 35x9 -e tty-clock -b -c -C 3 -D &
+xset r rate 200 100 &
+ksuperkey &
+unclutter &
+udiskie -aNtq2 &
+pulseaudio --start &
+xcalib -d :0 ~/.extra/mbp11x/colorprofile.icc &
+compton -b --config ~/.config/compton.conf
+# dropbox &
+thunar --daemon &
+greenclip daemon &
+# conky -d &
+transmission-daemon &
 
 # Start desktop environment
+# exec i3 >> ~/.config/i3/.i3log 2>&1
 exec i3

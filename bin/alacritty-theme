@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+theme=$1
+if [[ ! -f ~/.config/alacritty/color.yml ]]; then
+	echo "file ~/.config/alacritty/color.yml doesn't exist"
+	return
+fi
+
+# sed doesn't like symlinks, get the absolute path
+config_path=$(/usr/local/bin/realpath ~/.config/alacritty/color.yml)
+
+/usr/bin/sed -i "" -e "s#^colors: \*.*#colors: *$theme#g" $config_path
+
+echo "switched to $theme"

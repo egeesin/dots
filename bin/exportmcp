@@ -1,0 +1,17 @@
+#!/bin/bash
+
+INPUTDIR="${1%/}"
+INPUTNAME="$(basename "$(greadlink -f "$INPUTDIR" || readlink -f "$2" )")"
+[ "$2" ] && OUTPUT="${2%/}" || OUTPUT="$HOME/Downloads"
+
+cp $1 $OUTPUT/$DISTDIR
+cd $OUTPUT/$DISTDIR/.minecraft
+
+# Clean unnecessary or personal files
+rm -rf coremods logs/ hs_err_pid*.log server-resource-packs texturepacks crash-reports usercache.json hotbar.nbt
+rm -rf screenshots usercache.json XaeroWaypoints/ XaeroWaypoints_*/ XaeroWorldMap/ .vote2020_marker .replay_cache toomanybinds_history.txt replay_recordings schematics/
+rm -rf mods/!(OptiFine_,optifabric,preview_OptiFine).disabled resourcepacks/*.disabled 
+# rm -rf saves/* 
+
+cd -- | exit 0
+zip -r $DISTDIR.zip $OUTPUT/$DISTDIR/

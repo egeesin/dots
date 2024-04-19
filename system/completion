@@ -1,7 +1,7 @@
 #TODO
 # need an zsh equivalent for complete command
 # Bash
-#is-executable brew && [ -f $(brew --prefix)/share/bash-completion/bash_completion ] && . $(brew --prefix)/share/bash-completion/bash_completion
+#is_executable brew && [ -f $(brew --prefix)/share/bash-completion/bash_completion ] && . $(brew --prefix)/share/bash-completion/bash_completion
 #
 ## Dotfiles
 #_dotfiles_completions() {
@@ -12,10 +12,10 @@
 #complete -o default -F _dotfiles_completions dotfiles
 #
 ## Grunt
-#is-executable grunt && eval "$(grunt --completion=bash)"
+#is_executable grunt && eval "$(grunt --completion=bash)"
 #
 ## killall
 #complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal" killall;
 #
 ## Homebrew
-#is-executable brew && [ -f $(brew --prefix)/Library/Contributions/brew_bash_completion.sh ] && . `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+#is_executable brew && [ -f $(brew --prefix)/Library/Contributions/brew_bash_completion.sh ] && . `brew --prefix`/Library/Contributions/brew_bash_completion.sh

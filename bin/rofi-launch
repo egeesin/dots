@@ -1,0 +1,7 @@
+#! /usr/bin/env bash
+# github.com/egeesin
+# dep: libqalculate, greenclip
+SCRIPT_DIR="~/.dots/bin/rofi"
+
+# rofi -theme-str '#entry,prompt {font: "sans 32";} #window {padding:16px;border-radius:32px;width:720px;}' -show-icons -sidebar-mode -show drun -modi :$SCRIPT_DIR/files,:qalc,drun,window,:'greenclip print'
+rofi -theme-str '#entry,prompt {font: "sans 32";} #window {padding:16px;border-radius:32px;width:720px;}' -show-icons -sidebar-mode -show drun -modi :$SCRIPT_DIR/files,:qalc,drun,window

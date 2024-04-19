@@ -1,0 +1,284 @@
+##########
+# This file is based on Win 10 / Server 2016 / Server 2019 Initial Setup Script
+# Author: Disassembler <disassembler@dasm.cz>
+# Version: v3.10, 2020-07-15
+# Source: https://github.com/Disassembler0/Win10-Initial-Setup-Script
+##########
+
+### Require administrator privileges ###
+# RequireAdmin
+
+### Privacy Tweaks ###
+# NOTE(infokiller): disabling Telemetry disables the the possibility to join Windows Insider Program and breaks Microsoft Intune enrollment/deployment. Therefore, this tweak is not applied by default.
+# For more info, see comments in sysTweaks.psm1.
+# EnableTelemetry                 # DisableTelemetry
+DisableCortana                   # EnableCortana
+DisableWiFiSense                # EnableWiFiSense
+DisableSmartScreen            # EnableSmartScreen
+DisableWebSearch              # EnableWebSearch
+DisableAppSuggestions           # EnableAppSuggestions
+DisableActivityHistory           # EnableActivityHistory
+# DisableSensors                # EnableSensors
+DisableLocation                 # EnableLocation
+DisableMapUpdates               # EnableMapUpdates
+DisableFeedback                 # EnableFeedback
+DisableTailoredExperiences      # EnableTailoredExperiences
+DisableAdvertisingID            # EnableAdvertisingID
+DisableWebLangList              # EnableWebLangList
+# DisableCortana                # EnableCortana
+# DisableBiometrics             # EnableBiometrics
+# DisableCamera                 # EnableCamera
+# DisableMicrophone             # EnableMicrophone
+EnableErrorReporting            # DisableErrorReporting
+# SetP2PUpdateLocal             # SetP2PUpdateInternet          # SetP2PUpdateDisable
+DisableDiagTrack                # EnableDiagTrack
+# DisableWAPPush                # EnableWAPPush
+# EnableClearRecentFiles        # DisableClearRecentFiles
+# DisableRecentFiles            # EnableRecentFiles
+
+
+### UWP Privacy Tweaks ###
+DisableUWPBackgroundApps        # EnableUWPBackgroundApps
+# DisableUWPVoiceActivation     # EnableUWPVoiceActivation
+# DisableUWPNotifications       # EnableUWPNotifications
+# DisableUWPAccountInfo         # EnableUWPAccountInfo
+# DisableUWPContacts            # EnableUWPContacts
+# DisableUWPCalendar            # EnableUWPCalendar
+# DisableUWPPhoneCalls          # EnableUWPPhoneCalls
+# DisableUWPCallHistory         # EnableUWPCallHistory
+# DisableUWPEmail               # EnableUWPEmail
+# DisableUWPTasks               # EnableUWPTasks
+# DisableUWPMessaging           # EnableUWPMessaging
+# DisableUWPRadios              # EnableUWPRadios
+# DisableUWPOtherDevices        # EnableUWPOtherDevices
+# DisableUWPDiagInfo            # EnableUWPDiagInfo
+# DisableUWPFileSystem          # EnableUWPFileSystem
+# DisableUWPSwapFile            # EnableUWPSwapFile
+
+### Security Tweaks ###
+# SetUACLow                     # SetUACHigh
+# EnableSharingMappedDrives     # DisableSharingMappedDrives
+DisableAdminShares              # EnableAdminShares
+EnableFirewall                  # DisableFirewall
+# HideDefenderTrayIcon          # ShowDefenderTrayIcon
+DisableDefender                  # EnableDefender
+DisableDefenderCloud             # EnableDefenderCloud
+EnableCtrldFolderAccess         # DisableCtrldFolderAccess
+EnableCIMemoryIntegrity         # DisableCIMemoryIntegrity
+EnableDefenderAppGuard          # DisableDefenderAppGuard
+HideAccountProtectionWarn       # ShowAccountProtectionWarn
+DisableDownloadBlocking       # EnableDownloadBlocking
+# Disabling Windows Script Host causes a pop up window with a warning, so
+# enabling it for now.
+EnableScriptHost                # DisableScriptHost
+EnableDotNetStrongCrypto        # DisableDotNetStrongCrypto
+# EnableMeltdownCompatFlag      # DisableMeltdownCompatFlag
+EnableF8BootMenu                # DisableF8BootMenu
+# DisableBootRecovery           # EnableBootRecovery
+# DisableRecoveryAndReset       # EnableRecoveryAndReset
+SetDEPOptIn                     # SetDEPOptOut
+
+### Network Tweaks ###
+# SetCurrentNetworkPrivate      # SetCurrentNetworkPublic
+SetUnknownNetworksPublic        # SetUnknownNetworksPrivate
+# DisableNetDevicesAutoInst     # EnableNetDevicesAutoInst
+# DisableHomeGroups             # EnableHomeGroups
+# DisableSMB1                   # EnableSMB1
+# DisableSMBServer              # EnableSMBServer
+# DisableNetBIOS                # EnableNetBIOS
+# DisableLLMNR                  # EnableLLMNR
+# DisableLLDP                   # EnableLLDP
+# DisableLLTD                   # EnableLLTD
+# DisableMSNetClient            # EnableMSNetClient
+# DisableQoS                    # EnableQoS
+# DisableIPv4                   # EnableIPv4
+# DisableIPv6                   # EnableIPv6
+# DisableNCSIProbe              # EnableNCSIProbe
+# DisableConnectionSharing      # EnableConnectionSharing
+# NOTE(infokiller): Quick Assist is a new app in Windows 10 that seems like it
+# will eventually replace Remote Assistance.
+DisableRemoteAssistance         # EnableRemoteAssistance
+# EnableRemoteDesktop           # DisableRemoteDesktop
+
+### Service Tweaks ###
+# DisableUpdateMSRT             # EnableUpdateMSRT
+# DisableUpdateDriver           # EnableUpdateDriver
+EnableUpdateMSProducts          # DisableUpdateMSProducts
+# DisableUpdateAutoDownload     # EnableUpdateAutoDownload
+EnableUpdateRestart             # DisableUpdateRestart
+# DisableMaintenanceWakeUp      # EnableMaintenanceWakeUp
+# DisableAutoRestartSignOn      # EnableAutoRestartSignOn
+DisableSharedExperiences        # EnableSharedExperiences
+EnableClipboardHistory          # DisableClipboardHistory
+DisableAutoplay                 # EnableAutoplay
+DisableAutorun                  # EnableAutorun
+# DisableRestorePoints          # EnableRestorePoints
+EnableStorageSense              # DisableStorageSense
+EnableDefragmentation           # DisableDefragmentation
+# DisableSuperfetch             # EnableSuperfetch
+EnableIndexing                  # DisableIndexing
+# DisableSwapFile               # EnableSwapFile
+# DisableRecycleBin             # EnableRecycleBin
+EnableNTFSLongPaths             # DisableNTFSLongPaths
+# DisableNTFSLastAccess         # EnableNTFSLastAccess
+SetBIOSTimeUTC                  # SetBIOSTimeLocal
+EnableHibernation               # DisableHibernation
+# DisableSleepButton            # EnableSleepButton
+# DisableSleepTimeout           # EnableSleepTimeout
+# Fast Startup is disabled because it may have issues with Linux dual boot.
+DisableFastStartup              # EnableFastStartup
+# DisableAutoRebootOnCrash      # EnableAutoRebootOnCrash
+
+### UI Tweaks ###
+# TODO: Consider disabling ActionCenter if the notification log is not useful to
+# me.
+EnableActionCenter              # DisableActionCenter
+# TODO: Test disabling the lock screen. This doesn't disable the password
+# prompt, so it shouldn't degrade security, but I want to verify what UI is
+# changed from this option.
+EnableLockScreen                # DisableLockScreen
+# DisableLockScreenRS1          # EnableLockScreenRS1
+HideNetworkFromLockScreen       # ShowNetworkOnLockScreen
+ShowShutdownOnLockScreen        # HideShutdownFromLockScreen
+DisableLockScreenBlur           # EnableLockScreenBlur
+DisableAeroShake                # EnableAeroShake
+DisableAccessibilityKeys        # EnableAccessibilityKeys
+ShowTaskManagerDetails          # HideTaskManagerDetails
+ShowFileOperationsDetails       # HideFileOperationsDetails
+EnableFileDeleteConfirm         # DisableFileDeleteConfirm
+HideTaskbarSearch               # ShowTaskbarSearchIcon         # ShowTaskbarSearchBox
+HideTaskView                    # ShowTaskView
+ShowSmallTaskbarIcons           # ShowLargeTaskbarIcons
+SetTaskbarCombineWhenFull       # SetTaskbarCombineNever        # SetTaskbarCombineAlways
+HideTaskbarPeopleIcon           # ShowTaskbarPeopleIcon
+HideTrayIcons                   # HideTrayIcons
+# ShowSecondsInTaskbar          # HideSecondsFromTaskbar
+DisableSearchAppInStore         # EnableSearchAppInStore
+DisableNewAppPrompt             # EnableNewAppPrompt
+# HideRecentlyAddedApps         # ShowRecentlyAddedApps
+# HideMostUsedApps              # ShowMostUsedApps
+# SetWinXMenuPowerShell         # SetWinXMenuCmd
+SetControlPanelSmallIcons       # SetControlPanelLargeIcons     # SetControlPanelCategories
+DisableShortcutInName           # EnableShortcutInName
+# HideShortcutArrow             # ShowShortcutArrow
+SetVisualFXPerformance          # SetVisualFXAppearance
+DisableTransparency             # EnableTransparency
+# EnableTitleBarColor           # DisableTitleBarColor
+SetAppsDarkMode               # SetAppsLightMode
+SetSystemDarkMode            # SetSystemLightMode
+# AddENKeyboard                 # RemoveENKeyboard
+EnableNumlock                   # DisableNumlock
+# AddTurkishKeyboard
+SetKeyboardTypingSpeed
+SetPointersMovement
+# DisableEnhPointerPrecision    # EnableEnhPointerPrecision
+# SetSoundSchemeNone            # SetSoundSchemeDefault
+DisableStartupSound             # EnableStartupSound
+# DisableChangingSoundScheme    # EnableChangingSoundScheme
+# EnableVerboseStatus           # DisableVerboseStatus
+DisableF1HelpKey                # EnableF1HelpKey
+
+### Windows 11 UI Tweaks ###
+DisableWidgets
+DisableFeeds
+
+### Explorer UI Tweaks ###
+# ShowExplorerTitleFullPath     # HideExplorerTitleFullPath
+ShowKnownExtensions             # HideKnownExtensions
+ShowHiddenFiles                 # HideHiddenFiles
+# ShowSuperHiddenFiles          # HideSuperHiddenFiles
+# ShowEmptyDrives               # HideEmptyDrives
+# ShowFolderMergeConflicts      # HideFolderMergeConflicts
+EnableNavPaneExpand             # DisableNavPaneExpand
+# ShowNavPaneAllFolders         # HideNavPaneAllFolders
+# ShowNavPaneLibraries          # HideNavPaneLibraries
+# EnableFldrSeparateProcess     # DisableFldrSeparateProcess
+# EnableRestoreFldrWindows      # DisableRestoreFldrWindows
+# ShowEncCompFilesColor         # HideEncCompFilesColor
+# DisableSharingWizard          # EnableSharingWizard
+# HideSelectCheckboxes          # ShowSelectCheckboxes
+ShowSyncNotifications           # HideSyncNotifications
+ShowRecentShortcuts             # HideRecentShortcuts
+# SetExplorerQuickAccess          # SetExplorerThisPC
+# ShowQuickAccess                 # HideQuickAccess
+ShowRecycleBinOnDesktop         # HideRecycleBinFromDesktop
+HideThisPCFromDesktop           # ShowThisPCOnDesktop
+# ShowUserFolderOnDesktop       # HideUserFolderFromDesktop
+# ShowControlPanelOnDesktop     # HideControlPanelFromDesktop
+# ShowNetworkOnDesktop          # HideNetworkFromDesktop
+# HideDesktopIcons              # ShowDesktopIcons
+# ShowBuildNumberOnDesktop      # HideBuildNumberFromDesktop
+HideDesktopFromThisPC           # ShowDesktopInThisPC
+# HideDesktopFromExplorer       # ShowDesktopInExplorer
+HideDocumentsFromThisPC         # ShowDocumentsInThisPC
+# HideDocumentsFromExplorer     # ShowDocumentsInExplorer
+HideDownloadsFromThisPC         # ShowDownloadsInThisPC
+# HideDownloadsFromExplorer     # ShowDownloadsInExplorer
+HideMusicFromThisPC             # ShowMusicInThisPC
+# HideMusicFromExplorer         # ShowMusicInExplorer
+HidePicturesFromThisPC          # ShowPicturesInThisPC
+# HidePicturesFromExplorer      # ShowPicturesInExplorer
+HideVideosFromThisPC            # ShowVideosInThisPC
+# HideVideosFromExplorer        # ShowVideosInExplorer
+Hide3DObjectsFromThisPC         # Show3DObjectsInThisPC
+# Hide3DObjectsFromExplorer     # Show3DObjectsInExplorer
+# HideNetworkFromExplorer       # ShowNetworkInExplorer
+# HideIncludeInLibraryMenu      # ShowIncludeInLibraryMenu
+# HideGiveAccessToMenu          # ShowGiveAccessToMenu
+# HideShareMenu                 # ShowShareMenu
+# DisableThumbnails             # EnableThumbnails
+# DisableThumbnailCache         # EnableThumbnailCache
+# DisableThumbsDBOnNetwork      # EnableThumbsDBOnNetwork
+
+### Application Tweaks ###
+# DisableOneDrive               # EnableOneDrive
+# UninstallOneDrive             # InstallOneDrive
+UninstallMsftBloat              # InstallMsftBloat
+UninstallThirdPartyBloat        # InstallThirdPartyBloat
+# InstallMaybeBloat               # UninstallMaybeBloat
+# UninstallWindowsStore         # InstallWindowsStore
+# DisableXboxFeatures             # EnableXboxFeatures
+# DisableFullscreenOptims       # EnableFullscreenOptims
+DisableAdobeFlash               # EnableAdobeFlash
+DisableEdgePreload              # EnableEdgePreload
+DisableEdgeShortcutCreation     # EnableEdgeShortcutCreation
+DisableIEFirstRun               # EnableIEFirstRun
+DisableFirstLogonAnimation      # EnableFirstLogonAnimation
+# DisableMediaSharing             # EnableMediaSharing
+# DisableMediaOnlineAccess      # EnableMediaOnlineAccess
+EnableDeveloperMode           # DisableDeveloperMode
+UninstallMediaPlayer          # InstallMediaPlayer
+UninstallInternetExplorer     # InstallInternetExplorer
+# UninstallWorkFolders          # InstallWorkFolders
+# UninstallHelloFace            # InstallHelloFace
+# UninstallMathRecognizer       # InstallMathRecognizer
+# UninstallPowerShellV2         # InstallPowerShellV2
+# UninstallPowerShellISE        # InstallPowerShellISE
+InstallLinuxSubsystem           # UninstallLinuxSubsystem
+# InstallHyperV                   # UninstallHyperV
+# UninstallSSHClient            # InstallSSHClient
+# InstallSSHServer              # UninstallSSHServer
+# InstallTelnetClient           # UninstallTelnetClient
+# InstallNET23                  # UninstallNET23
+SetPhotoViewerAssociation       # UnsetPhotoViewerAssociation
+AddPhotoViewerOpenWith          # RemovePhotoViewerOpenWith
+# UninstallPDFPrinter           # InstallPDFPrinter
+UninstallXPSPrinter             # InstallXPSPrinter
+RemoveFaxPrinter                # AddFaxPrinter
+# UninstallFaxAndScan           # InstallFaxAndScan
+
+### Server Specific Tweaks ###
+# HideServerManagerOnLogin      # ShowServerManagerOnLogin
+# DisableShutdownTracker        # EnableShutdownTracker
+# DisablePasswordPolicy         # EnablePasswordPolicy
+# DisableCtrlAltDelLogin        # EnableCtrlAltDelLogin
+# DisableIEEnhancedSecurity     # EnableIEEnhancedSecurity
+# EnableAudio                   # DisableAudio
+
+### Unpinning ###
+UnpinStartMenuTiles
+UnpinTaskbarIcons
+
+### Auxiliary Functions ###
+# WaitForKey
+# Restart

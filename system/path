@@ -1,31 +1,76 @@
-# Warning: prepend-path, is-executable etc. commands described in .function file. This file must not sourced before .function!
+#!/bin/zsh
+# sourced=0
+# if [ -n "$ZSH_EVAL_CONTEXT" ]; then
+# 	case $ZSH_EVAL_CONTEXT in *:file) sourced=1;; esac
+# elif [ -n "$KSH_VERSION" ]; then
+# 	[ "$(cd $(dirname -- $0) && pwd -P)/$(basename -- $0)" != "$(cd $(dirname -- ${.sh.file}) && pwd -P)/$(basename -- ${.sh.file})" ] && sourced=1
+# elif [ -n "$BASH_VERSION" ]; then
+# 	(return 0 2>/dev/null) && sourced=1
+# else # All other shells: examine $0 for known shell binary filenames
+# 	# Detects `sh` and `dash`; add additional shell filenames as needed.
+# 	case ${0##*/} in sh|dash) sourced=1;; esac
+# fi
+# if [[ $sourced = 1 ]]; then
+# 	echo "system/env already sourced exiting..."
+# 	return 1
+# fi
 
-is-executable getconf && PATH=$(`command -v getconf` PATH)
+# Warning: prepend_path, is_executable etc. commands described in .function file. This file must not sourced before .function!
+
+is_executable getconf && PATH=$(`command -v getconf` PATH)
 
 # Prepend new items to path (if directory exists)
-prepend-path "/bin"
-prepend-path "/usr/bin"
-prepend-path "/usr/local/bin"
-[[ "$(uname -s)" = "Darwin" ]] && is-executable brew && prepend-path "$BREW_PREFIX_COREUTILS/libexec/gnubin"
-prepend-path "$DOT_DIR/bin"
-prepend-path "$HOME/bin"
-prepend-path "/sbin"
-prepend-path "/usr/sbin"
-prepend-path "/usr/local/sbin"
+prepend_path "/bin"
+prepend_path "/usr/bin"
+prepend_path "/usr/local/bin"
+
+prepend_path "/sbin"
+prepend_path "/usr/sbin"
+prepend_path "/usr/local/sbin"
+
+# macOS specific path variables
 if [[ "$(uname -s)" = "Darwin" ]]; then
-	prepend-path "$HOME/.rvm/bin"
-	prepend-path "/opt/local/bin"
-	prepend-path "/opt/local/sbin"
-	prepend-path "/usr/local/share/npm/bin"
-	prepend-path "/Library/Frameworks/Python.framework/Versions/3.5/bin"
-	prepend-path "$HOME/Library/Python/2.7/bin"
-	prepend-path "/usr/local/opt/bc/bin"
-	prepend-path "/usr/local/opt/ncurses/bin"
-	prepend-path "/usr/local/opt/openssl/bin"
+	export PNPM_HOME="$HOME/Library/pnpm"
+	is_executable brew && prepend_path "$BREW_PREFIX_COREUTILS/libexec/gnubin"
+	# prepend_path "/opt/local/bin"
+	# prepend_path "/opt/local/sbin"
+	# prepend_path "/usr/local/share/npm/bin"
+
+	# prepend_path "$HOME/Library/Python/2.7/bin"
+	# prepend_path "/usr/local/opt/python@3.7/bin"
+	# prepend_path "/usr/local/opt/python@3.8/bin"
+	# prepend_path "/usr/local/opt/python@3.9/bin"
+	# prepend_path "/usr/local/opt/python@3.10/bin"
+	prepend_path "/usr/local/opt/python/bin"
+	# prepend_path "$HOME/Library/Python/2.7/bin"
+	# prepend_path "$HOME/Library/Python/3.8/bin"
+
+	prepend_path "/usr/local/opt/ruby/bin"
+
+	# prepend_path "/usr/local/opt/bc/bin"
+	# prepend_path "/usr/local/opt/ncurses/bin"
+	# prepend_path "/usr/local/opt/openssl/bin"
 fi
+
+# GO
 export GOPATH="$HOME/.go"
-prepend-path "$GOROOT/bin"
-prepend-path "$GOPATH/bin"
+prepend_path "$GOROOT/bin"
+prepend_path "$GOPATH/bin"
+
+# Rust
+prepend_path "$HOME/.cargo/bin"
+
+# prepend_path "$HOME/bin"
+# prepend_path "$HOME/.yarn/bin"
+# prepend_path "$HOME/.config/yarn/global/node_modules/.bin"
+# prepend_path "$HOME/.fnm"
+
+# dots
+prepend_path "$DOT_DIR/bin"
+
+# Node.js
+# Note: in order to add these automatically to zshrc, "pnpm setup" is also an option.
+prepend_path "$PNPM_HOME"
 
 # Remove duplicates (preserving prepended items) -  Source: http://unix.stackexchange.com/a/40755
 PATH=`echo -n $PATH | awk -v RS=: '{ if (!arr[$0]++) {printf("%s%s",!ln++?"":":",$0)}}'`

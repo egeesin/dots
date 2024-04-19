@@ -1,57 +1,127 @@
 # vim: set ft=tmux:
-#  _                        
+#  _
 # | |_ _ __ ___  _   ___  __
 # | __| '_ ` _ \| | | \ \/ /
-# | |_| | | | | | |_| |>  < 
+# | |_| | | | | | |_| |>  <
 #  \__|_| |_| |_|\__,_/_/\_\
-                          
-bind R source-file ~/.tmux.conf
 
-# Set prefix
-set-option -g prefix C-a 
-# Tmuxline
-source-file ~/.dotfiles/system/tmuxline
+# Credits: youtube.com/@gotbletu
 
-# TPM Plugins
-if "test ! -d ~/.tmux/plugins/tpm" \
-   "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
-# To install plugins: Prefix - I
-# To update plugins: Prefix - U
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-yank'
-set -g @plugin 'tmux-plugins/tmux-open'
-set -g @plugin 'tmux-plugins/tmux-copycat'
-
-set -g @shell_mode 'vi'
-
-# Rename your terminals
-set -g set-titles on
+# ======= General Settings
 
 # Set the default terminal mode to 256color mode
-set -g default-terminal "xterm-256color"
+set -g default-terminal 'xterm-256color'
 set -g terminal-overrides ',xterm-256color:Tc'
+set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'  # undercurl supports
+set -as terminal-overrides ',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m'  # underscore colours - needs tmux-3.0
+
+#tmux < 2.2 set -q -g status-utf8 on
+setw -q -g utf8 on
+
+# Set prefix
+# set-option -g prefix C-a
+# setw -g xterm-keys on
+set -g prefix2 C-a # GNU-Screen compatible prefix
+bind C-a send-prefix -2
+
 # Allows for faster key repetition
-set -s escape-time 0
+set -s escape-time 5
+# set -sg repeat-time 601
+set -s focus-events on
 
 # Scroll History
-set -g history-limit 30000
+set -g history-limit 10000
 
-# Status bar customization
+# activity
+set -g monitor-activity on
+set -g visual-activity off
+
+# base-index
+set -g base-index 1         # start windows numbering at 1
+setw -g pane-base-index 1 # make pane numbering consistent with windows
+
+# don't rename windows automatically
+set-option -g allow-rename off
+
+setw -g automatic-rename on
+set -g renumber-windows on
+
+set -g set-titles on
+set -g set-titles-string '#h ❐ #S ● #I #W'
+
+set -g display-panes-time 800 # slightly longer pane indicators display time
+set -g display-time 1000      # slightly longer status messages display time
+
+# Mouse mode
+set -g mouse on
+
+# bind -n C-l send-keys C-l \; run 'sleep 0.1' \; clear-history
+
+# Toggle mouse on with ^B m
+# bind m \
+#   set -g mouse on
+#   display 'Mouse: ON'
+#  Toggle mouse off with ^B M
+# bind M \
+#   set -g mouse off
+#   display 'Mouse: OFF'
+
+# toggle mouse
+bind m run "cut -c3- ~/.tmux.conf | sh -s _toggle_mouse"
+
 #
-#set -g status-bg black
-#set -g status-fg white
-set -g status-interval 5
-set -g status-left-length 90
-set -g status-right-length 60
-#set -g status-left "#[fg=blue]#(whoami) #[fg=white]| #[fg=Blue]\#(hostname - s) #[fg=white]| #[fg=yellow]#(curl ipecho.net/plain;echo)"
-set -g window-status-current-attr "bold"
-set -g status-justify centre
-set -g status-position top
-#set -g status-right " \"#{=21:pane_title}\" %b %d %H:%M"
+# ======= Rebinds & Tweaked Shortcuts
+#
 
-# enable activity alerts
-#setw -g monitor-activity on
-#set -g visual-activity on
+# Reload Configuration with Shortcut => (prefix + r)
+bind r source-file ~/.tmux.conf \; display '~/.tmux.conf sourced.'
+
+# Easier window switch
+bind -r C-p previous-window
+bind -r C-n next-window
+bind Tab last-window # move to last active window
+
+bind-key -r J resize-pane -D 5
+bind-key -r K resize-pane -U 5
+bind-key -r H resize-pane -L 5
+bind-key -r L resize-pane -R 5
+bind z resize-pane -Z
+
+# Maximize current pane
+# bind + run 'cut -c3- ~/.tmux.conf | sh -s _maximize_pane "#{session_name}" #D'
+
+# Move windows (cycle) left and right
+bind-key -r "<" swap-window -t -1
+bind-key -r ">" swap-window -t +1
+
+# Don't prompt to kill panes/windows.
+bind-key x kill-pane
+bind-key X kill-window
+
+bind-key \\ split-window -h -c "#{pane_current_path}"
+bind-key - split-window -v -c "#{pane_current_path}"
+unbind '"'
+unbind %
+
+bind-key | split-window -fh -c "#{pane_current_path}"
+bind-key _ split-window -fv -c "#{pane_current_path}"
+
+bind C-c new-session
+
+bind C-f command-prompt -p find-session 'switch-client -t %%'
+
+# Universal Clipboard
+setw -g mode-keys vi
+bind-key -T copy-mode-vi 'v' send -X begin-selection
+bind-key -T copy-mode-vi 'V' send -X rectangle-toggle
+bind-key -T copy-mode-vi 'Escape' send -X cancel
+
+# Paste from clipboard
+bind v run "xsel -o -b | tmux load-buffer - && tmux paste-buffer"
+
+#
+# == Switching between vim and tmux panes
+#
 is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
   | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
 is_fzf="ps -o state= -o comm= -t '#{pane_tty}' \
@@ -71,90 +141,103 @@ bind -n C-k run "($is_vim && tmux send-keys C-k) || \
 bind -n C-l run "($is_vim && tmux send-keys C-l) || \
                  tmux select-pane -R"
 
-bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
+bind -n C-\\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
 
-bind -r J resize-pane -D 5
-bind -r K resize-pane -U 5
-bind -r H resize-pane -L 5
-bind -r L resize-pane -R 5
-bind z resize-pane -Z
+# set-option remain-on-exit on # keep new-window 'terminal command' open after the command exits 0
 
-# Easier window switch
-bind C-p previous-window
-bind C-n next-window
-
-# Universal clipboard
-setw -g mode-keys vi
-bind-key -Tcopy-mode-vi 'v' send -X begin-selection
-bind-key -Tcopy-mode-vi 'Escape' send -X cancel
-#bind-key ] run-shell "xclip -sel clip -o | tmux load-buffer - ; tmux paste-buffer" 
-#bind-key -Tcopy-mode-vi 'y' send -X copy-pipe-and-cancel "xclip"
-#bind-key -Tcopy-mode-vi 'y' copy-pipe-and-cancel "xclip -selection clipboard >/dev/null"
-#bind-key -Tcopy-mode-vi 'y' send -X copy-selection
-#bind-key -Tcopy-mode-vi 'y' send -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
-# older than 10.10
-#bind -t vi-copy v begin-selection
-#bind -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
-
-# Xclip edition
-# bind C-p run "xclip -o | tmux load-buffer - ; tmux paste-buffer"
-# bind C-y run "tmux save-buffer - | xclip -i"<Paste>
-
-# Mouse mode 
-set -g mouse on
 
 #
-# Toggle mouse on with ^B m
-# bind m \
-#   set -g mouse on
-#   display 'Mouse: ON'
-#  Toggle mouse off with ^B M
-# bind M \
-#   set -g mouse off
-#   display 'Mouse: OFF'
+# ======= Status Bar/Pane Customization
+#
 
-# Scrolling
+# set -g status-bg black
+# set -g status-fg white
+set -g status-interval 10
+
+# Minimal version of default status bar.
+set -g status-style dim
+
+set -g status-justify centre
+# set -g status-justify left
+set -g status-position bottom
+# set -g window-status-current-style bold
+
+# === LEFT-SIDE
+#
+set -g status-left-length 18
+# set -g status-left "#[fg=blue]#(whoami) #[fg=white]| #[fg=Blue]\#(hostname - s) #[fg=white]| #[fg=yellow]#(curl ipecho.net/plain;echo)"
+set -g status-left "\
+$USER | \
+#[bold]#{?client_prefix,#[fg=colour011],}#S\
+#[bold]#{?client_prefix,#[fg=colour011],}#{?window_zoomed_flag,[Z] ,} "
+
+# === RIGHT-SIDE
+#
+# set -g status-right-length 60
+# set -g status-right " \"#{=21:pane_title}\" %b %d %H:%M"
+set -g status-right "\
+%l:%M %p | %d %b %a \
+| #H"
+
+# === WINDOW LABEL (INACTIVE)
+#
+setw -g window-status-format "\
+#I \
+#W "
+
+# === WINDOW LABEL (ACTIVITY)
+#
+setw -g window-status-activity-style "fg=colour013"
+
+# === WINDOW LABEL (BELL)
+#
+setw -g window-status-activity-style "fg=colour013"
+
+# === WINDOW LABEL (ACTIVE)
+#
+setw -g window-status-current-format "\
+#[fg=colour008, bg=colour011, bold] #W "
+
+# === PANES
+#
+# set pane colors - highlight the active pane
+set -g pane-border-style "fg=colour007" #base02
+set -g pane-active-border-style "fg=colour011" #base01
+
+
+# ======= Scrolling
+
 # make scrolling with wheels work
 bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
 bind -n WheelDownPane select-pane -t= \; send-keys -M
 
- # set pane colors - highlight the active pane
-set-option -g pane-border-fg colour010 #base02
-set-option -g pane-active-border-fg colour006 #base01
 
-# Don't prompt to kill panes/windows.
-bind-key x kill-pane
-bind-key X kill-window
-setw -g automatic-rename on
-set -g renumber-windows on
-# bind c new-window -c "#{pane_current_path}"
-if "[[ `tmux -V` == *1.9* ]]" 'unbind c; bind c new-window -c "#{pane_current_path}"'
+# ======= Other
 
-# split panes using | and -
-bind-key \ split-window -h -c "#{pane_current_path}"
-bind-key - split-window -v -c "#{pane_current_path}"
-unbind '"'
-unbind %
-
-# full-window split
-bind-key | split-window -fh -c "#{pane_current_path}"
-bind-key _ split-window -fv -c "#{pane_current_path}"
-
-# don't rename windows automatically
-set-option -g allow-rename off
-
-## Credit: youtube.com/user/gotbletu
-bind-key O capture-pane \; save-buffer /tmp/tmux-buffer \; \
+# == Open window to list of visible URLs (with urlscan)
+# youtube.com/user/gotbletu
+#
+bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; \
 	new-window -n "  +" '$SHELL -c "urlscan -c < /tmp/tmux-buffer"'
 
-## Saved layouts
-#bind-key M-m new-window -n music -c $HOME \; \
-#   send-keys 'clear && figlet Radio' 'Enter' \; \
-#   split-window -v -p 50 -t 1 \; \
-#   send-keys 'cmus' 'Enter' \; \
-#   split-window -h -p 71 -t 1 \; \
-#   send-keys 'clear && figlet Search Music' 'Enter' \; \
-#   select-pane -t 2
 
-# make sure this line keep at bottom
+# tmux Plugin Manager
+#
+if "test ! -d ~/.tmux/plugins/tpm" \
+   "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
+# To install plugins: Prefix - I
+# To update plugins: Prefix - U
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'tmux-plugins/tmux-open'
+set -g @plugin 'tmux-plugins/tmux-copycat'
+set -g @shell_mode 'vi'
+
+
+# tmuxline | Integrated status configuration with vim plugins lightline/airline
+#
+# if-shell "test -f ~/.dots/system/tmuxline" \
+#     "source ~/.dots/system/tmuxline" \
+
+# This line below should stay at the bottom of the file if you use TPM.
 run '~/.tmux/plugins/tpm/tpm'

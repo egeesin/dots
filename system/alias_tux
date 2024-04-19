@@ -1,16 +1,22 @@
-alias resetdisplay='~/.extra/mbp11x/screenlayout/default.sh'
+# Monitor Settings
+alias extmon='~/.screenlayout/ext-only.sh'
+alias intmon='~/.screenlayout/int-only.sh'
+alias resetmon=intmon
+alias duomon='~/.screenlayout/dual.sh'
+alias tvmon='~/.screenlayout/tv-only.sh'
 
+# Pacman
 alias pac="pacman $1"
 alias pacs="sudo pacman -S"
 alias pacr="sudo pacman -Rns"
-alias pacup="sudo pacman -Syu"
 alias pacupforce="sudo pacman -Syyu --force"
 
-alias aur="pacaur $1"
-alias aurs="pacaur -a -S"
-alias aurr="pacaur -a -Rns"
-alias aurup="pacaur -a -Syu"
+# AUR Helper
+alias aur="trizen $1"
+alias aurs="trizen -a -S"
+alias aurr="trizen -a -Rns"
 
+# PIP
 alias pipi "sudo pip install"
 alias pip2i "sudo pip2 install"
 alias pip3i "sudo pip3 install"
@@ -28,17 +34,29 @@ alias cpwd="pwd | xclip -selection clipboard"
 alias lightsoff="redshift -x"
 alias lightson="redshift -o"
 
+# Reset Pacman Keyring
+alias resetkeyring="sudo rm -fr /etc/pacman.d/gnupg && sudo pacman-key --init && sudo pacman-key --populate archlinux"
+alias refreshkeyring="sudo pacman-key --refresh-keys"
+
+
 # VNC Aliases
 alias startvnc="sudo systemctl start x0vncserver.service"
 alias stopvnc="sudo systemctl stop x0vncserver.service"
 alias startlegacy="vncviewer -passwd ~/.extra/secret/vnc/passwd DotWhenNoCursor=1 192.168.2.144:5900"
 alias startarch="vncviewer -passwd ~/.extra/secret/vnc/passwd DotWhenNoCursor=1 192.168.2.229:5900"
 
-
+# Chagne X11 Keymaps
+# alias swapkb="setxkbmap -model pc104 -layout tr -variant alt -option custom:esctrlock"
+# alias noswapkb="setxkbmap -model pc104 -layout tr -variant alt -option" 
 # spotify HiDPI
 # alias spotify="spotify --force-device-scale-factor=1.5"
 
 alias tetris="vitetris --nomenu"
 
+# CAVA with SSH
+alias cavassh="cava  <> /dev/console >&0 2>&1"
+
 # List GTK2/3 themes (must-not-include-space-in-theme-name)
 alias listgtk='find $(find ~/.themes /usr/share/themes/ -wholename "*/gtk-3.0" | sed -e "s/^\(.*\)\/gtk-3.0$/\1/") -wholename "*/gtk-2.0" | sed -e "s/.*\/\(.*\)\/gtk-2.0/\1"/'
+
+alias xlunch-desktop='xlunch --config ~/.config/xlunch.cfg -f "/usr/share/fonts/ttf-inter-ui/Inter-UI-Regular/13" -dnqG --scroll --border 120 --name xlunch-desktop'

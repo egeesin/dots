@@ -1,0 +1,23 @@
+#!/bin/bash
+# Usage: get-extradots <output>
+EXT_DIR=$HOME"/.extra"
+DOT_DIR=$HOME"/.dots"
+TEMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'TEMPDIR')
+VERNUM=$(date +%Y-%m-%d)
+
+OUTPUTDIR="."
+[ "$1" ] && OUTPUTDIR="$1"
+
+trap 'rm -rf $TEMPDIR/extra $TEMPDIR/dots && echo "Temporary files removed." ' 0 2 3 15
+
+cd "$TEMPDIR" || exit
+cp -r "$EXT_DIR" extra && echo ".extra copied."
+cp -r "$DOT_DIR" dots && echo ".dots copied."
+
+# Delete unwanted files
+find "$EXT_DIR" "$DOT_DIR" -type f -name '*.DS_Store' -ls -exec /bin/rm {} \;
+rm -r dots/config/mutt/{tmp,cache}
+
+tar czf extradots-"$VERNUM".tar.gz extra dots && echo "Compressed."
+cd - || exit
+mv "$TEMPDIR"/extradots-"$VERNUM".tar.gz "$OUTPUTDIR"/ && echo "█▓▒░░ Archive of $VERNUM -> Ready!"

@@ -1,56 +1,58 @@
-# Warning: This file must not source before .function!
-
 # Global aliases
 
 # Use aliases with sudo
 alias sudo='sudo '
 
-if $(is-supported "alias -g"); then
+# Frequent pipe command aliases: ex. "cat file.txt" L instead of "cat file.txt | less"
+if $(is_supported "alias -g"); then
   alias -g G="| grep -i"
   alias -g H="| head"
   alias -g T="| tail"
-alias -g L="| less"
+  alias -g L="| less"
+  alias -g IX="| curl -F 'f:1=<-' ix.io"
+  alias -g IX2="| curl -F 'f:1=<-' -F 'read:1=2' ix.io"
 fi
 
-alias v="nvim -p"
+# Single letter aliases
+alias v="nvim"
+alias vlite="nvim --clean -c 'syntax off'"
+alias t="tmux"
+alias n="nnn -e"
 
 # Quick directory movement
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 
-# Copy current working directory path (Mac version)
-alias cpwd="pwd|tr -d '\n'|pbcopy"
-
-# Go to the last directory you were in
-alias back='cd $OLDPWD'
-
 # aliases with familiar name
-alias .files="ranger --cmd='set show_hidden true'"
-alias files="ranger --cmd='set show_hidden false'"
-alias news='newsbeuter -u $DOTFILES_DIR/etc/feeds/all'
+# alias .files="ranger --cmd='set show_hidden true'"
+# alias files="ranger --cmd='set show_hidden false'"
+# alias news='newsboat -u $DOT_DIR/etc/feeds/all'
 alias music="ncmpcpp"
-alias tube="mpsyt"
-alias torr="stig"
-alias clock='tty-clock -s -c -t -C 6'
 alias web='w3m'
-alias startmux='tmuxinator main'
+# alias tube="mpsyt"
+# alias torr="stig"
+alias clock='tty-clock -s -c -t -C 6'
+# alias startmux='tmuxinator main'
 
 alias mpdtroubleshoot="mpd --stdout --no-daemon --verbose"
-
+# Not tested on macOS
+alias mpdupdatedb="mpd --kill; rm $HOME/.config/mpd/mpd.db; touch $HOME/.config/mpd/mpd.db; echo 'Note: In 8 seconds, MPD (no-daemon) will start to update the database.\nIf,\nffmpeg/mov,mp4,m4a,3gp,3g2,mj2: AVIndex stream 0, sample 1337\n stops printing continuously, that means your database is up to date. You can safely kill the process (Ctrl-C) then start the daemon again.'; sleep 8; mpd --stdout --no-daemon --verbose"
 
 # fuck.
-eval $(thefuck --alias)
+# eval $(thefuck --alias)
 
 # ls
-LS_COLORS=`is-supported "ls --color" --color -G`
-LS_TIMESTYLEISO=`is-supported "ls --time-style=long-iso" --time-style=long-iso`
-LS_GROUPDIRSFIRST=`is-supported "ls --group-directories-first" --group-directories-first`
-alias l="ls -lahA $LS_COLORS $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
-alias ll="ls -lA $LS_COLORS"
-alias lt="ls -lhAtr $LS_COLORS $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
-alias ld="ls -ld $LS_COLORS */"
-unset LS_COLORS LS_TIMESTYLEISO LS_GROUPDIRSFIRST
+# LS_COLORS=`is_supported "ls --color" --color -G`
+# LS_TIMESTYLEISO=`is_supported "ls --time-style=long-iso" --time-style=long-iso`
+# LS_GROUPDIRSFIRST=`is_supported "ls --group-directories-first" --group-directories-first`
+# alias l="ls -lahA $LS_COLORS $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
+# alias ll="ls -lA $LS_COLORS"
+# alias lt="ls -lhAtr $LS_COLORS $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
+# alias ld="ls -ld $LS_COLORS */"
+# unset LS_COLORS LS_TIMESTYLEISO LS_GROUPDIRSFIRST
+
+alias l="ls -TAhp"
 
 # List declared aliases, functions
 alias listaliases="alias | sed 's/=.*//'"
@@ -62,54 +64,43 @@ alias df="df -h"
 alias du="du -h"
 alias free="free -h"
 alias streamlink="streamlink -p mpv"
+alias rg="rg --trim -i"
 #alias 2048='2048 blackwhite'
-alias cmatrix="cmatrix -C blue"
-# alias dtrx="dtrx -r $1"
-# alias rsync="rsync -vh"
-# alias json="json -c"
-# alias psgrep="psgrep -i"
+# alias cmatrix="cmatrix -C blue"
 
+# Horizontal Rule Aliases
+alias hrlenny="hr '( ͡° ͜ʖ ͡°)   '"
 
 # Streamlink Aliases
-alias cnnturk="streamlink 'https://www.youtube.com/watch?v=4oUdVy4TdmU' 360p" # resolution: 360p 480p 720p...
-alias cnnturkalt="streamlink 'http://www.cnnturk.com/canli-yayin' 500k" # resolution: 300k 500k 750k 1000k 1250k
-alias kanald="streamlink 'https://www.kanald.com.tr/canli-yayin' 492k" # resolution: 331k 492k 852k 1013k 1301k
-alias tv8="streamlink 'https://www.tv8.com.tr/canli-yayin' 576p" # resolution: 576p 864p
+# alias foxtv="streamlink 'https://www.fox.com.tr/canli-yayin' 360p"
 
 # OpenVPN Aliases
-alias vpnca="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-CA1/vpnbook-ca1-tcp443.ovpn"
-alias vpnde="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-DE1/vpnbook-de233-tcp443.ovpn"
-alias vpnus="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-US1/vpnbook-us1-tcp443.ovpn"
-alias vpneu="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-Euro1/vpnbook-euro1-tcp443.ovpn"
-alias vpnus2="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-US2/vpnbook-us2-tcp443.ovpn"
-alias vpneu2="openvpn --config ~/.extra/vpn/VPNBook.com-OpenVPN-Euro2/vpnbook-euro2-tcp443.ovpn"
-
-# Shortcuts to configuration files
-alias xres="nvim ~/.dotfiles/config/xres && xrdb ~/.Xresources"
-alias aliasrc="nvim ~/.dotfiles/system/alias"
-alias aliaslinuxrc="nvim ~/.dotfiles/system/alias_tux"
-alias aliasmacrc="nvim ~/.dotfiles/system/alias_mac"
-alias zshrc="nvim ~/.dotfiles/runcom/zshrc && . ~/.zshrc"
-alias vimrc="nvim ~/.dotfiles/config/vim"
-alias tmuxconf="nvim ~/.dotfiles/config/tmux"
+# alias mkvpnauth="~/.extra/extra/vpn/mkvpnauth"
+alias vpnpl="openvpn --config ~/.extra/secret/vpn/vpnbook-pl226-tcp443.ovpn --auth-user-pass ~/.extra/secret/vpn/auth"
+alias vpnde="openvpn --config ~/.extra/secret/vpn/vpnbook-de4-tcp443.ovpn --auth-user-pass ~/.extra/secret/vpn/auth"
+alias vpnus="openvpn --config ~/.extra/secret/vpn/vpnbook-de4-tcp443.ovpn --auth-user-pass ~/.extra/secret/vpn/auth"
 
 # Exclude MacOS specific files in ZIP archives
 alias zip="zip -x *.DS_Store -x *__MACOSX* -x *.AppleDouble*"
 
 # We-Get aliases
-alias findtpb="you-get --target the_pirate_bay --search"
-alias find1337="you-get --target 1337x --search"
-alias findeztv="you-get --target eztv --search"
-alias findyts="you-get --target yts --search"
+# alias findtpb="you-get --target the_pirate_bay --search"
+# alias find1337="you-get --target 1337x --search"
+# alias findeztv="you-get --target eztv --search"
+# alias findyts="you-get --target yts --search"
 
 # Self-written notes of command line tools
-alias clinotes='nvim ~/.extra/doc/clinotes.md'
-alias todo='nvim ~/.extra/doc/todo.md'
+alias clinotes='$VISUAL ~/Library/CloudStorage/Dropbox/post/CLI/clinotes.md'
+
+# pnpm shortcut
+alias pn="pnpm"
+alias px="pnpm exec"
+alias pdlx="pnpm dlx"
 
 # npm shortcuts (for global)
-alias npmi="npm i -g "
-alias npmr="npm un -g"
-alias npmu="npm up -g"
+# alias npmi="npm i -g "
+# alias npmr="npm un -g"
+# alias npmu="npm up -g"
 
 # tpm shortcuts
 alias tpmi="~/.tmux/plugins/tpm/bin/install_plugins"
@@ -117,15 +108,11 @@ alias tpmu="~/.tmux/plugins/tpm/bin/update_plugins"
 alias tpmuall="~/.tmux/plugins/tpm/bin/update_plugins all"
 alias tpmr="~/.tmux/plugins/tpm/bin/clean_plugins"
 
-# Network
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias localip="ipconfig getifaddr en1"
-alias ipl="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+# Youtube DL Shortcuts
+alias youtube-dl-album='yt-dlp -x -o "%(autonumber)s - %(title)s.%(ext)s" --autonumber-size 2 --audio-format=opus'
+alias dl-a='yt-dlp -x -f bestaudio --prefer-free-formats -i --output "%(title)s.%(ext)s"'
+alias dl-v='yt-dlp -f bestvideo+bestaudio --prefer-free-formats -i --output "%(title)s.%(ext)s"'
 
-# Request using GET, POST, etc. method
-for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-  alias "$method"="lwp-request -m '$method'"
-done
 
 # Recursively remove Apple meta files
 alias cleanupds="find . -type f -name '*.DS_Store' -ls -exec /bin/rm {} \;"
@@ -134,15 +121,41 @@ alias cleanupad="find . -type d -name '.AppleD*' -ls -exec /bin/rm -r {} \;"
 # print the path with each directory separated by a newline
 alias path="echo -e ${PATH//:/\\n}"
 
-# make less properly handle colored output
-alias lessr="less -R"
-
 # Translate Shell (trans)
-#alias cevir="trans {=tr} $1" # detect language, then translate to Turkish
-#alias translate="trans {=en} $1" # detect language, then translate to English
+alias cevir="trans {=tr} $1" # detect language, then translate to Turkish
+alias translate="trans {=en} $1" # detect language, then translate to English
 
-# Just for fun.
-alias thx='figlet np'
+# Bukuserver
+# alias bukuweb="bukuserver run --host 127.0.0.1 --port 5001"
 
-# figlet it
-alias now="date +%T | figlet"
+# Tron Multiplayer (Share with your friends)
+alias tron="ssh sshtron.zachlatta.com"
+
+alias applychanges-mopidy="curl -d \"{'jsonrpc': '2.0', 'id': 1, 'method': 'core.library.refresh'}\" http://localhost:6680/mopidy/rpc"
+
+# Normalize `open` across Linux, macOS, and Windows.
+# This is needed to make the `o` function (see below) cross-platform.
+if [ ! $currentos = 'Darwin' ]; then
+	if grep -q Microsoft /proc/version; then
+		# Ubuntu on Windows using the Linux subsystem
+		alias open='explorer.exe';
+	else
+		alias open='xdg-open';
+	fi
+fi
+
+# alias swift="PATH='/usr/bin:$PATH' swift"
+
+# Network
+alias printip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias printlocalip="ipconfig getifaddr en1"
+alias printipl="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+
+# Request using GET, POST, etc. method
+for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
+  alias "$method"="lwp-request -m '$method'"
+done
+
+alias gsf="cd ~/Documents/anadolu-7yy/ && nnn"
+alias 123rf="cd ~/Documents/stokluk && ncftp -u egeesin ftp.123rf.com"
+alias webdev="~/webdev/pxl/utility/cli.sh edit"

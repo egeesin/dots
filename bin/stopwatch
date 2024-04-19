@@ -1,0 +1,35 @@
+#===  FUNCTION  ================================================================
+#          NAME:  progressIndicatorTime
+#   DESCRIPTION:  Display a progress indicator with seconds passed.
+#    PARAMETERS:  [increment]   between 1 and 60 [sec], default is 2 [sec]
+#===============================================================================
+function progressIndicatorTime ()
+{
+  declare default=2                                       # default increment [sec]
+  declare increment="${1:-$default}"                      # 1. parameter or default
+  declare format='\b\b\b\b\b\b\b\b%02d:%02d:%02d'         # time format hh:mm:ss
+  declare timepassed=0
+  declare seconds minutes hours
+
+  [[ ! "$increment" =~ ^([1-9]|[1-5][0-9]|60)$ ]] && increment=$default
+  printf " ... working [hh:mm:ss]  00:00:00"
+  while : ; do                                            # infinite loop 
+    ((seconds=timepassed%60))
+    ((minutes=timepassed/60))
+    ((hours=minutes/60))
+    ((minutes=minutes%60))
+    printf "$format" $hours $minutes $seconds
+    sleep $increment || break                             # sleep ...
+    ((timepassed+=increment))
+  done
+}    # ----------  end of function progressIndicatorTime  ----------
+
+progressIndicatorTime &                                   # run progress indicator
+declare progressIndicatorPid=${!}                         # save process ID
+trap  "kill $progressIndicatorPid" INT TERM               # trap keyboard interrupt
+
+#
+# run long command
+#
+
+kill -s SIGTERM $progressIndicatorPid                     # terminate progress indicator

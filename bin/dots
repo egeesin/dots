@@ -1,0 +1,383 @@
+#!/usr/bin/env bash
+BIN_NAME=$(basename "$0")
+BIN_PATH=$(dirname "$(greadlink -f "$0" || readlink -f "$0")")
+COMMAND_NAME=$1
+SUB_COMMAND_NAME=$2
+DOT_DIR=$HOME/.dots
+LSFILE="/tmp/dotslist.txt"
+
+# shellcheck source=../system/function
+. "$DOT_DIR/system/function"
+# shellcheck source=../system/env
+. "$DOT_DIR/system/env"
+
+sub_help () {
+	echo "Usage: $BIN_NAME <command>"
+	echo
+	echo "Commands:"
+	echo " help/--help/-h .... This."
+	echo " list/ls <arg> ..... Lists installed packages, aliases and functions"
+	echo " edit .............. Open main directory in an editor ($EDITOR)"
+	echo " (re)load .......... Reload Z Shell configuration"
+	echo " link/ln ........... Relink configurations"
+	echo " (up)date........... Updates all packages"
+	echo " re(in)stall ....... Install packages listed from the dots/setup"
+	echo " (ex)port <path> ... Get a local backup/archive of the main directory"
+	echo " clear ............. Clean up caches from all package managers"
+	echo " todo .............. Open local TODO list for dots/extra related stuff"
+	echo
+	if [[ $currentos == "Darwin" ]]; then
+		echo "=== macOS only ==="
+		echo "• defaults .......... Apply system defaults"
+		echo "• dock .............. Apply dock placements"
+		echo "• dock-<preset> ..... Choose a dock preset"
+		echo "  Presets: general, web, graphic, font, media"
+	fi
+}
+
+#---- Tab completion support
+sub_completion () {
+	echo "edit list reload link clear update reinstall export defaults dock dock-general dock-web dock-graphic dock-font dock-media dock-gaming"
+}
+
+#---- Output a list of installed packages from all detected package managers
+sub_list () {
+
+# [[ -f $LSFILE ]] && rm $LSFILE;
+
+lstype=$1
+listall=0
+saveonly=0
+
+[[ $1 = 'save' ]] && saveonly=1
+[[ -z $lstype ]] && listall=1
+# [[ -n $lstype ]] && listall=1
+cat >$LSFILE <<EOL
+$([[ $listall = 1 || $lstype == 'pip' ]] &&
+echo &&
+echo "----------- Python Packages -----------" &&
+# pip freeze
+pip list)
+$([[ $listall = 1 || $lstype == 'npm' ]] &&
+echo &&
+echo "----------- Global Node Modules -----------" &&
+ls "$(pnpm root -g)")
+$([[ $listall = 1 || $lstype == 'gem' ]] &&
+echo &&
+echo "---------------- Ruby Gems ----------------" &&
+gem list)
+$([[ $currentos == "Darwin" && $listall = 1 || $lstype == 'brew' ]] &&
+echo &&
+echo "------------ Homebrew Packages ------------" &&
+brew list)
+$([[ $listall = 1 || $lstype == 'mas' ]] &&
+echo &&
+echo "----- Applications from Mac App Store -----" &&
+find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print |\sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##')
+$([[ $listall = 1 || $lstype == 'cask' ]] &&
+echo &&
+echo "----- Applications from Homebrew Cask -----" &&
+brew cask list)
+$([[ $currentos == "Debian" && $listall = 1 || $lstype == 'dpkg' ]] &&
+echo &&
+echo "------------- Debian Packages -------------" &&
+dpkg-query -f '${binary:Package}\n' -W)
+$([[ $currentos == "Debian" && $listall = 1 || $lstype == 'apt' ]] &&
+echo &&
+echo "------------ Aptitude Packages ------------" &&
+apt list --installed)
+$([[ $currentos == "Red Hat" && $listall = 1 || $lstype == 'rpm' ]] &&
+echo &&
+echo "------------ Red Hat Packages -------------" &&
+rpm -qa)
+$([[ $currentos == "Arch Linux" && $listall = 1 || $lstype == 'pacman' ]] &&
+echo &&
+echo "------------- Pacman Packages -------------" &&
+pacman -Q)
+$([[ $currentos == "Arch Linux" && $listall = 1 || $lstype == 'aur' ]] &&
+echo &&
+echo "--------------- AUR Packages --------------" &&
+yay -Q)
+$([[ $listall = 1 || $lstype == 'alias' ]] &&
+echo &&
+echo "--------------- ZSH Aliases ---------------" &&
+alias | sed 's/=.*//' && declare -f | grep '^[a-z].* ()' | sed 's/{$//')
+$([[ $listall = 1 || $lstype == 'function' ]] &&
+echo &&
+echo "-------------- ZSH Functions --------------" &&
+alias | sed 's/=.*//' && declare -f | grep '^[a-z].* ()' | sed 's/{$//')
+
+
+EOL
+[[ $saveonly = 0 ]] && less $LSFILE
+
+# wish you were here, choco...
+# $([[ $currentos == "Windows" && $listall = 1 || $lstype == 'choco' ]] &&
+# echo &&
+# echo "------------ Chocolatey Packages ------------" &&
+# clist -l)
+# $([[ $currentos == "Windows" && $listall = 1 || $lstype == 'scoop' ]] &&
+# echo &&
+# echo "------------ Scoop Packages ------------" &&
+# scoop list)
+}
+sub_ls () {
+	sub_list "$@"
+}
+
+sub_edit () {
+	if [[ $1 == "bin" ]]; then
+		sh -c "$EDITOR $BIN_PATH/$BIN_NAME"
+	else
+		sh -c "$EDITOR $DOT_DIR"
+	fi
+}
+
+sub_reload () {
+# shellcheck source=../config/zsh
+	. "$DOT_DIR/config/zsh" && echo "Zsh configuration reloaded."
+}
+sub_re () {
+	sub_reload
+}
+
+sub_link () {
+# shellcheck source=../link.sh
+	. "$DOT_DIR/link.sh"
+}
+sub_ln () {
+	sub_link
+}
+
+sub_update () {
+	if [[ $currentos == "Darwin" ]]; then
+		sudo softwareupdate -i -a
+		# git -C "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core" fetch --unshallow
+		brew update
+		brew upgrade
+		# pip3 install --upgrade pip
+		# pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
+		sudo gem update --system
+		sudo gem update
+	elif [[ $currentos == "Arch Linux" ]]; then
+		yay -Syu --noedit
+		# sudo pip2 install --upgrade pip && sudo pip3 install --upgrade pip
+		sudo pip install --upgrade pip
+		sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
+		# cup all -y
+	fi
+	# . "$DOT_DIR/system/nvm"
+	pnpm add -g pnpm@latest
+	pnpm up -g
+	# npm i -g npm@latest
+	# npm i -g npx
+	# npm up -g
+	# $(command -v zplug) update
+	# zplug update
+	echo "Don't forget to update zsh plugins manually"
+	echo "by typing: zplug update"
+
+	# TODO: fnm alternative to this - currently not possible with fnm
+	# nvm upgrade # requires zsh-nvm and nvm
+	# if [[ $(nvm current) != $(nvm version node) ]]; then
+		# nvm install stable --reinstall-packages-from=node && npm alias default node
+	# else
+		# echo "Current NodeJS is up to date."
+	# fi
+}
+sub_up () {
+	sub_update
+}
+
+sub_reinstall () {
+	local SCRIPT="${HOME}/.dots/setup/${SUB_COMMAND_NAME}.sh"
+		if [ -f "$SCRIPT" ]; then
+			. "$SCRIPT"
+		else
+			echo "Unable to find script to reinstall packages from ${SUB_COMMAND_NAME}";
+		fi
+}
+sub_in () {
+	sub_reinstall "$@"
+}
+
+sub_export () {
+	EXT_DIR=$HOME"/.extra"
+	DOT_DIR=$HOME"/.dots"
+	TEMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'TEMPDIR')
+	VERNUM=$(date +%Y-%m-%d)
+	EXTDIREXISTS=0
+	if [[ -d $EXT_DIR ]]; then
+		EXTDIREXISTS=1
+		sub_list save
+		cp "$LSFILE" "$EXT_DIR/pkglist-$VERNUM.txt"
+	fi
+
+	OUTPUTDIR="."
+	[ "$1" ] && OUTPUTDIR="$1"
+
+	trap 'rm -rf $TEMPDIR/extra $TEMPDIR/dots && echo "Temporary files removed." ' 0 2 3 15
+
+	cd "$TEMPDIR" || exit
+
+	if [[ $EXTDIREXISTS == 1 ]]; then
+		cp -r "$EXT_DIR" extra && echo ".extra copied."
+	else
+		echo ".extra directory not found, skipping…"
+	fi
+
+	cp -r "$DOT_DIR" dots && echo ".dots copied."
+
+	# Delete unwanted files
+	if [[ $EXTDIREXISTS == 1 ]]; then
+		find "$EXT_DIR" "$DOT_DIR" -type f -name '*.DS_Store' -ls -exec /bin/rm {} \;
+	else
+		find "$DOT_DIR" -type f -name '*.DS_Store' -ls -exec /bin/rm {} \;
+	fi
+
+	rm -rf dots/config/mutt/{tmp,cache}
+
+	if [[ $EXTDIREXISTS == 1 ]]; then
+		tar czf extradots-"$VERNUM".tar.gz extra dots && echo "extra and dots succesfully compressed."
+	else
+		tar czf dots-"$VERNUM".tar.gz dots && echo "dots succesfully compressed."
+	fi
+
+	cd - || exit
+	if [[ $EXTDIREXISTS == 1 ]]; then
+		mv "$TEMPDIR"/extradots-"$VERNUM".tar.gz "$OUTPUTDIR"/ && echo "█▓▒░░ extra & dots archive of $VERNUM -> Ready!"
+	else
+		mv "$TEMPDIR"/dots-"$VERNUM".tar.gz "$OUTPUTDIR"/ && echo "█▓▒░░ dots archive of $VERNUM -> Ready!"
+	fi
+}
+sub_ex() {
+	sub_export "$@"
+}
+
+#-- Clear caches, outdated package downloads of various package managers or any other programs.
+sub_clear () {
+	if [[ $currentos == "Darwin" ]]; then
+		brew cleanup                          # Homebrew
+		brew services cleanup
+#		npm install --cache /tmp/empty-cache  # Node.js
+		rvm cleanup all                       # Ruby Version Manager
+		sudo gem cleanup                      # Ruby Package Manager
+		rm -rf "$HOME"/Library/Caches/pip/*   # PIP
+	elif [[ $currentos == "Arch Linux" ]]; then
+		yay -Sc --noconfirm                   # AUR Package Manager
+#		npm install --cache /tmp/empty-cache  # Node.js
+		rvm cleanup all                       # Ruby Version Manager
+		sudo gem cleanup                      # Ruby Package Manager
+		rm -rf "$HOME"/.cache/pip/*           # PIP
+		wal -c                                # Pywal - Clear cache
+	fi
+
+	#scoop cache rm *
+	#choco-cleaner.bat
+	pnpm cache verify # Node.js
+
+	# Removes recursively every .DS_Store (Stores window customization data) file from working directory.
+	find . -type f -name '*.DS_Store' -ls -exec /bin/rm {} \;
+	# Removes recursively every file starts with .AppleD from
+	find . -type d -name '.AppleD*' -ls -exec /bin/rm -r {} \;
+}
+sub_todo () {
+	if [[ $currentos == "Darwin" ]]; then
+		$VISUAL "$HOME/Library/CloudStorage/Dropbox/post/__TODO/dots-TODO.md"
+	else
+		echo "Please set path for TODO file in GNU/Linux."
+	fi
+}
+
+#-- Rewrite Mac Defaults
+sub_defaults () {
+	if [[ $currentos == "Darwin" ]]; then
+		# Executes defaults write commands for Mac system.
+		for DEFAULTS_FILE in "${HOME}"/.dots/mac/defaults*.sh; do
+			echo "Applying ${DEFAULTS_FILE}" && . "${DEFAULTS_FILE}"
+		done
+		echo "Done. Some changes may require a logout/restart to take effect."
+	else
+		echo "This command is available for macOS, exiting."
+	fi
+}
+
+#---- Dock Commands
+#-- Re-apply dock defaults
+sub_dock () {
+	if [[ $currentos == "Darwin" ]]; then
+		# Configures dock placement for Mac system.
+		# shellcheck source=../mac/dock-bootstrap.sh
+		. "$DOT_DIR/mac/dock-bootstrap.sh" echo "Dock reloaded."
+		# . "$DOT_DIR/mac/dock/_general.sh"
+	else
+		echo "This command is available for macOS, exiting."
+	fi
+}
+#-- Choose general dock preset
+sub_dock-general () {
+	if [[ $currentos = "Darwin" ]]; then
+		# shellcheck source=../mac/dock/_general.sh
+		. "$DOT_DIR/mac/dock/_general.sh"
+	else
+		echo "This command is available for macOS, exiting."
+	fi
+}
+#-- Choose web dock preset
+sub_dock-web () {
+	if [[ $currentos = "Darwin" ]]; then
+		# shellcheck source=../mac/dock/web.sh
+		. "$DOT_DIR/mac/dock/web.sh"
+	else
+		echo "This command is available for macOS, exiting."
+	fi
+}
+#-- Choose media dock preset
+sub_dock-media () {
+	if [[ $currentos = "Darwin" ]]; then
+		# shellcheck source=../mac/dock/media.sh
+		. "$DOT_DIR/mac/dock/media.sh"
+	else
+		echo "This command is available for macOS, exiting."
+	fi
+}
+#-- Choose graphic dock preset
+sub_dock-graphic () {
+	if [[ $currentos = "Darwin" ]]; then
+		# shellcheck source=../mac/dock/graphic.sh
+		. "$DOT_DIR/mac/dock/graphic.sh"
+	else
+		echo "This command is available for macOS, exiting."
+	fi
+}
+#-- Choose font dock preset
+sub_dock-font () {
+	if [[ $currentos = "Darwin" ]]; then
+		. "$DOT_DIR/mac/dock/font.sh"
+	else
+		echo "This command is available for macOS, exiting."
+	fi
+}
+#-- Choose gaming dock preset
+sub_dock-gaming () {
+	if [[ $currentos = "Darwin" ]]; then
+		. "$DOT_DIR/mac/dock/gaming.sh"
+	else
+		echo "This command is available for macOS, exiting."
+	fi
+}
+
+
+case $COMMAND_NAME in
+	"" | "-h" | "--help")
+		sub_help
+		;;
+	*)
+		shift
+		sub_"${COMMAND_NAME}" "$@"
+		if [ $? = 127 ]; then
+			echo "'$COMMAND_NAME' is not a known command or has errors." >&2
+			exit 1
+		fi
+		;;
+esac

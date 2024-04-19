@@ -1,0 +1,46 @@
+i3cheatsheet() {
+	grep -E "^bind" ~/.config/i3/config | awk '{$1=""; print $0}' | sed 's/^ *//g' | grep -vE "^XF86" | column | pr -2 -w 160 -t | less                                                                                                       
+}
+
+#list servicesd
+listd() {
+  echo -e ${BLD}${RED}" --> SYSTEM LEVEL <--"${NRM}
+  find /etc/systemd/system -mindepth 1 -type d | sed '/getty.target/d' | xargs ls -gG --color
+  [[ $(find $HOME/.config/systemd/user -mindepth 1 -type d | wc -l) -eq 0 ]] ||
+	(echo -e ${BLD}${RED}" --> USER LEVEL <--"${NRM} ; \
+	find $HOME/.config/systemd/user -mindepth 1 -type d | xargs ls -gG --color)
+}
+
+# Show used mirrors {archlinux}
+lsmirror() {
+  grep -v '^$\|^#' /etc/pacman.d/mirrorlist | awk '{print $3}' | awk -F '/' '{print $3}';
+}
+
+# download the aur(4) package to the current directory, similar to cower -d from the old AUR, but using the officially supported method; git.
+# usage:
+# $ aurd <package-name>
+aurd() {
+	git clone https://aur4.archlinux.org/$1.git/
+	#git clone ssh://aur@aur4.archlinux.org/$1.git/
+}
+
+# download the aur(4) package to the current directory, cd, build (clean) and prompt to install.
+aurb() {
+	git clone https://aur4.archlinux.org/$1.git/ && cd $1 && makepkg -sci
+	#git clone ssh://aur@aur4.archlinux.org/$1.git/ && cd $1 && makepkg -sci
+}
+
+# update the package in the current directory
+auru() {
+	git pull && rm -f *.pkg.tar.xz || true && makepkg -sci
+}
+
+# set volume
+vol () {
+	pactl set-sink-volume 5 $1% ;
+}
+
+#wallpaper changer
+fehpap() {
+  zenity --file-selection | xargs feh --bg-scale
+}

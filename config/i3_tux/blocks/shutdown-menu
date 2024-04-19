@@ -38,7 +38,7 @@ BORDER_COLOR="#222222"
 
 # Options not related to colors
 ROFI_TEXT="Menu:"
-ROFI_OPTIONS=(-width -11 -location 3 -hide-scrollbar -bw 2)
+ROFI_OPTIONS=(-width -24 -location 3 -hide-scrollbar -bw 1)
 
 # Zenity options
 ZENITY_TITLE="Menu"
@@ -113,13 +113,13 @@ typeset -A menu
 
 # Menu with keys/commands
 menu=(
-  [Shutdown]="systemctl poweroff"
-  [Reboot]="systemctl reboot"
-  [Hibernate]="systemctl hibernate"
+  [Shut Down]="systemctl poweroff"
+  [Restart]="systemctl reboot"
+  [Sleep]="systemctl hibernate"
   [Suspend]="systemctl suspend"
   [Halt]="systemctl halt"
-  [Lock]="${LOCKSCRIPT:-i3lock --color=${BG_COLOR#"#"}}"
-  [Logout]="i3-msg exit"
+  [Lock Screen]="${LOCKSCRIPT:-i3lock --color=${BG_COLOR#"#"}}"
+  [Log Out]="i3-msg exit"
   [Cancel]=""
 )
 menu_nrows=${#menu[@]}
@@ -162,7 +162,7 @@ selection="$(printf '%s\n' "${!menu[@]}" | sort | "${launcher[@]}")"
 
 function ask_confirmation() {
   if [ "${launcher_exe}" == "rofi" ]; then
-    confirmed=$(echo -e "Yes\nNo" | rofi -dmenu -i -lines 2 -p "${selection}?" \
+    confirmed=$(echo -e "Yes\nNo" | rofi -dmenu -i -lines 1 -p "${selection}?" \
       "${rofi_colors}" "${ROFI_OPTIONS[@]}")
     [ "${confirmed}" == "Yes" ] && confirmed=0
   elif [ "${launcher_exe}" == "zenity" ]; then

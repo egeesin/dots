@@ -1,7 +1,6 @@
 .cache.sh
-system/custom
-config/mutt/account
-config/mutt/cache
+config/mutt/{account,cache,tmp}
 config/mutt/*.asc
 config/mutt/*.json
-bin/libshower/__pycache__
+config/i3_tux/{*.log,.i3log}
+logs/

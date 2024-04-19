@@ -1,0 +1,53 @@
+#!/bin/zsh
+
+mode_setting="$1"
+mode="light" # default value
+if [[ -z $mode_setting ]]; then
+    /usr/bin/defaults read -g AppleInterfaceStyle &> /dev/null
+    if [[ $? -eq 0 ]]; then
+        mode="dark"
+	fi
+else
+	case $mode_setting in
+		light)
+			/usr/bin/osascript -l JavaScript -e "Application('System Events').appearancePreferences.darkMode = false" &> /dev/null
+			mode="light"
+		;;
+		dark)
+			/usr/bin/osascript -l JavaScript -e "Application('System Events').appearancePreferences.darkMode = true" &> /dev/null
+			mode="dark"
+		;;
+	esac
+fi
+
+# change neovim (dependency: neovim-remote)
+for addr in $(/usr/local/bin/nvr --serverlist); do
+	case $mode in
+		dark)
+		/usr/local/bin/nvr --servername $addr -c "set background=dark"
+		;;
+		light)
+		/usr/local/bin/nvr --servername $addr -c "set background=light"
+		;;
+	esac
+done
+
+# change tmux
+# case $mode
+# 	dark)
+# 		tmux source-file ~/.tmux/tmux-dark.conf
+# 	;;
+# 	light)
+# 		tmux source-file ~/.tmux/tmux-light.conf
+# 	;;
+# esac
+
+# change alacritty
+case $mode in
+	dark)
+		/Users/ege/.dots/bin/alacritty-theme dark
+	;;
+	light)
+		/Users/ege/.dots/bin/alacritty-theme light
+	;;
+esac

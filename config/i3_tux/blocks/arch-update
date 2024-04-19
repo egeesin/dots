@@ -44,7 +44,7 @@ def get_update_count():
 
 
 def get_aur_update_count():
-    output = check_output(['pacaur', '-Qua']).decode('utf-8')
+    output = check_output(['trizen', '-Qu']).decode('utf-8')
     if not output:
         return 0
 
@@ -63,7 +63,7 @@ update_count = get_update_count()
 if args.aur:
     update_count += get_aur_update_count()
 if update_count == 0:
-    print(message.format(args.base_color, ''))
+    print(message.format(args.base_color, ''))
 else:
     #info = str(update_count) + 'updates available'
     info = str(update_count)

@@ -1,0 +1,29 @@
+#!/bin/bash
+# Wikia Image Downloader by egeesin
+#
+# Instructions
+# Go to Special:Statistics, get 'current' dump in the bottom of the page.
+#
+# Usage: wikia-img-dl <the-name-of-wikia> <list> <xmldump>
+
+URL="http://"$1".wikia.com"
+# example.wikia.com/wiki
+SOURCE=$URL'/wiki/File:'
+LIST=$2
+XML_DUMP=$3
+OUTPUTDIR=$HOME"/Downloads/images-from-wikia/"$1
+mkdir -p $OUTPUTDIR
+if [[ ! -e $LIST ]]; then
+	echo "List not found, creating a list from selected XML dump."
+	grep -oP '((?<=File:)|(?<=Image:)).[^{,},\[,\],\d{14}!]+?\.(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|webm|WEBM)' $XML_DUMP >> $LIST
+	find $LIST -type f -exec sed -i 's/ /_/g;s/\?/\%3F/g;s/'\''/\%27/g;s/\&amp;/\&/g;s/\&quot;/'\"'/g' {} \;
+	sort -u $LIST -o $LIST
+fi
+cat $LIST | while read -r line; do
+	if [[ -e $OUTPUTDIR/$line ]]; then
+		echo -e "\033[0;33m"$line" already exists.\033[0m"
+	else
+		echo -e "\033[1;34mDownloading $line...\n\033[0m"
+		wget -nd -r -l1 -P $OUTPUTDIR -A jpg,jpeg,gif,png,webm $(curl -s $SOURCE$line | grep -oP '(?<=\(<a href=")http.*(?=/revision/latest\?cb=\d{14}(.*)format=original".*>download</a>)')
+	fi
+done

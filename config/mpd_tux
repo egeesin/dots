@@ -148,7 +148,7 @@ audio_output {
 bind_to_address "localhost"
 port "6600"
 
-music_directory "/media/ege-hd/audio/music-archive/MP3"
+music_directory "/media/ege-hd/audio/music/"
 
 playlist_directory "~/.config/mpd/playlists"
 db_file "~/.config/mpd/mpd.db"

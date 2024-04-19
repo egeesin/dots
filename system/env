@@ -1,15 +1,40 @@
+#!/bin/zsh
+# sourced=0
+# if [ -n "$ZSH_EVAL_CONTEXT" ]; then
+# 	case $ZSH_EVAL_CONTEXT in *:file) sourced=1;; esac
+# elif [ -n "$KSH_VERSION" ]; then
+# 	[ "$(cd $(dirname -- $0) && pwd -P)/$(basename -- $0)" != "$(cd $(dirname -- ${.sh.file}) && pwd -P)/$(basename -- ${.sh.file})" ] && sourced=1
+# elif [ -n "$BASH_VERSION" ]; then
+# 	(return 0 2>/dev/null) && sourced=1
+# else # All other shells: examine $0 for known shell binary filenames
+# 	# Detects `sh` and `dash`; add additional shell filenames as needed.
+# 	case ${0##*/} in sh|dash) sourced=1;; esac
+# fi
+# if [[ $sourced = 1 ]]; then
+# 	echo "system/env already sourced exiting..."
+# 	return 1
+# fi
+
+# DOT_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export DOT_DIR=$HOME'/.dots'
+export X_DIR=$HOME'/.extra'
+
 # Defaults
-export TERM='xterm-256color'
+
+# if [[ -z $TMUX ]]; then
+# 	export TERM='xterm-256color'
+# else
+# 	export TERM='screen-256color'
+# fi
+
 export EDITOR='nvim'
+export TERMINAL='alacritty'
 export VISUAL='nvim'
 export PAGER='less'
 export MAILCAPS=${HOME}'/.mailcap'
+export TR_AUTH=":"
+# export LESS='man less'
 
-if [[ "$(uname -s)" == "Darwin" ]]; then
-    export BROWSER='/Applications/Vivaldi.app'
-elif [[ "$(uname -s)" == "Linux" ]]; then
-	export BROWSER='$(which vivaldi)'
-fi
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
@@ -22,10 +47,6 @@ export TZ='Europe/Istanbul'
 
 export ARCHFLAGS="-arch x86_64"
 
-# .secrets
-export PASSWORD_STORE_DIR=~/.extra/secret/pass
-export GNUPGHOME=~/.extra/secret/gnupg
-
 # History
 export HISTSIZE=32768;
 export HISTFILESIZE="${HISTSIZE}";
@@ -35,9 +56,6 @@ export HISTCONTROL=ignoredups:erasedups
 # Enable colors
 export CLICOLOR=1
 
-# cheat-cli syntax highlighting
-export CHEATCOLORS=true
-
 # Prefer US English and use UTF-8.
 export LC_ALL='en_US.UTF-8';
 export LANG='en_US.UTF-8';
@@ -45,10 +63,128 @@ export LANG='en_US.UTF-8';
 # Highlight section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}"
 
+# Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
+export PYTHONIOENCODING='UTF-8';
+
+# .secrets
+# If secret directory exists inside .extra, change default GPG & Pass paths.
+# These must be executed before package installation.
+if [ -d "$X_DIR/secret" ]; then
+	export PASSWORD_STORE_DIR="$X_DIR/secret/pass"
+	export GNUPGHOME="$X_DIR/secret/gnupg"
+fi
+
+
+# Term Color
+#
+if [ -e /usr/share/terminfo/x/xterm-256color ] || [ -e /usr/share/terminfo/78/xterm-256color ]; then
+	export TERM='xterm-256color'
+else
+	export TERM='xterm-color'
+fi
+if [ "$TERM" = "xterm" ] ; then
+	if [ -z "$COLORTERM" ] ; then
+		if [ -z "$XTERM_VERSION" ] ; then
+			echo "Warning: Terminal wrongly calling itself 'xterm'."
+		else
+			case "$XTERM_VERSION" in
+			"XTerm(256)") TERM="xterm-256color" ;;
+			"XTerm(88)") TERM="xterm-88color" ;;
+			"XTerm") ;;
+			*)
+				echo "Warning: Unrecognized XTERM_VERSION: $XTERM_VERSION"
+				;;
+			esac
+		fi
+	else
+		case "$COLORTERM" in
+			gnome-terminal)
+				# Those crafty Gnome folks require you to check COLORTERM,
+				# but don't allow you to just *favor* the setting over TERM.
+				# Instead you need to compare it and perform some guesses
+				# based upon the value. This is, perhaps, too simplistic.
+				TERM="gnome-256color"
+				;;
+			*)
+				echo "Warning: Unrecognized COLORTERM: $COLORTERM"
+				;;
+		esac
+	fi
+fi
+
+# Print Operating System
+#
+# Got this from: https://unix.stackexchange.com/a/6348/175879
+if [ -f /etc/os-release ]; then
+	# freedesktop.org and systemd
+	. /etc/os-release
+	currentos=$NAME
+	osversion=$VERSION_ID
+elif type lsb_release >/dev/null 2>&1; then
+	# linuxbase.org
+	currentos=$(lsb_release -si)
+	osversion=$(lsb_release -sr)
+elif [ -f /etc/lsb-release ]; then
+	# For some versions of Debian/Ubuntu without lsb_release command
+	. /etc/lsb-release
+	currentos=$DISTRIB_ID
+	osversion=$DISTRIB_RELEASE
+elif [ -f /etc/debian_version ]; then
+	# Older Debian/Ubuntu/etc.
+	currentos=Debian
+	osversion=$(cat /etc/debian_version)
+elif [ -f /etc/SuSe-release ]; then
+	# Older SuSE/etc.
+	currentos='Older SuSE'
+elif [ -f /etc/redhat-release ]; then
+	# Older Red Hat, Centcurrentos, etc.
+	currentos='Older Red Hat'
+else
+	# Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
+	currentos=$(uname -s)
+	osversion=$(uname -r)
+fi
+case $(uname -m) in
+x86_64)
+	archbits=64
+	;;
+i*86)
+	archbits=32
+	;;
+*)
+	archbits=?
+	;;
+esac
+
+if [[ $currentos == "Darwin" ]]; then
+    # export BROWSER='open -a /Applications/Firefox.app'
+    export BROWSER='open'
+elif [[ $currentos == "Arch Linux" ]]; then
+	export BROWSER='$(which firefox)'
+fi
+
+# Environments for third party
+
+# cheat-cli syntax highlighting
+export CHEATCOLORS=true
+
 # RTV variables
 RTV_URLVIEWER='urlscan';
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 
-# Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
-export PYTHONIOENCODING='UTF-8';
+# NNN
+export NNN_USE_EDITOR=1
+export NNN_RESTRICT_NAV_OPEN=1
+export NNN_TRASH=1
+export NNN_OPS_PROG=1
+
+# Fast Node Manager (fnm)
+# eval "$(fnm env)"
+
+# asdf Version Manager
+if [[ $currentos == "Darwin" ]]; then
+	. $(brew --prefix asdf)/libexec/asdf.sh
+elif [[ $currentos == "Arch Linux" ]]; then
+	. /opt/asdf-vm/asdf.sh
+fi

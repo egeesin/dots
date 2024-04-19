@@ -1,0 +1,256 @@
+tap "homebrew/bundle"
+tap "homebrew/services"
+
+# GNU
+brew "coreutils"
+brew "findutils"
+brew "gnu-sed"
+brew "grep"
+brew "psgrep"
+
+brew "git"
+brew "git-extras"
+
+tap "jesseduffield/lazygit"
+brew "lazygit" # Simple terminal UI for git commands
+
+# Essentials
+# brew "zsh", args: ["with-unicode9"]
+brew "zsh"
+brew "zsh-completions"
+brew "starship"
+brew "gettext"
+brew "gnupg"
+brew "pass"
+brew "openssl"
+brew "openvpn"
+
+tap "localsend/localsend"
+brew "localsend" # An open-source cross-platform alternative to AirDrop
+
+# brew "pnpm" # setup/nodejs.sh should've installed pnpm already
+
+brew "nnn" # Tiny, lightning fast, feature-packed file manager
+brew "yazi" # Blazing fast terminal file manager written in Rust, based on async I/O
+
+brew "asdf"
+brew "git-delta" # Git diff highlighter
+
+# Neovim and other dependencies for LSPs
+tap "neovim/neovim"
+brew "neovim"
+brew "neovide"
+
+tap "shopify/shopify"
+brew "theme-check"
+brew "cmake"
+
+brew "tree"
+brew "ripgrep"
+# brew "vim", args: ["with-override-system-vi","with-custom-perl","with-custom-python","with-custom-ruby","with-lua","with-gettext"]
+# brew "vim"
+brew "pandoc"
+brew "mactex"
+brew "shellcheck"
+# brew "wget", args: ["with-gpgme"]
+brew "wget"
+brew "yank"
+tap "universal-ctags/universal-ctags"
+brew "universal-ctags", args: ["HEAD"]
+brew "fzf"
+brew "fd"
+# brew "tmux", args: ["with-utf8proc"]
+brew "tmux"
+brew "reattach-to-user-namespace"
+tap "cjbassi/gotop"
+brew "gotop"
+# brew "imagemagick", args: ["with-webp","with-x11","with-librsvg","with-openjpeg"]
+brew "imagemagick"
+# brew "transmission-cli"
+# brew "ffmpeg", args: ["with-libcaca","with-libbluray","with-webp","with-x265","with-tesseract"]
+brew "ffmpeg"
+# brew "youtube-dl"
+brew "yt-dlp/taps/yt-dlp"
+# brew "mpv", args: ["with-libcaca","with-libbluray","with-libaacs","with-pulseaudio","with-bundle"]
+brew "mpv"
+brew "streamlink"
+brew "mpd"
+# tap "mopidy/mopidy"
+# brew "mopidy"
+# brew "mopidy-spotify"
+# brew "mpd", args: ["with-flac","with-jack","with-pulseaudio"]
+# brew "mps-youtube"
+# brew "ncmpcpp", args: ["with-clock","with-outputs"]
+brew "ncmpcpp"
+brew "flac"
+brew "shntool"
+
+brew "freetype"
+brew "fontconfig"
+# brew "fontforge", args: ["with-giflib","with-extra-tools"]
+brew "fontforge"
+brew "bats"
+brew "atool"
+
+brew "python"
+brew "ruby"
+
+brew "calcurse"
+brew "translate-shell"
+brew "newsboat"
+brew "bc"
+# brew "remind"
+tap "nickolasburr/pfa"
+brew "sc-im"
+# brew "buku" # Powerful command-line bookmark manager
+brew "neofetch"
+# brew "neomutt/homebrew-neomutt/neomutt", args: ["with-sidebar-patch", "with-notmuch-patch"]
+# brew "neomutt" # E-mail reader with support for Notmuch, NNTP and much more
+# brew "notmuch"
+# brew "mutt"
+# brew "w3m" # Text-based browser
+brew "bmon"
+brew "figlet"
+brew "fortune"
+brew "cowsay"
+# brew "lolcat"
+# brew "pipes-sh"
+# brew "tty-clock"
+# brew "sl"
+# brew "cmatrix"
+# tap "passy/givegif"
+# brew "givegif"
+# brew "c2048"
+# brew "vitetris"
+# brew "ninvaders"
+# brew "typespeed"
+
+/* brew "dockutil" */
+# Homebrew database haven't updated a major version of dockutil yet.
+brew "hpedrorodrigues/tools/dockutil"
+# This is a temporariy cask, author told once official cask is available, this will be deprecated.
+
+# tap "koekeishiya/formulae"
+# brew "yabai" # chunkwm replacement
+# brew "skhd" # khd replacement
+
+brew "mackup" # Backup tool for Mac applications and CLI configs
+
+brew "leptonica"
+# brew "ansiweather"
+# brew "asciinema"
+# brew "boost"
+# brew "cairo"
+brew "exiftool"
+brew "fftw"
+brew "httpie"
+# brew "imessage-ruby"
+brew "mdp"
+# brew "pango", args: ["with-x11"]
+brew "pango"
+brew "wkhtmltopdf"
+brew "poppler"
+brew "spark"
+brew "ssh-copy-id"
+# brew "stow"
+brew "surfraw"
+# brew "tesseract", args: ["with-serial-num-pack"]
+brew "tesseract"
+brew "tesseract-lang"
+# brew "thefuck" # Auto corrects commands
+brew "gh" # Official GitHub CLI client
+
+brew "sox" # Swiss Army Knife of audio manipulation
+
+brew "graphviz"
+
+brew "chafa"
+
+
+brew "cloc" # Statistics utility to count lines of code
+brew "pastel" # Command-line tool to generate, analyze, convert and manipulate colors
+
+cask_args appdir: "/Applications"
+
+tap "homebrew/cask-drivers"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+brew "cask"
+
+cask "appcleaner"
+cask "keybase"
+cask "the-unarchiver"
+cask "alacritty"
+cask "wacom-tablet"
+cask "macs-fan-control"
+cask "monitorcontrol"
+brew "terminal-notifier"
+cask "dropbox"
+cask "scroll-reverser"
+cask "firefox"
+# cask "eloston-chromium"
+cask "netnewswire"
+cask "obsidian"
+cask "iina"
+# cask "spotify"
+# tap "khanhas/tap"
+# brew "spicetify-cli"
+# cask "bluestacks"
+cask "discord"
+cask "element" # Matrix collaboration client
+cask "handbrake"
+cask "losslesscut"
+
+# cask "fontgoggles" # Font viewer for various font formats
+cask "unicodechecker"
+# cask "xquartz"
+cask "exifrenamer"
+# cask "virtualbox"
+cask "karabiner-elements"
+cask "penc"
+# cask "soundflower"
+# cask "java11"
+cask "java"
+cask "imageoptim"
+cask "polymc"
+# cask "multimc"
+# cask "minecraft"
+cask "qlcolorcode"
+cask "qlstephen"
+cask "qlmarkdown"
+cask "quicklook-json"
+cask "qlprettypatch"
+cask "quicklook-csv"
+# cask "betterzipql"
+cask "qlimagesize"
+cask "webpquicklook"
+cask "quicklookase"
+cask "quicklook-pat"
+cask "qlvideo"
+cask "suspicious-package"
+cask "adobe-creative-cloud-cleaner-tool"
+
+cask "f3d" # Fast and minimalist 3D viewer
+
+cask "sensiblesidebuttons"
+
+cask "signal"
+cask "c0re100-qbittorrent"
+
+# brew "mas"
+# mas "1Password"
+cask "bitwarden"
+# mas "Affinity Designer"
+# mas "Affinity Photo"
+# mas "Clear"
+# mas "Display Menu"
+# mas "djay Pro"
+# mas "Final Cut Pro"
+# mas "Scapple"
+# mas "Ulysses"
+
+
+cask "activitywatch"
+cask "grandperspective"
+
+cask "tomatobar"
