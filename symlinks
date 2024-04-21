@@ -31,9 +31,8 @@ mutt               .mutt
 calcurse           .calcurse/conf
 calcurse-keys      .calcurse/keys
 rtv                .config/rtv/rtv.cfg
-alacritty_mac      .config/alacritty/alacritty.toml
-alacritty_tux      .config/alacritty/alacritty.toml
-alacritty-colorscheme .config/alacritty/color.toml
+alacritty          .config/alacritty/alacritty.toml
+alacritty-color    .config/alacritty/color.toml
 hyper              .hyper.js
 mpd_mac            .mpdconf
 mpd_tux            .config/mpd/mpd.conf

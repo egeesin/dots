@@ -1,4 +1,4 @@
-# -*-mode:powershell-*- vim:ft=powershell
+# vim:ft=ps1
 # Source: https://github.com/jayharris/dotfiles-windows/blob/master/aliases.ps1
 #         https://github.com/e5e4f6/dotfiles/blob/main/dot_config/powershell/aliases.ps1
 

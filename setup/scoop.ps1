@@ -1,11 +1,13 @@
-# -*-mode:powershell-*- vim:ft=powershell
+# vim:ft=ps1
 # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 # Install Scoop first if it doesn't exists
 
+# if (!(Get-Command scoop -ErrorAction SilentlyContinue))
 if (-Not(Get-Command scoop -ErrorAction "Ignore")){
     Write-Warning "Scoop not found. Installing..." -ForegroundColor "Yellow"
     # irm get.scoop.sh | iex
+	# Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression
     Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
 }
 if (Get-Command "scoop" -ErrorAction "Stop") {
@@ -35,8 +37,8 @@ if (Get-Command "scoop" -ErrorAction "Stop") {
     	"curl",
 #    	"diffutils",
 #    	"findutils",
+#    	"psutils",
 #    	"gawk",
-#    	"git",
 #    	"gradle",
 #    	"grep",
 #    	"lazygit",

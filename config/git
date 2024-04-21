@@ -81,6 +81,13 @@
 	email = aegean@duck.com
 	name = Ege Esin
 
+[safe]
+	directory = C:\\Users\\ege_e\\scoop\\apps\\scoop\\current
+	directory = C:/Users/ege_e/scoop/apps/scoop/current
+
+[init]
+	defaultBranch = main
+
 [delta]
 	side-by-side = true
 	line-numbers = true
@@ -92,3 +99,4 @@
 [delta "dark-mode"]
   light = false
   syntax-theme = Visual Studio Dark+
+

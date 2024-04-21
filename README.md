@@ -25,6 +25,7 @@ Installation scripts for both macOS and Windows are meant to be ran on a formatt
 -   Change macOS defaults and dock arrangements
 -   Execute noninvolved `~/.extra/install.sh` file if exists. (Not mandatory)
 
+For macOS or GNU/Linux distros:
 ```sh
 # Clone the repository to your local machine.
 git clone https://github.com/egeesin/dots ~/.dots
@@ -37,6 +38,11 @@ chmod +x ./install.sh ./link.sh bin/*
 
 # Begin the installation.
 ./install.sh
+```
+
+For Windows: 
+```ps1
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/egeesin/dots/main/install.ps1')
 ```
 
 ### Remote

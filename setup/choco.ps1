@@ -1,4 +1,4 @@
-# -*-mode:powershell-*- vim:ft=powershell
+# vim:ft=ps1
 # Set-ExecutionPolicy Bypass -Scope Process -Force
 
 if (-Not(Get-Command scoop -ErrorAction "Ignore")){

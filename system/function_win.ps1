@@ -1,4 +1,4 @@
-# -*-mode:powershell-*- vim:ft=powershell
+# vim:ft=ps1
 # Source: https://github.com/jayharris/dotfiles-windows/blob/master/functions.ps1
 
 # Basic commands
@@ -10,14 +10,14 @@ function Edit-Hosts { Invoke-Expression "sudo $(if($env:EDITOR -ne $null)  {$env
 function Edit-Profile { Invoke-Expression "$(if($env:EDITOR -ne $null)  {$env:EDITOR } else { 'notepad' }) $profile" }
 
 # Sudo
-function sudo() {
-    if ($args.Length -eq 1) {
-        start-process $args[0] -verb "runAs"
-    }
-    if ($args.Length -gt 1) {
-        start-process $args[0] -ArgumentList $args[1..$args.Length] -verb "runAs"
-    }
-}
+# function sudo() {
+#     if ($args.Length -eq 1) {
+#         start-process $args[0] -verb "runAs"
+#     }
+#     if ($args.Length -gt 1) {
+#         start-process $args[0] -ArgumentList $args[1..$args.Length] -verb "runAs"
+#     }
+# }
 
 # System Update - Update RubyGems, NPM, and their installed packages
 function System-Update() {
@@ -26,8 +26,10 @@ function System-Update() {
     Update-Help -Force
     gem update --system
     gem update
-    npm install npm -g
-    npm update -g
+    # npm install npm -g
+    # npm update -g
+    pnpm install pnpm -g
+    pnpm update -g
 }
 
 # Reload the Shell
