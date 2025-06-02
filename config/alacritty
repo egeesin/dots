@@ -1,8 +1,13 @@
 # vim: set ft=toml:
-
+[general]
 import = ["~/.dots/config/alacritty-color"]
 live_config_reload = true
-working_directory = "None"
+# working_directory = "~/"
+working_directory = "C:\\Users\\ege_e\\"
+
+[terminal]
+shell = { program = "pwsh" }
+# shell = { program = "C:\\Users\\ege_e\\scoop\\apps\\pwsh\\current\\pwsh.exe" }
 
 [bell]
 animation = "EaseOutExpo"

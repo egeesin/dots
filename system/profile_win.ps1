@@ -38,3 +38,14 @@ if (Get-Command "nvim" -ErrorAction "Ignore") {
 $env:STARSHIP_CONFIG = "$HOME\.config\starship.toml"
 
 Invoke-Expression (&starship init powershell)
+Invoke-Expression "$(vfox activate pwsh)"
+Invoke-Expression (& { (zoxide init powershell | Out-String) })
+$env:_ZO_ECHO = '1'
+
+
+Set-Alias lvim 'C:\Users\ege_e\.local\bin\lvim.ps1'
+Set-Alias neovide 'C:\Users\ege_e\scoop\apps\neovide\current\neovide.exe"'
+# Set-Alias pn 'C:\Users\ege_e\scoop\shims\pnpm.EXE'
+Set-Alias pn 'C:\Users\ege_e\.version-fox\cache\nodejs\current\pnpm.ps1'
+
+

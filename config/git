@@ -100,3 +100,5 @@
   light = false
   syntax-theme = Visual Studio Dark+
 
+[credential "helperselector"]
+	selected = manager

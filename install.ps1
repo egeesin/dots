@@ -13,15 +13,15 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 
 # Receive dots
 Set-Location $HOME
-if (!(Test-Path $HOME/.dots)) {
-	git clone https://github.com/egeesin/dots $HOME/.dots
+if (!(Test-Path $HOME\.dots)) {
+	git clone https://github.com/egeesin/dots $HOME\.dots
 }
 
 # Install packages from Chocolatey and Scoop
-Invoke-Expression "$HOME\.dots\setup\choco.ps1"
-Invoke-Expression "$HOME\.dots\setup\scoop.ps1"
+Invoke-Expression "$HOME\.dots\win\choco.ps1"
+Invoke-Expression "$HOME\.dots\win\scoop.ps1"
 
-# winget import "$HOME/dots/setup/winget.json"
+# winget import "$HOME/.dots/win/winget.json"
 
 # Connect each file (or directory) to dotfiles with a symbolic link.
 Invoke-Expression "$HOME\.dots\link.ps1"

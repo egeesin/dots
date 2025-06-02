@@ -54,22 +54,26 @@ if ask "> Install package bundles?" Y; then
 
 #——— For macOS
 	if [[ $currentos = "Darwin" ]]; then
-
-		# shellcheck source=setup/brew.sh
-		. "$DOT_DIR/setup/brew.sh"
-		# shellcheck source=setup/gem.sh
-		. "$DOT_DIR/setup/gem.sh"
+		# shellcheck source=mac/brew.sh
+		. "$DOT_DIR/mac/brew.sh"
+		# shellcheck source=mac/gem.sh
+		. "$DOT_DIR/mac/gem.sh"
 
 #——— For Arch Linux
 	elif [[ $currentos == "Arch Linux" ]]; then
+		# shellcheck source=tux/arch.sh
+		. "$DOT_DIR/tux/arch.sh"
 
-		# shellcheck source=setup/arch.sh
-		. "$DOT_DIR/setup/arch.sh"
+#——— For NixOS
+	elif [ -n "$(grep -i nixos < /etc/os-release)" ]; then
+		echo "Verified this is NixOS."
+		echo "-----"
 	fi
+
+#——— For WSL
 	# if grep -qE "(Microsoft|WSL)" /proc/version
 
 	# fi
-
 fi
 
 #————————[3] Symlink All Configs
@@ -83,7 +87,7 @@ fi
 #————————[4] ~/.extra
 #
 if [[ -d "$X_DIR" ]]; then
-	if ask "> ~/.extra found, install it?" Y; then
+	if ask "> ~/.extra found, install it?" N; then
 		X_CHOSEN=1
 		. "$X_DIR/install.sh"
 	fi

@@ -1,0 +1,56 @@
+zsh                           .zshrc
+# nvim/vim-init                 .config/nvim/init.vim
+# nvim/vim-partials             .config/nvim/partials
+# nvim/vim-ftplugin             .config/nvim/ftplugin
+# nvim/vim-ftdetect             .config/nvim/ftdetect
+helix-config                  .config/helix/config.lua
+helix-langs                   .config/helix/languages.lua
+lunarvim                      .config/lvim/config.lua
+editorconfig                  .editorconfig
+ctags                         .ctags
+tmux                          .tmux.conf
+zellij                        .config/zellij/config.kdl
+npm                           .npmrc
+git                           .gitconfig
+gitignore                     .gitignore_global
+curl                          .curlrc
+neofetch                      .config/neofetch/config
+# trans                         .translate-shell/init.trans
+htop_tux                      .config/htop/htoprc
+pandoc                        .pandoc
+# mailcap_mac                   .mailcap
+# mailcap_tux                   .mailcap
+w3m                           .w3m/config
+newsboat_mac                  .config/newsboat/config
+newsboat_tux                  .config/newsboat/config
+wezterm                       .wezterm.lua
+# alacritty                     .config/alacritty/alacritty.toml
+# alacritty-color               .config/alacritty/color.toml
+# hyper                         .hyper.js
+# mpd_mac                       .mpdconf
+# mpd_tux                       .config/mpd/mpd.conf
+# mopidy                        .config/mopidy/mopidy.conf
+# ncmpcpp                       .ncmpcpp/config
+# ncmpcpp-keys                  .ncmpcpp/bindings
+# xinit_tux                     .xinitrc
+# xres_tux                      .Xresources
+# xlunch_tux                    .config/xlunch/xlunch.conf
+# xscreensaver_tux              .xscreensaver
+# i3_tux                        .config/i3
+hypr_tux                        .config/hypr
+waybar_tux                      .config/waybar
+# polybar_tux                   .config/polybar/config
+# rofi_tux                      .config/rofi/config.rasi
+# gtk2_tux                      .gtkrc-2.0
+# gtk3_tux                      .config/gtk-3.0/settings.ini
+# gtk3css_tux                   .config/gtk-3.0/gtk.css
+# dunst_tux                     .config/dunst/dunstrc
+# lead_tux                      .config/lead/lead.conf
+# fontconfig_tux                .config/fontconfig/fonts.conf
+# conky_tux                     .conkyrc
+# glavaradial_tux               .config/glava/radial.glsl
+# glavarc_tux                   .config/glava/rc.glsl
+mpv                           .config/mpv/mpv.conf
+mplayer                       .mplayer/config
+# mackup_mac                    .mackup.cfg
+# retroarch_mac                 Library/Application Support/RetroArch/config/retroarch.cfg

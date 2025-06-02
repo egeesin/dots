@@ -1,0 +1,148 @@
+#!/bin/bash
+
+# Function to correct the case of a relative path and ensure forward slashes.
+# Arguments:
+#   $1: Absolute path to the directory containing the M3U file.
+#   $2: The path string from the M3U file line.
+correct_path_case_and_slashes() {
+    local m3u_dir_abs="$1"
+    local original_path_line="$2"
+    local current_path_to_process="$original_path_line"
+
+    # Requirement: Replace all backslashes with forward slashes.
+    current_path_to_process="${current_path_to_process//\\//}"
+
+    # This path (with slashes fixed) is used as a fallback if full correction fails.
+    local fallback_path="$current_path_to_process"
+
+    # This will be the iteratively resolved absolute path on the filesystem
+    # that we use as a base to find the next component.
+    local current_resolved_abs_path="$m3u_dir_abs"
+
+    local ifs_orig="$IFS"
+    IFS='/'
+    # shellcheck disable=SC2207 # Word splitting by / is intended here.
+    read -r -a path_components <<< "$current_path_to_process"
+    IFS="$ifs_orig"
+
+    local corrected_path_segments=()
+
+    for component in "${path_components[@]}"; do
+        # Skip empty components (e.g. from "foo//bar", though read -a usually handles this)
+        if [[ -z "$component" ]]; then
+            continue
+        fi
+
+        if [[ "$component" == ".." ]];
+        then
+            current_resolved_abs_path=$(realpath "$current_resolved_abs_path/..")
+            if [[ $? -ne 0 ]]; then
+                echo "Error: realpath failed for '$current_resolved_abs_path/..'. Original M3U path: '$original_path_line'" >&2
+                echo "$fallback_path" # Output the slash-corrected original path
+                return
+            fi
+            corrected_path_segments+=("..")
+        elif [[ "$component" == "." ]];
+        then
+            # realpath "$current_resolved_abs_path/." doesn't change current_resolved_abs_path
+            corrected_path_segments+=(".")
+        else
+            # This is a directory or filename component.
+            # Find it case-insensitively within current_resolved_abs_path.
+            local found_item_full_abs_path
+            found_item_full_abs_path=$(find "$current_resolved_abs_path" -maxdepth 1 -mindepth 1 \( -type d -o -type f -o -type l \) -iname "$component" -print -quit 2>/dev/null)
+
+            if [[ -n "$found_item_full_abs_path" ]]; then
+                local actual_basename
+                actual_basename=$(basename "$found_item_full_abs_path")
+                corrected_path_segments+=("$actual_basename")
+                current_resolved_abs_path="$found_item_full_abs_path" # Update base for next search
+            else
+                # Component not found.
+                echo "Warning: Component '$component' not found in '$current_resolved_abs_path' (for M3U path '$original_path_line'). Using original path with forward slashes." >&2
+                echo "$fallback_path" # Output the slash-corrected original path
+                return
+            fi
+        fi
+    done
+
+    # Reconstruct the corrected relative path with forward slashes.
+    local final_corrected_path
+    if [ ${#corrected_path_segments[@]} -eq 0 ]; then
+        # Handles cases like an originally empty path line.
+        if [[ -z "$original_path_line" ]]; then # Check original, not just current_path_to_process
+            final_corrected_path=""
+        else
+            # If path_components was empty (e.g. from m3u path "/"), but we expect relative paths.
+            # Or if original path was non-empty but somehow resulted in no segments (unlikely for valid relative paths).
+            final_corrected_path="$fallback_path" # Fallback to be safe
+        fi
+    else
+        final_corrected_path=$(IFS=/; echo "${corrected_path_segments[*]}")
+    fi
+
+    echo "$final_corrected_path"
+}
+
+# --- Main script execution ---
+if [[ $# -ne 1 ]]; then
+    echo "Usage: $0 <playlist.m3u>" >&2
+    exit 1
+fi
+
+m3u_file="$1"
+if [[ ! -f "$m3u_file" ]]; then
+    echo "Error: M3U file '$m3u_file' not found." >&2
+    exit 1
+fi
+
+# Determine the absolute path of the directory containing the M3U file.
+m3u_file_dir=$(dirname "$m3u_file")
+m3u_file_dir_abs=$(realpath "$m3u_file_dir")
+
+if [[ $? -ne 0 || -z "$m3u_file_dir_abs" ]]; then
+    echo "Error: Could not determine absolute path for M3U directory '$m3u_file_dir'." >&2
+    exit 1
+fi
+
+# Create a secure temporary file to store the modified content.
+temp_output_file=$(mktemp)
+if [[ $? -ne 0 || -z "$temp_output_file" ]]; then
+    echo "Error: Could not create temporary file." >&2
+    exit 1
+fi
+
+# Ensure the temporary file is removed when the script exits (normally or on error).
+trap 'rm -f "$temp_output_file"' EXIT
+
+# Process the M3U file line by line.
+while IFS= read -r line || [[ -n "$line" ]]; do # Process last line even if no newline
+    line_clean="${line//$'\r'/}" # Remove carriage return characters (from Windows files)
+
+    if [[ "${line_clean:0:1}" == "#" ]] || [[ -z "$line_clean" ]]; then
+        # Line is a comment/directive (e.g., #EXTM3U, #EXTINF) or empty. Print as is.
+        echo "$line_clean"
+    else
+        # Assume it's a file path to be processed.
+        corrected_path=$(correct_path_case_and_slashes "$m3u_file_dir_abs" "$line_clean")
+        echo "$corrected_path"
+    fi
+done < "$m3u_file" > "$temp_output_file"
+
+# Verify that the temporary file was created and contains data.
+if [[ -s "$temp_output_file" ]]; then
+    # Replace the original M3U file with the modified content.
+    if mv "$temp_output_file" "$m3u_file"; then
+        # Optional: uncomment to show a success message
+        # echo "Playlist '$m3u_file' updated successfully."
+        trap - EXIT # Clear the trap as mv succeeded and temp file is gone
+    else
+        echo "Error: Failed to move temporary file to overwrite '$m3u_file'." >&2
+        # The trap will attempt to remove temp_output_file if mv failed.
+        exit 1
+    fi
+else
+    echo "Error: Processing failed, temporary output file is empty. Original file '$m3u_file' remains unchanged." >&2
+    # The trap will attempt to remove temp_output_file.
+    exit 1
+fi

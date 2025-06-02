@@ -1,0 +1,199 @@
+
+#
+# Directories
+#
+# mpd_music_dir = "/media/ege-hd/audio/music/"
+#mpd_music_dir = "/Volumes/ege-hd/audio/music/"
+lyrics_directory = "~/.lyrics"
+
+# mpd_host = localhost
+# mpd_port = 6600
+
+#
+# Visualizer Settings
+#
+audio_output {
+	type    "my_fifo"
+	name    "Visualizer feed"
+	# path    "/tmp/mpd.fifo"
+	path    "/tmp/mopidy.fifo"
+	format  "44100:16:2"
+}
+visualizer_fifo_path = "/tmp/mopidy.fifo"
+
+# Source: github.com/mohabaks/dotfiles
+##### song format #####
+##
+## For a song format you can use:
+##
+## %l - length
+## %f - filename
+## %D - directory
+## %a - artist
+## %A - album artist
+## %t - title
+## %b - album
+## %y - date
+## %n - track number (01/12 -> 01)
+## %N - full track info (01/12 -> 01/12)
+## %g - genre
+## %c - composer
+## %p - performer
+## %d - disc
+## %C - comment
+## %P - priority
+## $R - begin right alignment
+##
+## If you want to make sure that a part of the format is displayed
+## only when certain tags are present, you can archieve it by
+## grouping them with brackets, e.g. '{%a - %t}' will be evaluated
+## to 'ARTIST - TITLE' if both tags are present or '' otherwise.
+## It is also possible to define a list of alternatives by providing
+## several groups and separating them with '|', e.g. '{%t}|{%f}'
+## will be evaluated to 'TITLE' or 'FILENAME' if the former is not
+## present.
+##
+## Note: If you want to set limit on maximal length of a tag, just
+## put the appropriate number between % and character that defines
+## tag type, e.g. to make album take max. 20 terminal cells, use '%20b'.
+##
+## In addition, formats support markers used for text attributes.
+## They are followed by character '$'. After that you can put:
+##
+## - 0 - default window color (discards all other colors)
+## - 1 - black
+## - 2 - red
+## - 3 - green
+## - 4 - yellow
+## - 5 - blue
+## - 6 - magenta
+## - 7 - cyan
+## - 8 - white
+## - 9 - end of current color
+## - b - bold text
+## - u - underline text
+## - r - reverse colors
+## - a - use alternative character set
+##
+## If you don't want to use a non-color attribute anymore, just put it
+## again, but this time insert character '/' between '$' and attribute
+## character, e.g. {$b%t$/b}|{$r%f$/r} will display bolded title tag
+## or filename with reversed colors.
+##
+## If you want to use 256 colors and/or background colors in formats
+## (the naming scheme is described below in section about color
+## definitions), it can be done with the syntax $(COLOR), e.g. to set
+## the artist tag to one of the non-standard colors and make it have
+## yellow background, you need to write $(197_yellow)%a$(end). Note
+## that for standard colors this is interchangable with attributes
+## listed above.
+##
+## Note: colors can be nested.
+##
+#
+# display
+# song_list_format = {%a - }{%t}|{$8%f$9}$R{$5(%l)$9}
+song_list_format = "%t"
+song_status_format = "$3%t"
+playlist_display_mode = "columns"
+
+#
+song_library_format = {%n - }{%t}|{%f}
+#
+#
+alternative_header_first_line_format = $b$(12)$aqqu$/a$5 {%t}|{%f} $(12)$atqq$/a$9$/b
+alternative_header_second_line_format = {{$2$b%a$/b$9}{ - $4%b$9}{ ($4%y$9)}}|{%D}
+
+# now playing
+# now_playing_suffix = " $8×"
+now_playing_prefix = "$b$8▶ "
+
+# playlist
+browser_playlist_prefix = "$3 ♥ $3 "
+# browser_playlist_prefix = "$2playlist$9 "
+
+# delays
+playlist_disable_highlight_delay = "1"
+message_delay_time = "1"
+
+# progress bar
+progressbar_look = "───"
+# progressbar_color = "black"
+progressbar_elapsed_color = "white"
+
+# color
+colors_enabled = "yes"
+empty_tag_color = "white"
+statusbar_color = "white"
+state_line_color = "white"
+state_flags_color = "white"
+main_window_color = "white"
+header_window_color = "cyan"
+volume_color = "cyan"
+color1 = "cyan"
+color2 = "red"
+
+#active_column_color = "cyan"
+active_window_border = "blue"
+
+# visualizer
+visualizer_in_stereo = "yes"
+# If you set format to 44100:16:2, make it 'yes'.
+visualizer_output_name = "Visualizer Feed"
+# visualizer_sample_multiplier = 0.20
+visualizer_sync_interval = "30"
+# visualizer_type = "spectrum"
+#(spectrum/wave)
+#visualizer_color = 41, 83, 119, 155, 185, 215, 209, 203, 197, 161
+visualizer_color = "white"
+# visualizer_look = "●│"
+visualizer_look = "∙~"
+
+# misc
+# <0.6 media_library_display_date = "no"
+startup_screen = media_library
+display_bitrate = no
+mouse_support = yes
+browser_display_mode = "columns"
+# incremental_seeking = "yes"
+seek_time = 5
+display_remaining_time = "no"
+discard_colors_if_item_is_selected = "yes"
+autocenter_mode = "yes"
+centered_cursor = "yes"
+header_visibility = "yes"
+statusbar_visibility = "yes"
+follow_now_playing_lyrics = "yes"
+ignore_leading_the = "yes"
+# song_columns_list_format = "(10)[blue]{l} (30)[green]{a} (30)[magenta]{b} (50)[yellow]{t}"  
+enable_window_title = "yes"
+search_engine_default_search_mode = "1"
+external_editor = "nvim"
+user_interface = "alternative"
+lines_scrolled = "2"
+mpd_crossfade_time = "3"
+store_lyrics_in_song_dir = "no"
+#fancy_scrolling = "yes"
+#display_screens_numbers_on_start = "no"
+#selected_item_prefix = $6
+#
+#selected_item_suffix = $9
+#
+#modified_item_prefix = $3> $9
+#
+##
+## Note: attributes are not supported for the following variables.
+##
+#song_window_title_format = {%a - }{%t}|{%f}
+##
+## Note: Below variables are used for sorting songs in browser.
+## The sort mode determines how songs are sorted, and can be used
+## in combination with a sort format to specify a custom sorting format.
+## Available values for browser_sort_mode are "name", "mtime", "format"
+## and "noop".
+##
+#
+#browser_sort_mode = name
+#
+#browser_sort_format = {%a - }{%t}|{%f} {(%l)}
+#

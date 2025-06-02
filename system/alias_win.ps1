@@ -82,4 +82,5 @@ Set-Alias mute Set-SoundMute
 Set-Alias unmute Set-SoundUnmute
 
 # Update installed Ruby Gems, NPM, and their installed packages.
-Set-Alias update System-Update
+# Set-Alias update System-Update
+# disabled it since it interferes with scoop update

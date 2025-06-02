@@ -1,0 +1,895 @@
+; vim:ft=dosini
+;=====================================================
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/jaagr/polybar
+;
+;   The README contains alot of information
+;
+;=====================================================
+
+[settings]
+; The throttle settings lets the eventloop swallow up til X events
+; if they happen within Y millisecond after first event was received.
+; This is done to prevent flood of update event.
+;
+; For example if 5 modules emit an update event at the same time, we really
+; just care about the last one. But if we wait too long for events to swallow
+; the bar would appear sluggish so we continue if timeout
+; expires or limit is reached.
+
+throttle-output = 5
+throttle-output-for = 10
+
+; Time in milliseconds that the input handler will wait between processing events
+throttle-input-for = 30
+
+; Reload upon receiving XCB_RANDR_SCREEN_CHANGE_NOTIFY events
+screenchange-reload = true
+
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+[colors]
+background = #002b36
+background-alt = #073642
+foreground = #93a1a1
+foreground-alt = #586e75
+foreground-focused = #fdf6e3
+; foreground = ${xrdb:color14:#222}
+; foreground = #cccccc
+# Solarized
+
+blue = #268bd2
+magenta = #d33682
+violet = #6c71c4
+yellow = #b58900
+green = #859900
+cyan = #2aa198
+orange = #cb4b16
+red = #dc322f
+
+alert = ${colors.red}
+urgent = ${colors.blue}
+
+primary = ${colors.cyan}
+secondary = ${colors.blue}
+
+; [bar/bottom-mini]
+; MONITOR = $(polybar -m|tail -1|sed -e 's/:.*$//g')
+; monitor-fallback= ${env:MONITOR:eDP-1}
+; background=none
+; foreground=#FFF
+; bottom=true
+; width=100%
+; fixed-center=true
+; line-size=0
+; underline-size=0
+; border-size=0
+; font-0 = Sans:pixelsize=12;antialias=true;1
+; font-1 = Mono:pixelsize=14;antialias=true;2
+; font-2 = siji:pixelsize=10;1
+; font-3 = fixed:pixelsize=10;1
+; modules-center = i3
+
+[bar/minibar]
+MONITOR = $(polybar -m|tail -1|sed -e 's/:.*$//g')
+monitor-fallback= ${env:MONITOR:eDP-1}
+dpi = 96
+
+; width = 240
+width = 30%
+height = 36
+fixed-center = true
+enable-ipc = false
+
+background = ${colors.foreground}
+foreground = ${colors.background}
+
+font-0 = Sans:pixelsize=12;antialias=true;1
+font-1 = Mono:pixelsize=14;antialias=false;2
+font-2 = DejaVuSans:pixelsize=14;antialias=true;2
+font-3 = NotoSansSymbols2:pixelsize=16;antialias=true;3
+font-4 = WeatherIcons:pixelsize=16;antialias=true;2
+font-5 = siji:pixelsize=10;1
+font-6 = fixed:pixelsize=10;1
+
+modules-center = date
+; modules-center = i3
+
+; modules-right =  system-usb-mount vpncheck wlan wifispeed filesystem memory cpu temperature battery
+
+tray-transparent = true
+
+border-left-size = 14px
+border-right-size = 14px
+border-top-size = 12px
+border-bottom-size = 12px
+border-color = #00000000
+radius = 8
+
+wm-restack = i3
+override-redirect = true
+
+[bar/bottombar]
+; monitor-fallback= ${env:MONITOR:eDP-1}
+monitor = HDMI-2
+monitor-fallback = eDP-1
+; monitor-fallback = $(polybar -m|tail -1|sed -e 's/:.*$//g')
+dpi = 96
+
+wm-restack = i3
+override-redirect = true
+
+width = 100%
+height = 36
+offset-x = 0
+offset-y = 0
+fixed-center = true
+enable-ipc = false
+
+padding-left = 5
+padding-right = 5
+
+bottom = true
+
+modules-left = pulseaudio mpd
+modules-center = i3
+
+font-0 = Sans:pixelsize=12;antialias=true;1
+; font-1 = Mono:pixelsize=14;antialias=false;2
+font-1 = DejaVuSans:pixelsize=14;antialias=true;2
+font-2 = NotoSansSymbols2:pixelsize=16;antialias=true;3
+font-3 = Feather:pixelsize=16;antialias=false;3
+font-4 = WeatherIcons:pixelsize=16;antialias=true;2
+font-5 = siji:pixelsize=10;1
+font-6 = fixed:pixelsize=10;1
+
+
+background = #00000000
+foreground = ${colors.foreground}
+
+scroll-up = i3-msg workspace next_on_output
+scroll-down = i3-msg workspace prev_on_output
+
+click-right = i3-msg workspace back_and_forth
+
+tray-position = right
+tray-padding = 0
+tray-spacing = 0
+tray-transparent = false
+tray-background = ${root.background}
+tray-detached = false
+tray-maxsize = 24
+tray-offset-x = 0
+tray-offset-y = 0
+tray-scale = 1.0
+
+[bar/topbar]
+; Make the bar appear below windows
+wm-restack = i3
+override-redirect = true
+
+; Set monitor
+monitor = HDMI-2
+monitor-fallback = eDP-1
+; monitor-fallback = $(polybar -m|tail -1|sed -e 's/:.*$//g')
+dpi = 96
+;monitor = ${env:MONITOR:HDMI-1}
+; monitor_strict=false
+
+; Measurements of the bar
+width = 100%
+height = 36
+offset-x = 0
+offset-y = 0
+fixed-center = true
+enable-ipc = false
+
+; background = ${colors.background}
+background = #00000000
+foreground = ${colors.foreground}
+
+line-size = 0
+line-color = ${colors.red}
+
+underline-size = 0
+underline-color = ${colors.foreground-alt}
+
+radius = 0
+border-size=0
+; border-left-size = 14px
+; border-right-size = 14px
+
+; border-top-size = 12px
+bottom = false
+
+border-color = #00000000
+; border-color = ${colors.foreground-alt}
+
+spacing=0
+
+padding-left = 5
+padding-right = 5
+
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = Sans:pixelsize=12;antialias=true;1
+; font-1 = Mono:pixelsize=14;antialias=false;2
+font-1 = DejaVuSans:pixelsize=14;antialias=true;2
+font-2 = NotoSansSymbols2:pixelsize=16;antialias=true;3
+font-3 = Feather:pixelsize=16;antialias=false;3
+font-4 = WeatherIcons:pixelsize=16;antialias=true;2
+font-5 = siji:pixelsize=10;1
+font-6 = fixed:pixelsize=10;1
+
+; modules-left = powermenu date openweathermap-simple arch-updates inbox-imap-shell notification-github inbox-reddit uptime backlight-acpi isrunning-compton pulseaudio mpd
+modules-left = powermenu arch-updates openweathermap-simple inbox-imap-shell notification-github
+modules-center = date
+; modules-right =  system-usb-mount vpncheck wlan wifispeed filesystem memory cpu temperature isrunning-compton battery
+modules-right = system-usb-mount vpncheck wlan wifispeed filesystem memory cpu temperature battery
+
+; tray-position = right
+; tray-padding = 0
+; tray-spacing = 0
+tray-transparent = true
+; tray-background = ${root.background}
+; tray-detached = false
+; tray-maxsize = 24
+; tray-offset-x = 0
+; tray-offset-y = 0
+; tray-scale = 1.0
+;tray-background = #0063ff
+
+; scroll-up = i3wm-wsnext
+; scroll-down = i3wm-wsprev
+; scroll-up = i3-msg workspace next_on_output
+; scroll-down = i3-msg workspace prev_on_output
+
+click-right = ~/.dots/bin/rofi-launch
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+label-foreground = ${colors.foreground-focused}
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+; format-prefix-foreground = ${colors.foreground-alt}
+; format-prefix-underline = ${colors.secondary}
+
+label-layout = %layout%
+label-layout-underline = ${colors.primary}
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-background = ${colors.primary}
+label-indicator-underline = ${colors.primary}
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+; Sink to be used, if it exists (find using `pacmd list-sinks`)
+; If not, uses default sink
+sink = alsa_output.pci-0000_12_00.3.analog-stereo
+; sink = alsa_output.pci-0000_00_1b.0.analog-stereo
+
+format-volume = <label-volume> <ramp-volume>
+; label-volume = " "
+label-volume = ""
+label-volume-foreground = ${root.foreground}
+
+; format-muted-prefix = " "
+format-muted-prefix = 
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = "  "
+
+bar-volume-width = 10
+bar-volume-foreground-0 = ${colors.green}
+bar-volume-foreground-1 = ${colors.green}
+bar-volume-foreground-2 = ${colors.green}
+bar-volume-foreground-3 = ${colors.green}
+bar-volume-foreground-4 = ${colors.green}
+bar-volume-foreground-5 = ${colors.yellow}
+bar-volume-foreground-6 = ${colors.orange}
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground-alt}
+
+ramp-volume-0 = %{F#859900}▁ %{F-}
+ramp-volume-1 = %{F#859900}▂ %{F-}
+ramp-volume-2 = %{F#859900}▃ %{F-}
+ramp-volume-3 = %{F#859900}▄ %{F-}
+ramp-volume-4 = %{F#b58900}▅ %{F-}
+ramp-volume-5 = %{F#b58900}▆ %{F-}
+ramp-volume-6 = %{F#b58900}▇ %{F-}
+ramp-volume-7 = %{F#cb4b16}█ %{F-}
+
+; ramp-volume-0 = 
+; ramp-volume-1 = 
+; ramp-volume-2 = 
+
+
+[module/volume]
+type = internal/volume
+
+; Soundcard to be used
+; Usually in the format hw:#
+master-soundcard = default
+speaker-soundcard = default
+headphone-soundcard = default
+
+; Name of the master mixer
+; Default: Master
+master-mixer = Master
+
+; Optionally define speaker and headphone mixers
+; Use the following command to list available mixer controls:
+; $ amixer scontrols | sed -nr "s/.*'([[:alnum:]]+)'.*/\1/p"
+; Default: none
+speaker-mixer = Speaker
+; Default: none
+headphone-mixer = Headphone
+
+; NOTE: This is required if headphone_mixer is defined
+; Use the following command to list available device controls
+; $ amixer controls | sed -r "/CARD/\!d; s/.*=([0-9]+).*name='([^']+)'.*/printf '%3.0f: %s\n' '\1' '\2'/e" | sort
+; Default: none
+headphone-id = 9
+
+; Use volume mapping (similar to amixer -M and alsamixer), where the increase in volume is linear to the ear
+; Default: false
+mapped = true
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+spacing = 3
+
+mount-0 = /
+; mount-1 = /media/ege-hd
+
+; format-module-prefix = 
+label-mounted = %free%
+label-unmounted = %mountpoint%?
+label-unmounted-foreground = ${colors.foreground-alt}
+
+[module/i3index]
+type = internal/i3
+format = <label-state>
+
+label-focused = "%name%"
+label-focused-foreground = ${colors.background}
+label-focused-background = ${colors.primary}
+
+label-unfocused =
+label-urgent =
+
+[module/i3]
+type = internal/i3
+index-sort = true
+wrapping-scroll = true
+strip-wsnumbers = true
+pin-workspaces = false
+
+; enable-click = false
+; enable-scroll = false
+
+; Only show workspaces on the same output as the bar
+
+ws-icons-default =○
+ws-icon-0 = 1;▴
+ws-icon-1 = 2;⬧
+ws-icon-2 = 3;⬣
+ws-icon-3 = 4;❯
+ws-icon-4 = 5;⋰
+ws-icon-5 = 6;⋱
+ws-icon-6 = 7;❮
+ws-icon-7 = 8;⎔
+ws-icon-8 = 9;⬨ 
+ws-icon-9 = 10;▿
+format = <label-state> <label-mode>
+
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-foreground = #000
+label-mode-background = ${colors.blue}
+
+; focused = Active workspace on focused monitor
+label-focused = %icon%
+label-focused-foreground = ${colors.foreground-focused}
+label-focused-background = ${colors.background-alt}
+; label-focused-underline = ${module/bspwm.label-focused-underline}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %icon%
+label-unfocused-padding = 2
+
+; visible = Active workspace on unfocused monitor
+label-visible = %icon%
+; label-visible-background = ${self.label-focused-background}
+; label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = 2
+
+; urgent = Workspace with urgency hint set
+label-urgent = %icon%
+label-urgent-foreground = ${colors.blue}
+label-urgent-padding = 1
+
+[module/mpd]
+type = internal/mpd
+; format-online = "<icon-prev> <icon-stop> <toggle> <icon-next> <icon-repeat> <icon-random> <label-song> <bar-progress>" 
+; format-online = "<icon-prev> <icon-stop> <toggle> <icon-next> <icon-random> <label-song>" 
+; format-online = "<icon-prev> <toggle> <icon-next> <icon-stop> <label-song>" 
+; format-online = "<icon-prev> <toggle> <icon-next>" 
+format-online = "<icon-prev> <icon-stop> <toggle> <icon-next>   <label-song>" 
+; label-song = 🎜 %artist% - %title%
+label-song = %title%
+
+
+click-right = "~/.dots/bin/polybar/arch-updates -c&"
+click-left = "~/.dots/bin/polybar/arch-updates -n"
+
+; with Font Awesome & Nerd Fonts
+; icon-prev = " ⏮ "
+; icon-prev = "⏪"
+; icon-seekb = " ⏪"
+; icon-stop = " ⏹ "
+; icon-play = "  "
+; icon-pause = "  "
+; ; icon-next = " ⏭ "
+; icon-next = "⏩"
+; icon-seekf = " ⏩"
+; icon-random = "  "
+; icon-repeat = "  "
+
+; with Feather Icons
+icon-prev = " "
+icon-seekb = "  "
+icon-stop = " "
+icon-play = ""
+icon-pause = " "
+; icon-next = " ⏭ "
+icon-next = " "
+icon-seekf = "  "
+icon-random = "  "
+icon-repeat = "  "
+
+bar-progress-width = 10
+bar-progress-indicator = ╾
+bar-progress-fill = ━
+bar-progress-empty = ─
+
+
+; icon-prev = "   "
+; icon-stop = "   "
+; icon-play = "   "
+; icon-pause = "   "
+; icon-next = "   "
+
+label-song-maxlen = 40
+label-song-ellipsis = true
+
+[module/mpv]
+type = custom/script
+exec-if = pgrep -x mpv
+exec = ~/.dots/bin/polybar/mpv
+interval = 1
+
+format = <label>
+label = %output%<Paste>
+
+[module/github]
+type = internal/github
+token = ${env:GITHUB_TOKEN}
+
+label = "%notifications%"
+format-underline = #2aa198
+format-prefix = " "
+format-prefix-foreground = #5b
+
+[module/xbacklight]
+type = internal/xbacklight
+
+format = <label> <bar> 
+label = BL
+
+bar-width = 10
+bar-indicator = |
+bar-indicator-foreground = ${colors.foreground-alt}
+bar-indicator-font = 2
+bar-fill = ─
+bar-fill-font = 2
+bar-fill-foreground = #9f78e1
+bar-empty = ─
+bar-empty-font = 2
+bar-empty-foreground = ${colors.foreground-alt}
+
+[module/backlight-acpi]
+inherit = module/xbacklight
+type = internal/backlight
+card = intel_backlight
+
+format = <label> <ramp>
+; label = %percentage%
+label = 🌓
+
+ramp-0 = ▁
+ramp-1 = ▂
+ramp-2 = ▃
+ramp-3 = ▄
+ramp-4 = ▅
+ramp-5 = ▆
+ramp-6 = ▇
+ramp-7 = %{F#859900}█%{F-}
+
+; ramp-0 = 🌕
+; ramp-1 = 🌔
+; ramp-2 = 🌓
+; ramp-3 = 🌒
+; ramp-4 = 🌑
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format = <label> <ramp-coreload>
+format-prefix =
+format-prefix-foreground = ${colors.foreground-alt}
+;format-underline = #f90000
+; label = CPU %percentage%%
+; label = ᶜᵖᵘ
+label =
+ramp-coreload-0 = %{F#859900}▁%{F-}
+ramp-coreload-1 = %{F#859900}▂%{F-}
+ramp-coreload-2 = %{F#859900}▃%{F-}
+ramp-coreload-3 = %{F#b58900}▄%{F-}
+ramp-coreload-4 = %{F#b58900}▅%{F-}
+ramp-coreload-5 = %{F#cb4b16}▆%{F-}
+ramp-coreload-6 = %{F#cb4b16}▇%{F-}
+ramp-coreload-7 = %{F#cb4b16}█%{F-}
+
+; [module/cpu]
+; type = internal/cpu
+; interval = 2
+; ; format-prefix = " "
+; format-prefix-foreground = ${colors.foreground-alt}
+; format-underline = #f90000
+; label = %percentage:2%%
+
+[module/memory]
+type = internal/memory
+interval = 2
+format = <label> <bar-used>
+;format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+;format-underline = #4bffdc
+; label =  %{F#e60053}%{F-} RAM %gb_used%/%gb_free%
+; label = ʳᵃᵐ
+label =
+bar-used-width = 12
+bar-used-foreground-0 = ${colors.green}
+bar-used-foreground-1 = ${colors.green}
+bar-used-foreground-2 = ${colors.yellow}
+bar-used-foreground-3 = ${colors.orange}
+;bar-used-fill = ▐
+; bar-used-fill = 
+bar-used-fill = >
+; bar-used-empty = 
+bar-used-empty = >
+bar-used-empty-foreground = ${colors.foreground-alt}
+bar-used-indicator =
+
+
+; [module/memory]
+; type = internal/memory
+; interval = 2
+; ; format-prefix = " "
+; format-prefix-foreground = ${colors.foreground-alt}
+; format-underline = #4bffdc
+; label = %percentage_used%%
+
+[module/wlan]
+type = internal/network
+interface = wlp3s0
+interval = 3.0
+
+format-connected =<label-connected> <ramp-signal> 
+; format-connected-underline = #9f78e1
+; label-connected = %essid%
+; label-connected = 
+label-connected =
+
+; format-disconnected =
+format-disconnected = <label-disconnected>
+; format-disconnected-underline = ${self.format-connected-underline}
+; label-disconnected = %ifname% disconnected
+label-disconnected =
+; label-disconnected-foreground = ${colors.foreground-alt}
+
+
+ramp-signal-0 = %{F#cb4b16}▁%{F-}
+ramp-signal-1 = %{F#cb4b16}▂%{F-}
+ramp-signal-2 = %{F#b58900}▃%{F-}
+ramp-signal-3 = %{F#b58900}▄%{F-}
+ramp-signal-4 = %{F#b58900}▅%{F-}
+ramp-signal-5 = %{F#859900}▆%{F-}
+ramp-signal-6 = %{F#859900}▇%{F-}
+ramp-signal-7 = %{F#859900}█%{F-}
+; ttf-material-wifi-icons-git
+; ramp-signal-0 = 
+; ramp-signal-1 = 
+; ramp-signal-2 = 
+; ramp-signal-3 = 
+; ramp-signal-foreground = ${colors.foreground}
+
+[module/wifispeed]
+type = internal/network
+interface = wlp3s0
+; label-connected = "%downspeed:7% %upspeed:7%"
+label-connected = "%downspeed:7%%upspeed:7%"
+format-connected = <label-connected>
+; format-connected-prefix = " "
+
+; [module/eth]
+; type = internal/network
+; interface = net0
+; interval = 3.0
+
+; format-connected-underline = ${colors.green}
+; ; format-connected-prefix = " "
+; format-connected-prefix-foreground = ${colors.foreground-alt}
+; label-connected = %local_ip%
+
+; format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+[module/date]
+type = internal/date
+interval = 5
+
+; http://en.cppreference.com/w/cpp/io/manip/put_time
+date = "· %d %b"
+date-alt = "· %A %d.%m.%Y · ʷ%W"
+
+time = %a %I:%M
+time-alt = %I:%M %p · %z
+
+; format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #0a6cf5
+
+label = %time% %date%
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP1
+full-at = 95
+
+label-charging = "  %percentage%%"
+label-discharging = "  %percentage%%"
+format-charging = <label-charging>
+; format-charging-underline = #ffb52a
+
+format-discharging = <label-discharging>
+; format-discharging-underline = ${self.format-charging-underline}
+
+; format-prefix = "⚡"
+format-full-prefix-foreground = ${colors.foreground}
+; format-full-underline = ${self.format-charging-underline}
+
+; label-full = %{F#859900}%{F-}
+label-full = "%{F#859900} %{F-}"
+
+; ramp-capacity-0 = %{F#b58900}%{F-}
+; ramp-capacity-1 = %{F#b58900}%{F-}
+; ramp-capacity-2 = %{F#b58900}%{F-}
+; ramp-capacity-3 = 
+; ramp-capacity-4 = 
+
+bar-capacity-width = 10
+
+ramp-capacity-foreground = ${colors.foreground}
+
+; animation-charging-0 = 
+; animation-charging-1 = 
+; animation-charging-2 = 
+; animation-charging-3 = 
+; animation-charging-4 = 
+
+; animation-charging-framerate = 750
+; animation-charging-foreground = ${colors.yellow}
+
+[module/temperature]
+type = internal/temperature
+thermal-zone = 1
+warn-temperature = 70
+
+format =<label>
+; format-underline = #f50a4d
+format-warn =<label-warn>
+; format-warn-underline = ${self.format-underline}
+
+label = %temperature%
+ramp-foreground = ${colors.foreground}
+label-warn = %temperature%
+label-warn-foreground = ${colors.orange}
+
+; ramp-0 =
+; ramp-2 =
+; ramp-1 =
+; ramp-3 =
+; ramp-4 =
+; ramp-5 =
+; ramp-6 =
+; ramp-7 =
+
+
+[module/vpncheck]
+type = custom/script
+exec = pgrep openvpn
+interval = 5
+; label = 
+label =  
+; format-underline = #268bd2
+; format-prefix = ""
+format-prefix-foreground = ${colors.foreground-alt}
+
+; [module/rofimenu]
+; type = custom/menu
+; expand-right=true
+; format-spacing=2
+; label-open=
+; label-close =   
+; label-separator = | 
+; label-open-foreground = ${colors.secondary}
+; label-close-foreground = ${colors.secondary}
+; label-separator-foreground = ${colors.foreground-alt}
+; menu-0-0=' '
+; menu-0-0-exec = menu-open-1
+; menu-0-1 = ""
+; menu-0-1-exec = menu-open-1
+; menu-0-2=' '
+; menu-0-2-exec = menu-open-1
+
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 2
+
+; label-open = ⏻ 
+; label-open =   
+label-open = "  " 
+; label-open =   
+; label-open = ⌘  
+label-open-foreground = ${colors.secondary}
+label-close =   
+label-close-foreground = ${colors.secondary}
+label-separator = · 
+label-separator-foreground = ${colors.foreground-alt}
+
+; arch menu
+menu-0-0 = ""
+menu-0-0-exec = menu-open-1
+menu-0-1 = ""
+menu-0-1-exec = menu-open-2
+menu-0-2 = ""
+menu-0-2-exec = menu-open-3
+menu-0-3 = ""
+menu-0-3-exec = menu-open-4
+menu-0-4 = "    "
+menu-0-4-exec = menu-open-5
+
+; sleep
+menu-1-0 = Cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = Sleep?
+menu-1-1-exec = systemctl suspend
+
+; lock
+menu-2-0 = Cancel
+menu-2-0-exec = menu-open-0
+menu-2-1 = Lock the screen?
+menu-2-1-exec = lockscreen
+
+; log out
+menu-3-0 = Cancel
+menu-3-0-exec = menu-open-0
+menu-3-1 = Log out?
+menu-3-1-exec = i3-msg exit
+
+; reboot
+menu-4-0 = Cancel
+menu-4-0-exec = menu-open-0
+menu-4-1 = Restart?
+menu-4-1-exec = systemctl reboot
+
+; poweroff
+menu-5-0 = Cancel
+menu-5-0-exec = menu-open-0
+menu-5-1 = Shut down?
+menu-5-1-exec = systemctl poweroff
+
+[module/arch-updates]
+type = custom/script
+exec = "~/.dots/bin/polybar/arch-updates -s"
+tail = true
+format = <label>
+; format-prefix = " "
+format-prefix = "  "
+; format-prefix = ""
+; doesn't work
+; click-middle = "~/.dots/bin/polybar/arch-updates -u&"
+click-right = "~/.dots/bin/polybar/arch-updates -c&"
+click-left = "~/.dots/bin/polybar/arch-updates -n"
+
+[module/system-usb-mount]
+type = custom/script
+exec = ~/.dots/bin/polybar/system-usb-mount
+; format-prefix = " "
+format-prefix = " "
+interval = 5
+click-left = ~/.dots/bin/polybar/system-usb-mount --mount
+click-middle = ~/.dots/bin/polybar/system-usb-mount --unmount
+
+[module/uptime]
+type = custom/script
+exec = ~/.dots/bin/polybar/uptime-pretty
+; format-prefix = " "
+format-prefix = " "
+interval = 30
+
+[module/inbox-reddit]
+type = custom/script
+exec = ~/.extra/secret/polybar/inbox-reddit.sh
+interval = 60
+click-left = "firefox --new-tab https://www.reddit.com/message/unread/"
+
+[module/inbox-imap-shell]
+type = custom/script
+exec = ~/.extra/secret/polybar/inbox-imap-shell.sh
+interval = 60
+click-left = "alacritty -e neomutt"
+
+[module/notification-github]
+type = custom/script
+exec = ~/.extra/secret/polybar/notification-github
+interval = 60
+click-left = "firefox --new-tab https://github.com/notifications"
+
+[module/isrunning-compton]
+type = custom/script
+exec = ~/.dots/bin/polybar/isrunning-compton
+interval = 5
+click-left = ~/.dots/bin/polybar/isrunning-compton --toggle
+
+[module/openweathermap-simple]
+type = custom/script
+exec = ~/.extra/secret/polybar/openweathermap-simple
+interval = 600
+label-font = 1
+click-left = "firefox --new-tab https://www.mgm.gov.tr/tahmin/il-ve-ilceler.aspx"

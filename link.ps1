@@ -1,10 +1,9 @@
 # vim:ft=ps1
 # Source: https://github.com/SARDONYX-sard/.dots/blob/main/windows/setup/symlink.ps1
-
+# Warning: Make sure Param(...) is always in the first uncommented line!
 Param([switch]$f, [switch]$force, [switch]$d, [switch]$isDebug)
 $force = $f.IsPresent -or $force.IsPresent
 $isDebug = $d.IsPresent -or $isDebug.IsPresent
-
 <#
 .SYNOPSIS
 	Create Symlink format
@@ -57,21 +56,32 @@ $files = @(
 	# vim
 	# @{ target = "config\vim"; path = ""; name = ".vimrc" }
 
-	# neovim
-	@{ target = "config\vim-init"; fullpath = [IO.Path]::Combine($HOME, "AppData/Local/nvim/init.vim"); }
-	@{ target = "config\vim-ftdetect"; fullpath = [IO.Path]::Combine($HOME, "AppData/Local/nvim/ftdetect"); }
-	@{ target = "config\vim-ftplugin"; fullpath = [IO.Path]::Combine($HOME, "AppData/Local/nvim/ftplugin"); }
-	@{ target = "config\vim-partials"; fullpath = [IO.Path]::Combine($HOME, "AppData/Local/nvim/partials"); }
+	# Neovim
+	@{ target = "config\old\nvim\vim-init"; fullpath = [IO.Path]::Combine($HOME, "AppData\Local\nvim\init.vim"); }
+	@{ target = "config\old\nvim\vim-ftdetect"; fullpath = [IO.Path]::Combine($HOME, "AppData\Local\nvim\ftdetect"); }
+	@{ target = "config\old\nvim\vim-ftplugin"; fullpath = [IO.Path]::Combine($HOME, "AppData\Local\nvim\ftplugin"); }
+	@{ target = "config\old\nvim\vim-partials"; fullpath = [IO.Path]::Combine($HOME, "AppData\Local\nvim\partials"); }
+  
+	# LunarVim
+	@{ target = "config\lunarvim"; fullpath = [IO.Path]::Combine($HOME, "AppData\Local\lvim\config.lua"); }
+
+	# Helix
+	@{ target = "config\helix-config"; fullpath = [IO.Path]::Combine($HOME, "AppData\Roaming\helix\config.toml"); }
+	@{ target = "config\helix-langs"; fullpath = [IO.Path]::Combine($HOME, "AppData\Roaming\helix\languages.toml"); }
+	@{ target = "config\helix-ext-snippets"; fullpath = [IO.Path]::Combine($HOME, "AppData\Roaming\helix\external-snippets.toml"); }
+	
+	# Terminal (Wezterm)
+	@{ target = "config\wezterm"; fullpath = [IO.Path]::Combine($HOME, ".wezterm.lua"); }
 
 	# Terminal (Alacritty)
-	@{ target = "config\alacritty"; fullpath = [IO.Path]::Combine($HOME, "AppData/Roaming/alacritty/alacritty.toml"); }
-	# $terminalPath = [IO.Path]::Combine($env:LocalAppData, "Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json")
+	@{ target = "config\old\alacritty"; fullpath = [IO.Path]::Combine($HOME, "AppData\Roaming\alacritty\alacritty.toml"); }
+	# $terminalPath = [IO.Path]::Combine($env:LocalAppData, "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json")
 	# $terminalPreviewPath = $terminalPath.Replace("Terminal", "TerminalPreview")
 	# @{ target = "config\windows-terminal"; fullpath = $terminalPath; name = "settings.json" } # mode = "copy" }
 	# @{ target = "config\windows-terminal-preview"; fullpath = $terminalPreviewPath; name = "settings.json" } # mode = "copy" }
 
 	# global git
-	@{ target = "config\gitignore"; fullpath = [IO.Path]::Combine($HOME, ".config/git/ignore"); name = "ignore" } # mode = "copy" }
+	@{ target = "config\gitignore"; fullpath = [IO.Path]::Combine($HOME, ".config\git\ignore"); name = "ignore" } # mode = "copy" }
 	@{ target = "config\git"; path = ""; name = ".gitconfig" }
 
 	# if (Test-Path navi) {
