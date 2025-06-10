@@ -16,12 +16,18 @@
   editor = "hx";
   browser = "zen"; # Set Default Browser (google-chrome-stable for google-chrome)
   terminal = "alacritty"; # Set Default System Terminal
-  terminalfloating = "alacritty --class floating";
-  fileManager = "dolphin";
-  launcherMenu = "ulauncher";
+  # terminalfloating = "alacritty --class floating";
+  terminalfloating = "alacritty --title floating";
+  fileManager = "io.elementary.files";
+  # fileManager = "dolphin";
+
+  launcherMenu = "walker";
+  # launcherMenu = "ulauncher";
+  # launcherMenu = "rofi --show drun";
   # launcherMenu = "nwgdmenu";
+
+  startMenu = "nwg-drawer";
   # startMenu = "nwg-menu";
-  startMenu = "nwggrid";
   # startMenu = "ulauncher";
   # launcherMenu = "wofi --show drun";
 

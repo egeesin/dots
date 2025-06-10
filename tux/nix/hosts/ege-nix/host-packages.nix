@@ -1,4 +1,7 @@
-{pkgs, pkgs-unstable, ...}: {
+{
+pkgs,
+pkgs-unstable,
+...}: {
   environment.systemPackages = ( with pkgs; [
     shopify-cli
 
@@ -34,18 +37,33 @@
 
     ungoogled-chromium
 
-    obs-studio # screen recorder/streamer
-    obs-studio-plugins.wlrobs
-    # obs-studio-plugins.obs-nvfbc # unstable says it's broken
-    obs-studio-plugins.input-overlay  
-    obs-studio-plugins.droidcam-obs
-    obs-studio-plugins.obs-freeze-filter 
-    obs-studio-plugins.obs-livesplit-one 
-    obs-studio-plugins.obs-replay-source
-    obs-studio-plugins.obs-move-transition
-    obs-studio-plugins.obs-transition-table
-    obs-studio-plugins.obs-pipewire-audio-capture
-    obs-studio-plugins.advanced-scene-switcher
+    # obs-studio # screen recorder/streamer
+    # obs-studio-plugins.wlrobs
+    # # obs-studio-plugins.obs-nvfbc # unstable says it's broken
+    # obs-studio-plugins.input-overlay  
+    # obs-studio-plugins.droidcam-obs
+    # obs-studio-plugins.obs-freeze-filter 
+    # obs-studio-plugins.obs-livesplit-one 
+    # obs-studio-plugins.obs-replay-source
+    # obs-studio-plugins.obs-move-transition
+    # obs-studio-plugins.obs-transition-table
+    # obs-studio-plugins.obs-pipewire-audio-capture
+    # obs-studio-plugins.advanced-scene-switcher
+    #
+    (wrapOBS {
+      plugins = with pkgs.obs-studio-plugins; [
+        input-overlay  
+        droidcam-obs
+        obs-freeze-filter 
+        obs-livesplit-one 
+        obs-replay-source
+        obs-move-transition
+        obs-transition-table
+        obs-pipewire-audio-capture
+        # obs-backgroundremoval
+        advanced-scene-switcher
+      ];
+    })
 
     blender # 3D modelling tool
     blockbench # 3D modelling tool but for voxels and Minecraft
@@ -55,8 +73,11 @@
     birdfont # Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format
     pureref # Unfree
 
+    heimdall # Cross-platform tool suite to flash firmware onto Samsung devices
+    
     localsend # Open source cross-platform alternative to AirDrop
 
+    geary # an email application built around conversations, for the GNOME.
     fractal # Matrix group messaging app
     signal-desktop # Private, simple, and secure messenger
     
@@ -81,7 +102,7 @@
     # cmatrix
 
     neo # Simulates the digital rain from "The Matrix"
-    cowsay
+    cowsay # Program which generates ASCII pictures of a cow with a message
     fortune # Program that displays a pseudorandom message from a database of quotations
     fortune-kind # Kinder, curated fortune, written in rust
     clolcat # Much faster lolcat -> Rainbow version of cat
@@ -92,16 +113,21 @@
     cbonsai # Grow bonsai trees in your terminal
     nbsdgames # A package of 18 text-based modern games
     pipes # Animated pipes terminal screensaver
-    figlet
-    linuxwave
-    dwt1-shell-color-scripts
+    figlet # Program for making large letters out of ordinary text
+    linuxwave # Generate music from the entropy of Linux
+    dwt1-shell-color-scripts # Collection of shell color scripts collected by Derek Taylor
   ]) ++ ( with pkgs-unstable; [
-    davinci-resolve # video editor
+    davinci-resolve # Professional video editing, color, effects and audio post-processing
+
+    halloy # IRC application
     vesktop # Alternate client for Discord with Vencord built-in (Has screensharing bug fixes for Wayland systems)
+    # zoom-us
     # Note: don't forget to add { "SKIP_HOST_UPDATE": true } in ~/.config/discord (or vencord maybe)/settings.json
+    # dorion # Tiny alternative Discord client (Will try this later, but won't open with nix-shell for some reason, might be related to misconfigured desktop portal.)
     # discord # All-in-one cross-platform voice and text chat for gamers (Doesn't have any fixes for more than 5yrs old blurry screenshare bug.)
     beeper # Useful for connecting various messaging platforms but as of 4.0, it's invisible in Wayland. Deleting GPU cache also doesn't work except starting with --disable-gpu parameter.
   ]);
   # Android Debug Bridge
   programs.adb.enable = true;
+
 }

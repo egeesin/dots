@@ -13,7 +13,8 @@
     # ./xdg.nix # Adds preconfigured read-only mime file
     ./alacritty.nix
     ./darkman.nix
-    ./git.nix
+    ./mpv.nix
+    ./vcs.nix
     ./hyprland
     ./starship.nix
     ./swaync.nix

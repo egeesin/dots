@@ -113,7 +113,7 @@
       "float,class:^(xdg-desktop-portal-gtk)$"
 
       "float,class:^(com.interversehq.qView)$"
-      "float,class:^(floating)$"
+      "float,title:^(floating)$"
       "float,class:^(steam)$,initialTitle:^(Friends List)$"
       "float,class:^(org.kde.ark)$"
       "float,class:^(org.kde.kcalc)$"
@@ -131,14 +131,21 @@
       "float,class:^(org.prismlauncher.PrismLauncher)$"
       "float,class:^(dev-kostromdan-mods-crash_assistant-app-class_loading-Boot)$"
 
+      # "noborder, focus:0"
+      # "noshadow, focus:0"
       "noshadow, focus:0, floating: 0"
 
       # "Smart gaps" / "No gaps when only"
       # uncomment all if you wish to use that.
-      "bordersize 0, floating:0, onworkspace:w[tv1]"
-      "rounding 0, floating:0, onworkspace:w[tv1]"
-      "bordersize 0, floating:0, onworkspace:f[1]"
-      "rounding 0, floating:0, onworkspace:f[1]"
+      "bordersize 0, floating:0, plugin:hyprbars:nobar, onworkspace:w[tv1]"
+      "rounding 0, floating:0, plugin:hyprbars:nobar, onworkspace:w[tv1]"
+      "bordersize 0, floating:0, plugin:hyprbars:nobar, onworkspace:f[1]"
+      "rounding 0, floating:0, plugin:hyprbars:nobar, onworkspace:f[1]"
+    ];
+    workspace = [
+    #   # Note: Won't work while hyprbars enabled
+      "w[tv1]s[false], gapsout:0, gapsin:0"
+      "f[1]s[false], gapsout:0, gapsin:0"
     ];
     windowrule = [
       # set bordercolor to green if window's client fullscreen state is 1(maximize) (internal state can be anything)
@@ -173,27 +180,15 @@
       "blur,swaync-control-center"
       "ignorezero,swaync-control-center"
       "blur,logout_dialog"
+
+      # Shimeji https://codeberg.org/thatonecalculator/spamton-linux-shimeji
+      # "float, class:com-group_finity-mascot-Main"
+      # "noblur, class:com-group_finity-mascot-Main"
+      # "nofocus, class:com-group_finity-mascot-Main"
+      # "noshadow, class:com-group_finity-mascot-Main"
+      # "noborder, class:com-group_finity-mascot-Main"
     ];
-    workspace = [
-      "w[tv1], gapsout:0, gapsin:0"
-      "f[1], gapsout:0, gapsin:0"
-    ];
-    # hyprbars = {
-    #   bar_height = 18;
-    #   # bar_color = "rgb(282828)";
-    #   # "col.text" = "rgb(ebdbb2)";
-    #   bar_padding = 7;
-    #   bar_button_padding = 4;
-    #   bar_title_enabled = true;
-    #   bar_text_align = "left";
-    #   bar_part_of_window = true;
-    #   # bar_text_font = "Jetbrains Mono";
-    #   hyprbars-button = [
-    #     "rgb(282828), 25, , hyprctl dispatch killactive, rgb(ebdbb2)"
-    #     "rgb(282828), 25, , hyprctl dispatch fullscreen, rgb(ebdbb2)"
-    #     "rgb(282828), 25, 󰕔, hyprctl dispatch togglefloating, rgb(ebdbb2)"
-    #   ];
-    # };
+
 
     # Hide instead of kill Steam.
     # if [ "$(hyprctl activewindow -j | jq -r ".class")" = "Steam" ]; then

@@ -50,7 +50,7 @@
   services = {
     libinput.enable = true; # Input Handling (touchpad support)
     fstrim.enable = true; # SSD Optimizer
-    # gvfs.enable = true; # For mounting USB, adding Trash support in Nautilus & more
+    gvfs.enable = true; # For mounting USB, adding Trash support in Nautilus & more
     fwupd.enable = true; # Firmware updater (How to use: https://github.com/fwupd/fwupd#basic-usage-flow-command-line)
     udisks2.enable = true; # Also for mounting USB & more
     blueman.enable = true; # Bluetooth manager

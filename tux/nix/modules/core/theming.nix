@@ -1,8 +1,8 @@
 {
   pkgs,
   # pkgs-unstable,
-  # config,
-  lib,
+  config,
+  # lib,
   host,
   ...
 }: let
@@ -14,11 +14,16 @@
   # theme = "${pkgs.base16-schemes}/share/themes/gruvbox-light-medium.yaml";
   # theme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
   # theme = "${pkgs.base16-schemes}/share/themes/terracotta-dark.yaml";
-  # theme = "${pkgs.base16-schemes}/share/themes/mocha.yaml";
+  theme = "${pkgs.base16-schemes}/share/themes/mocha.yaml";
   # theme = "${pkgs.base16-schemes}/share/themes/monokai.yaml";
   # theme = "${pkgs.base16-schemes}/share/themes/gotham.yaml";
   # theme = "${pkgs.base16-schemes}/share/themes/eva.yaml";
-  theme = "${pkgs.base16-schemes}/share/themes/harmonic16-dark.yaml";
+  # theme = "${pkgs.base16-schemes}/share/themes/harmonic16-dark.yaml";
+  # theme = "${pkgs.base16-schemes}/share/themes/kanagawa.yaml";
+  # theme = "${pkgs.base16-schemes}/share/themes/kimber.yaml";
+  # theme = "${pkgs.base16-schemes}/share/themes/solarflare.yaml";
+  # theme = "${pkgs.base16-schemes}/share/themes/precious-dark-fifteen.yaml";
+  # theme = "${pkgs.base16-schemes}/share/themes/jabuti.yaml";
   # theme = "${pkgs.base16-schemes}/share/themes/windows-10.yaml";
   # theme = "${pkgs.base16-schemes}/share/themes/vesper.yaml";
   # theme = "${pkgs.base16-schemes}/share/themes/hopscotch.yaml";
@@ -30,6 +35,42 @@
   #   ${lib.getExe pkgs.graphicsmagick} convert -size 1920x1920 xc:$COLOR $out
   # '';
 in {
+  # Default font settings
+  fonts = {
+    fontDir.enable = true; # For exposing fonts dirs to Flatpak apps.
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        serif = [ config.stylix.fonts.serif.name ];
+        sansSerif = [ config.stylix.fonts.sansSerif.name ];
+        monospace = [ config.stylix.fonts.monospace.name ];
+      };
+      useEmbeddedBitmaps = true;
+    };
+    packages = (with pkgs; [
+      inter-nerdfont
+      # fantasque-sans-mono
+      # nerdfonts.symbols-only # attribute deosn't exist for some reason
+      # nerdfonts # (Includes all patched fonts)
+      commit-mono
+      # twemoji-color-font
+      # font-awesome 
+      # ultimate-oldschool-pc-font-pack
+      # twemoji-color-font   
+      # gelasio # Font which is metric-compatible with Microsoft's Georgia
+      comic-neue # Casual type face: Make your lemonade stand look like a fortune 500 company
+      comic-relief # Font metric-compatible with Microsoft Comic Sans
+      garamond-libre
+      # alegreya-sans # Humanist sans serif family with a calligraphic feeling
+      minecraftia # First we mine, then we craftia. Let's Minecraftia!
+      xkcd-font # title.
+      corefonts # Microsoft's TrueType core fonts for the Web
+      open-fonts # Collection of beautiful free and open source fonts
+      kreative-square # Fullwidth scalable monospace font designed specifically to support pseudographics, semigraphics, and private use characters
+      nerd-fonts.symbols-only # (Only includes symbols) available in unstable/25.05
+    # ]) ++ (with pkgs-unstable; [
+    ]);
+  };
   # Styling Options
   stylix = {
     enable = true;
@@ -121,11 +162,14 @@ in {
       };
     };
     targets = {
-      plymouth.enable = false; # but blahaj is better.
-      grub.enable = false; # Must not conflict with minegrub theme
-      qt.enable = true;
-      qt.platform = lib.mkForce "gnome";
-      # qt.platform = lib.mkForce "adwaita";
+      plymouth.enable = false; # because blahaj is better.
+      grub.enable = false; # Must not conflict with minegrub theme.
+      qt = {
+        enable = true;
+        # platform = lib.mkForce "qtct";
+        # platform = lib.mkForce "gnome";
+        # platform = lib.mkForce "adwaita";
+      };
     };
   };
 

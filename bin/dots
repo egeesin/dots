@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 BIN_NAME=$(basename "$0")
 BIN_PATH=$(dirname "$(greadlink -f "$0" || readlink -f "$0")")
 COMMAND_NAME=$1

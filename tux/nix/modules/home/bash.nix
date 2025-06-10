@@ -12,18 +12,14 @@
       #   flakeDir = "/home/${username}/.dots/tux/nix";
       # in {
       {
-      # rb = "sudo nixos-rebuild switch --flake ${flakeDir}#${profile}";
-      rb = "nh os switch --hostname ${profile}";
-      # upd = "nix flake update --flake ${flakeDir}#${profile}";
-      # upg = "sudo nixos-rebuild switch --upgrade --flake ${flakeDir}#${profile}";
-      upg = "nh os switch --hostname ${profile} --update";
-
-      # hms = "home-manager switch --flake ${flakeDir}#${profile}";
+      rb = "nh os switch -H ${profile}";
+      upd = "nh os switch --update -H ${profile}";
       hms = "nh home switch -c ${username}@${host}";
 
-      # conf = "$EDITOR ${flakeDir}/modules/core/default.nix";
-      # hmconf = "$EDITOR ${flakeDir}/modules/home/default.nix";
-      # pkgs = "$EDITOR ${flakeDir}/modules/core/packages.nix";
+      # rb = "sudo nixos-rebuild switch --flake ${flakeDir}#${profile}";
+      # upd = "nix flake update --flake ${flakeDir}#${profile}";
+      # upg = "sudo nixos-rebuild switch --upgrade --flake ${flakeDir}#${profile}";
+      # hms = "home-manager switch --flake ${flakeDir}#${profile}";
 
       lsgen = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
       rmgen = "sudo nix-collect-garbage -d";

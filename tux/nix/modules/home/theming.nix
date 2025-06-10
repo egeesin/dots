@@ -1,4 +1,9 @@
-{pkgs, ...}: {
+{
+pkgs,
+config,
+lib,
+...
+}: {
 # { pkgs, ... }: let
   # theme = {
   #   name = "adw-gtk3-dark";
@@ -127,6 +132,27 @@
   #   "kvantum/ArcDark".source = "${pkgs.arc-kde-theme}/share/kvantum/ArcDark";
   #   "kvantum/kvantum.kvconfig".text = "[General]\ntheme=ArcDark";
   # }
+
+  # QT Fonts
+      # fixed="${cfg.fonts.monospace.name},${toString cfg.fonts.sizes.applications},-1,5,50,0,0,0,0,0,Condensed"
+      # general="${cfg.fonts.sansSerif.name},${toString cfg.fonts.sizes.applications},-1,5,50,0,0,0,0,0,Condensed"
+  xdg.configFile = let
+    cfg = config.stylix;
+    qt5fontConf = ''
+      [Fonts]
+      fixed="${cfg.fonts.monospace.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"
+      general="${cfg.fonts.sansSerif.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"
+      '';
+    qt6fontConf = ''
+      [Fonts]
+      fixed="${cfg.fonts.monospace.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"
+      general="${cfg.fonts.sansSerif.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"
+      '';
+    in
+      (lib.mkIf (cfg.enable && cfg.targets.qt.enable && config.qt.platformTheme.name == "qtct") {
+        "qt5ct/qt5ct.conf".text = qt5fontConf;
+        "qt6ct/qt6ct.conf".text = qt6fontConf;
+      });
    
   dconf = {
     enable = true;

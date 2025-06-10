@@ -16,8 +16,9 @@
   terminal = "alacritty"; # Set Default System Terminal
   terminalfloating = "alacritty --class floating";
   fileManager = "dolphin";
-  launcherMenu = "ulauncher";
-  # launcherMenu = "wofi --show drun";
+  launcherMenu = "walker";
+  # launcherMenu = "ulauncher";
+  # launcherMenu = "rofi --show drun";
 
   # https://github.com/alexandrunastase/ro-de-keyboard-layout/blob/master/evdev.lst
   keyboardModel = "pc104";

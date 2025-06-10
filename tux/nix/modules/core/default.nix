@@ -1,7 +1,6 @@
 {inputs, ...}: {
   imports = [
     ./boot.nix
-    ./fonts.nix
     ./greetd.nix
     ./hardware.nix
     ./network.nix
@@ -23,9 +22,5 @@
     inputs.minegrub-theme.nixosModules.default
     inputs.stylix.nixosModules.stylix
     ./theming.nix
-  ];
-  nixpkgs.overlays = [
-   inputs.dolphin-overlay.overlays.default
-   inputs.fancontrol-gui.overlays.default
   ];
 }

@@ -23,7 +23,7 @@
     # kernelPackages = pkgs.linuxPackages_latest; # This acts funny when you try to install Nvidia driver
     kernelModules = [
       "kvm-amd"
-      "v4l2loopback"
+      "v4l2loopback" # This module allows you to create virtual video devices
       # For controlling monitor brightness
       "zenpower" # Using Ryzen
       "i2c-dev"
@@ -35,7 +35,7 @@
     ];
   };
   # For SSDs
-  services.fstrim.enable = true;
+  # services.fstrim.enable = true;
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/2814f870-f425-447e-8e66-dc5d72d80ce6";

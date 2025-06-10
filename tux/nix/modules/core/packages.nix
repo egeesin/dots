@@ -1,13 +1,32 @@
 {
   pkgs,
   pkgs-unstable,
-  # inputs,
+  inputs,
   # username,
    ...
 }: {
-
   # Tip: $ realpath $(which <pkgname>) # to find path of package
+
   programs = {
+    # fish.enable = true; # I'm fine with bash for now.
+    git.enable = true;
+    thunderbird.enable = true; #  a free and open-source email client
+    yazi.enable = true; # a terminal file manager
+    coolercontrol = { # A feature-rich cooling device control and monitoring application for Linux.
+      enable = true;
+      nvidiaSupport = true;
+      # https://docs.coolercontrol.org/tutorials/profile.html
+    };
+
+    # Some programs need SUID wrappers, can be configured further or are
+    # started in user sessions.
+    # programs.mtr.enable = true;
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+    dconf.enable = true;
+
     # uwsm = {
     #   enable = false;
     #   waylandCompositors = {
@@ -19,16 +38,34 @@
     #     };
     #   };
     # };
-    # hyprland = {
-      # enable = false;
-      # package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      # portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+
+    hyprland = {
+      enable = true;
+      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
       # withUWSM = false;
-      # xwayland.enable = true;
+      xwayland.enable = true;
+    };
+
+    # Using zen instead.
+    # google-chrome = {
+    #   enable = true;
+    #   package = pkgs.google-chrome;
+
+    #   # https://wiki.archlinux.org/title/Chromium#Native_Wayland_support
+    #   commandLineArgs = [
+    #     "--ozone-platform-hint=auto"
+    #     "--ozone-platform=wayland"
+    #     # make it use GTK_IM_MODULE if it runs with Gtk4, so fcitx5 can work with it.
+    #     # (only supported by chromium/chrome at this time, not electron)
+    #     "--gtk-version=4"
+    #     # make it use text-input-v1, which works for kwin 5.27 and weston
+    #     "--enable-wayland-ime"
+
+    #     # enable hardware acceleration - vulkan api
+    #     # "--enable-features=Vulkan"
+    #   ];
     # };
-    
-    # fish.enable = true;
-    git.enable = true;
     # firefox = {
     #   enable = false;
     #   preferencesStatus = "user";
@@ -59,42 +96,54 @@
     #     };
     #   };
     # };
-    thunderbird.enable = true; #  a free and open-source email client
-    lazygit.enable = true; # simple terminal UI for git commands
-    yazi.enable = true; # a terminal file manager
-    coolercontrol = { # A feature-rich cooling device control and monitoring application for Linux.
-      enable = true;
-      nvidiaSupport = true;
-      # https://docs.coolercontrol.org/tutorials/profile.html
-    };
-  };
+    # vscode = {
+    #   enable = true;
+    #   package =
+    #     pkgs.vscode.override
+    #     {
+    #       isInsiders = false;
+    #       # https://wiki.archlinux.org/title/Wayland#Electron
+    #       commandLineArgs = [
+    #         "--ozone-platform-hint=auto"
+    #         "--ozone-platform=wayland"
+    #         # make it use GTK_IM_MODULE if it runs with Gtk4, so fcitx5 can work with it.
+    #         # (only supported by chromium/chrome at this time, not electron)
+    #         "--gtk-version=4"
+    #         # make it use text-input-v1, which works for kwin 5.27 and weston
+    #         "--enable-wayland-ime"
 
-  nixpkgs.config.allowUnfree = true; 
+    #         # TODO: fix https://github.com/microsoft/vscode/issues/187436
+    #         # still not works...
+    #         "--password-store=gnome" # use gnome-keyring as password store
+    #       ];
+    #     };
+    # };
+  };
 
   # https://search.nixos.org/packages
   environment.systemPackages = ( with pkgs; [
-    zip
-    unzip
+    zip unzip unrar
     # rar
-    unrar
     kdePackages.kde-cli-tools
     kdePackages.ark # archiver/unarchiver
     # file-roller # Archive manager for the GNOME desktop environment
 
-    yq # a lightweight and portable tool that works with yaml and json files.
+    # yq # a lightweight and portable tool that works with yaml and json files.
+    jq # JSON processor 
     nodePackages.prettier # an opinionated code formatter
     shfmt # Shell parser and formatter, installed it for prettybat
     # bat # A cat(1) clone with syntax highlighting and Git integration.
-    delta # Git diff with better highlight, installed it as optional dep for batdiff
-    difftastic # a structural diff that understands syntax
     eza # A modern replacement for ls.
     zoxide # a smarter cd command, inspired by z and autojump.
 
+    skim # Command-line fuzzy finder written in Rust
     ripgrep # Utility that combines the usability of The Silver Searcher with the raw speed of grep
     ripgrep-all # Ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, and more
 
-    wezterm # GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
+    # wezterm # GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust
     alacritty # default terminal emulator
+
+    helix # normally it's available in home-manager, but including here too so I can use it in sudo
     
     acpi # Show battery status and other ACPI information
     fastfetch # An actively maintained, feature-rich and performance oriented, neofetch like system information tool
@@ -118,8 +167,6 @@
     # vulkan-tools
     # glmark2
     gpu-viewer # A front-end to glxinfo, vulkaninfo, clinfo and es2_info.
-    
-    #jujutsu # insecure
 
     # wlr-randr
     egl-wayland # EGLStream-based Wayland external platform
@@ -137,9 +184,7 @@
 
     zellij # Terminal workspace with batteries included (tmux but better)
 
-    libsForQt5.kservice 
     # kdePackages.kservice 
-    kdePackages.dolphin #qt6 # there's something wrong when I try to open files, it always forgets what type of application it should run.
     pantheon.elementary-files
     filezilla # Graphical FTP, FTPS and SFTP client
     ffmpegthumbnailer # Lightweight video thumbnailer
@@ -159,16 +204,13 @@
     # rofi-wayland
     bitwarden-desktop # Secure and free password manager for all of your devices
 
-    ulauncher # Fast application launcher for Linux, written in Python, using GTK
-    nwg-launchers # GTK-based launchers: application grid, button bar, dmenu for sway and other window managers
-    # nwg-menu # menu start plugin for nwg-panel
-    # https://github.com/NixOS/nixpkgs/issues/297267
     wmctrl # CLI tool to interact with EWMH/NetWM compatible X Window Managers
 
     # kdePackages.xwaylandvideobridge # Utility to allow streaming Wayland windows to X applications
     # Summons a white unknown window at startup in Hyprland. Probably it's for Plasma?
     droidcam # Linux client for DroidCam app that lets you use your phone as webcam source.
     audacity # Sound editor with graphical UI
+    soundconverter
     # easyeffects # pipewire compatible audio adjustment tool
     rnnoise-plugin # Real-time noise suppression plugin for voice based on Xiph's RNNoise 
     syshud # simple system status indicator written in gtkmm 4
@@ -186,34 +228,6 @@
     ffmpeg # Complete, cross-platform solution to record, convert and stream audio and video
     # haruna # Open source video player built with Qt/QML and libmpv
     # vlc # Cross-platform media player and streaming server
-    mpv # lightweight media player
-    mpvScripts.uosc # Feature-rich minimalist proximity-based UI
-    mpvScripts.thumbfast # High-performance on-the-fly thumbnailer for mpv
-    mpvScripts.visualizer # various audio visualization
-    mpvScripts.youtube-chat # overlay youtube chat on top of a video using yt-dlp
-    mpvScripts.youtube-upnext # Userscript that allows you to play 'up next'/recommended youtube videos
-    mpvScripts.twitch-chat # Show Twitch chat messages as subtitles when watching Twitch VOD with mpv.
-    mpvScripts.videoclip # Easily create videoclips with mpv
-    mpvScripts.mpv-notify-send # send notifications with notify-send
-    mpvScripts.mpv-playlistmanager # Create and manage playlists
-    mpvScripts.mpv-discord # Cross-platform Discord Rich Presence integration for mpv with no external dependencies
-    mpvScripts.mpris # Add support for media keybinds
-    mpvScripts.vr-reversal # Script for mpv to play VR video with optional saving of head tracking data
-    mpvScripts.sponsorblock-minimal # SponsorBlock with minimal deps
-    mpvScripts.skipsilence # Increase playback speed during silence
-    mpvScripts.quality-menu # Switch video quality from YT on-the-go
-    mpvScripts.mpv-subtitle-lines # Skip to subtitle lines
-    mpvScripts.memo # REcent files menu
-    mpvScripts.evafast # Seeking and hybrid fastforwarding like VHS
-    mpvScripts.quack # Reduce audio volume after seeking
-    mpvScripts.autosub # Fully automatic subtitle downloading
-    mpvScripts.manga-reader
-    mpvScripts.mpv-image-viewer.minimap # Adds a minimap that displays the position of the image relative to the view
-    mpvScripts.mpv-image-viewer.ruler # Adds a ruler command that lets you measure positions, distances and angles in the image. Can be configured through ruler.conf
-    mpvScripts.mpv-image-viewer.status-line # Adds a status line that can show different properties in the corner of the window
-    mpvScripts.mpv-image-viewer.freeze-window # By default, mpv automatically resizes the window when the current file changes to fit its size. This script freezes the window so that this does not happen
-    mpvScripts.mpv-image-viewer.image-positioning # Adds several high-level commands to zoom and pan
-    mpvScripts.occivink.crop # Crop the current video in a visual manner
 
     # spotify # unfree but adfree ->  $ bash <(curl -sSL https://raw.githubusercontent.com/SpotX-Official/SpotX-Bash/main/spotx.sh)
     quodlibet # GTK-based audio player written in Python, using the Mutagen tagging library
@@ -223,7 +237,7 @@
     # kdePackages.elisa
     handbrake # Tool for converting video files and ripping DVDs
     # wf-recorder # a utility program for screen recording of wlroots-based compositors | Usage: https://github.com/ammen99/wf-recorder#usage
-    peek # Simple animated GIF screen recorder with an easy to use interface
+    # peek # Simple animated GIF screen recorder with an easy to use interface # Doesn't support Wayland natively, need GDK_BACKEND=x11 instead
     kooha # Elegantly record your screen
 
     qview # lightweight image viewer
@@ -248,7 +262,7 @@
     # kdePackages.qt6ct # qt6 config tool
     # libsForQt5.qt5ct # qt5 config tool
     # inspector # Gtk4 Libadwaita wrapper for various system info cli commands
-    libsForQt5.qtstyleplugins # Additional style plugins for Qt5, including BB10, GTK, Cleanlooks, Motif, Plastique
+    # libsForQt5.qtstyleplugins # Additional style plugins for Qt5, including BB10, GTK, Cleanlooks, Motif, Plastique
     # kdePackages.qt6gtk2 # gtk+2.0 integration plugins for qt6
     kdePackages.koi # Scheduling LIGHT/DARK Theme Converter for the KDE Plasma Desktop
 
@@ -271,7 +285,6 @@
 
     kdePackages.kolourpaint # Easy-to-use paint program
 
-
     # yubikey-manager    
     # 
     glxinfo # available in unstable
@@ -293,14 +306,20 @@
     yaml-language-server # lsp for YAML
     lua-language-server # lsp for Lua
     shopify-cli # lsp for Liquid templating language
+    libsForQt5.kservice 
+    kdePackages.dolphin #qt6 # there's something wrong when I try to open files, it always forgets what type of application it should run.
+
+    # wineWowPackages.stable # supports both 32-bit and 64-bit Windows executables.
+    wineWowPackages.waylandFull
+    winetricks
   ]);
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
+  nixpkgs = {
+    config.allowUnfree = true; 
+    overlays = [
+      inputs.dolphin-overlay.overlays.default # This Nix overlay fixes Dolphin's "Open with" menu when running outside of KDE (e.g., under Hyprland or other Wayland compositors).
+      inputs.grim-hyprland.overlays.default # A fork of grim that takes advantage of Hyprland's custom protocols to grab specific windows.
+      # inputs.fancontrol-gui.overlays.default
+    ];
   };
-  programs.dconf.enable = true;
 }

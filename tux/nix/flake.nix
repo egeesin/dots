@@ -98,22 +98,29 @@
       submodules = true;
       # inputs.nixpkgs.follows = "nixpkgs";
     };
-    # hyprland-plugins = { # I'm using hyprlandPlugins from nixpkgs instead
-    #   url = "github:hyprwm/hyprland-plugins";
-    #   inputs.hyprland.follows = "hyprland";
-    # };
+    hyprland-plugins = { # I'm using hyprlandPlugins from nixpkgs instead
+      url = "github:hyprwm/hyprland-plugins";
+      # url = "https://code.hyprland.org/hyprwm/hyprland-plugins.git";
+      inputs.hyprland.follows = "hyprland";
+    };
     # hyprkool = {
     #   url = "github:thrombe/hyprkool";
     #   inputs.hyprland.follows = "hyprland";
     # };
-    # hypr-dynamic-cursors = {
-    #   url = "github:VirtCode/hypr-dynamic-cursors";
-    #   inputs.hyprland.follows = "hyprland";
-    # };
+    hypr-dynamic-cursors = {
+      url = "github:VirtCode/hypr-dynamic-cursors";
+      inputs.hyprland.follows = "hyprland";
+    };
     # Hyprspace = {
     #   url = "github:KZDKM/Hyprspace";
     #   inputs.hyprland.follows = "hyprland"; # Hyprspace uses latest Hyprland. We declare this to keep them in sync.
     # };
+    hyprshell = {
+      url = "github:H3rmt/hyprswitch?ref=hyprshell";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    grim-hyprland.url = "github:eriedaberrie/grim-hyprland";
 
     # Stylix is a theming framework for NixOS, Home Manager, nix-darwin, and
     # Nix-on-Droid that applies color schemes, wallpapers, and fonts to a wide

@@ -5,14 +5,15 @@
     # kernelPackages = pkgs.linuxPackages_zen;
     # Rest of it are in hosts/<HOSTNAME>/hardware
     # kernel.sysctl = { "vm.max_map_count" = 2147483642; };
+    # Dual-boot: https://nixos.wiki/wiki/Dual_Booting_NixOS_and_Windows
     loader = {
       timeout = 4;
-      efi.canTouchEfiVariables = true;
+      efi.canTouchEfiVariables = true; # Windows is installed on another disk with a separate EFI partition
       grub = {
         enable = true;
         efiSupport = true;
         devices = [ "nodev" ];
-        useOSProber = true;
+        useOSProber = true; # Auto-detect other systems on the machine
         # https://github.com/Lxtharia/minegrub-theme#nixos-module-flake
         # theme = "${pkgs.kdePackages.breeze-grub}/grub/themes/breeze";
         minegrub-theme = {
@@ -25,8 +26,11 @@
       };
     };
 
-    # For Bluetooth
-    extraModprobeConfig = "options bluetooth disable_ertm=1 ";
+    # For Bluetooth and adding OBS Virtual Cam
+    extraModprobeConfig = ''
+    options bluetooth disable_ertm=1
+    options v4l2loopback devices=1 video_nr=1 card_label="OBS Video Source" exclusive_caps=1
+    '';
 
     # Appimage Support
     # binfmt.registrations.appimage = {

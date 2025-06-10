@@ -158,9 +158,10 @@ in
           # format = ""; # Nix snowflake logo
           # format = "⬢"; # Just hexagon
           # format = "⌘"; # cmd symbol
+          # format = ""; # Apple
           # format = "❄️"; # Snowflake emoji
           # format = "🇹🇷"; # Turkish Flag
-          format = "😎"; # Sunglass emoji
+          format = "😎"; # Cool sunglasses emoji
           # format = "🃏"; # Joker wildcard emoji
           # format = "🗿"; # Moyai wildcard emoji
           # format = "⚽"; # Soccerball emoji
