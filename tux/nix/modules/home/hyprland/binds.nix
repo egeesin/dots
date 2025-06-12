@@ -9,8 +9,7 @@ osConfig,
     # browser
     fileManager
     terminal
-    terminalfloating
-    launcherMenu
+    # launcherMenu
     startMenu
     ;
   showdesktop = pkgs.writeShellScriptBin "showdesktop" ''
@@ -114,14 +113,14 @@ in {
       # binds = {
           # pass_mouse_when_bound = true;
       # };
-      bindr = [
-        # Press dnd release modifier key to open launcher menu
-        "$mod, SUPER_L, exec, ${launcherMenu}"
-        ];
+      # bindr = [
+      #   # Press dnd release modifier key to open launcher menu
+      #   "$mod, SUPER_L, exec, ${launcherMenu}"
+      #   ];
       bind = [
         # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
         "$mod+SHIFT, return, exec, ${terminal}"
-        "$mod, return, exec, ${terminalfloating}"
+        "$mod, return, exec, [float] ${terminal}"
         "$mod+CTRL, W, killactive,"
         "ALT, F4, killactive," # Classic.
         "$mod+SHIFT, Q, exit,"

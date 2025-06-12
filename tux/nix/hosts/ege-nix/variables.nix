@@ -17,7 +17,6 @@
   browser = "zen"; # Set Default Browser (google-chrome-stable for google-chrome)
   terminal = "alacritty"; # Set Default System Terminal
   # terminalfloating = "alacritty --class floating";
-  terminalfloating = "alacritty --title floating";
   fileManager = "io.elementary.files";
   # fileManager = "dolphin";
 

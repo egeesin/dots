@@ -7,8 +7,6 @@
   pkgs-unstable,
   ...
 }: let
-  # pluginsAsNixpkgs = pkgs.hyprlandPlugins;
-  pluginsAsFlake = inputs.hyprland-plugins.packages.${pkgs.system}; # From flake
   inherit
     (import ../../../hosts/${host}/variables.nix)
     # browser
@@ -26,7 +24,13 @@ in {
     hyprpaper # Wallpaper utility
     hyprsunset # hyprsunset -t 3000 https://wiki.hyprland.org/Hypr-Ecosystem/hyprsunset/
     # grim # Grab images from Wayland compositor (replaced with grim-hyprland)
+    (pkgs.writeShellScriptBin "grim-hyprland" ''
+      exec -a $0 ${inputs.grim-hyprland.packages.${pkgs.system}.default}/bin/grim "$@"
+    '')
+    wf-recorder # a utility program for screen recording of wlroots-based compositors | Usage: https://github.com/ammen99/wf-recorder#usage
     slurp # Select a region
+    # peek # Simple animated GIF screen recorder with an easy to use interface # Doesn't support Wayland natively, need GDK_BACKEND=x11 instead
+    kooha # Elegantly record your screen
     satty # Screenshot annotation tool
     wev # for testing and getting key names
     ydotool # Generic Linux command-line automation tool (no X!)
@@ -60,7 +64,6 @@ in {
 
   imports = [
     inputs.hyprland.homeManagerModules.default
-    inputs.hyprshell.homeModules.hyprshell
   ];
   systemd.user.targets.hyprland-session.Unit.Wants = [
     "xdg-desktop-autostart.target"
@@ -78,27 +81,9 @@ in {
       enable = true;
       # hidpi = true;
     };
-      
-    plugins =
-      # https://github.com/hyprwm/hyprland-plugins#plugin-list
-      # https://github.com/hyprland-community/awesome-hyprland
-    # (with pluginsAsNixpkgs; [
-    # ]) ++ (with pluginsAsFlake; [
-    (with pluginsAsFlake; [ # Had to move all plugins from nixpkgs to flake source as hyprland (as flake) complains about mismatch versions of plugins
-      hyprbars # adds window bar
-      csgo-vulkan-fix # force apps to a fake resolution without them realizing it.
-      # hyprwinwrap # Desktop environment background (wayland equivalent of xwinwrap, alternative to mpvwallpaper)
-      xtra-dispatchers # adds some additional dispatchers
-      # hyprscrolling # adds scrolling layout like niri (WIP) https://github.com/dawsers/hyprscroller # Can't build this atm for some reason
-    ]) ++ [
-      # inputs.hyprkool.packages.${pkgs.system}.default # Replicates the feel of KDE activities/desktop grid layout https://github.com/thrombe/hyprkool#example-configs
-      inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors
-      # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace # macOS/KDE like mission control thingy https://github.com/KZDKM/Hyprspace#configuration
-    ];
-
     settings = {
       debug = {
-        disable_logs = false;
+        disable_logs = true;
         # damage_tracking = 0;
         # Electron apps like Discord in Wayland (with Nvidia) sometimes flickers.
         # https://github.com/hyprwm/Hyprland/issues/6701#issuecomment-2198646262 
@@ -106,79 +91,6 @@ in {
       # "$mainMod" = "SUPER"; # Sets "Windows" key as main modifier
       # experimental.xx_color_management_v4 = true;
       # experimental.wide_color_gamut = true;
-      plugin = {
-        # hyprscrolling = {
-        #   "fullscreen_on_one_column" = false; 
-        # };
-        dynamic-cursors = {
-          # https://github.com/VirtCode/hypr-dynamic-cursors#configuration
-          # mode = "rotate";
-          # mode = "stretch";
-          mode = "tilt";
-          shake = {
-            threshold = 10; # default 6, might be an issue for some games like minecraft
-            enabled = false;
-            nearest = true;
-            effects = true;
-          };
-          # Should be good for SVG-based cursor themes and higher-res displays
-          # https://github.com/VirtCode/hypr-dynamic-cursors#hyprcursor
-          # hyprcursor = {
-          #   nearest = true;
-          #   enabled = true;
-          #   resolution = -1;
-          #   fallback = "clientside";
-          # };
-          shaperule = [
-            "text, rotate:offset: 90" # apply a 90deg offset in rotate mod to the text shape
-            "grab, stretch, stretch:limit:2000" # use stretch mode when grabbing, and set limit low
-            # "clientside, none" # don't show any effects on clientside cursors
-          ]; 
-        };
-        hyprbars = {
-          bar_height = 20;
-          bar_blur = true;
-          bar_color = "rgb(${config.lib.stylix.colors.base00})";
-          "col.text" = "rgb(${config.lib.stylix.colors.base03})";
-          bar_padding = 8;
-          bar_button_padding = 8;
-          bar_title_enabled = true;
-          bar_text_align = "left";
-          bar_part_of_window = true;
-          bar_precedence_over_border = true;
-          icon_on_hover = true;
-          # bar_text_font = "Jetbrains Mono";
-          hyprbars-button = [
-            "rgb(${config.lib.stylix.colors.base00}), 22, 󰖭, hyprctl dispatch killactive, rgb(${config.lib.stylix.colors.base03})"
-            "rgb(${config.lib.stylix.colors.base00}), 18, 󰕔, hyprctl dispatch togglefloating, rgb(${config.lib.stylix.colors.base03})"
-            "rgb(${config.lib.stylix.colors.base00}), 18, 󰘖, hyprctl dispatch fullscreen, rgb(${config.lib.stylix.colors.base03})"
-          ];
-        };
-        "csgo-vulkan-fix" = {
-          # https://github.com/hyprwm/hyprland-plugins/tree/main/csgo-vulkan-fix
-          res_w = 1920;
-          res_h = 1080;
-          class = "cs2"; # not a regex! has to match initial_class exactly
-          fix_mouse = true; # whether to fix the mouse position. a select few apps might be wonky with this.
-        }; 
-      };
-      # https://github.com/mageowl/nix-config/blob/15b0a97759f82dfdee4dc2b74a209a171f6e38fa/modules/home/programs/hyprland/waycorner.nix#L10
-      # waycorner = {
-      #   enable = true;
-      #   bottomRight = {
-      #     enable = true;
-      #     onEnter = ["wlogout"];
-      #     # onEnter = ["systemctl" "sleep"];
-      #   };
-      #   bottomLeft = {
-      #     enable = true;
-      #     onEnter = [ startMenu ];
-      #   };
-      #   topRight = {
-      #     enable = true;
-      #     onEnter = ["swaync-client" "-t" "-sw"];
-      #   };
-      # };
       monitor = [
         # ",preferred,0x0,1.0"
         "DP-1,preferred,0x0,1.0"
@@ -369,28 +281,35 @@ in {
       ];
       exec-once = [
         # "uwsm finalize"
-        "[workspace current silent] ${pkgs.wl-clipboard}/bin/wl-paste --type text --watch cliphist store" # Stores only text data
-        "[workspace current silent] ${pkgs.wl-clipboard}/bin/wl-paste --type image --watch cliphist store" # Stores only image data
-        "[workspace current silent] dbus-update-activation-environment --all --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "[workspace current silent] systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "[workspace current silent] systemctl --user start hyprpolkitagent" # https://wiki.hyprland.org/Hypr-Ecosystem/hyprpolkitagent/#usage
-        "[workspace current silent] gnome-keyring-daemon --start --components=secrets"
+        "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch cliphist store" # Stores only text data
+        "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch cliphist store" # Stores only image data
+        "dbus-update-activation-environment --all --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "systemctl --user start hyprpolkitagent" # https://wiki.hyprland.org/Hypr-Ecosystem/hyprpolkitagent/#usage
+        "gnome-keyring-daemon --start --components=secrets"
         # "export SSH_AUTH_SOCK"
-        "[workspace current silent] $POLKIT_BIN"
+        "$POLKIT_BIN"
         "${pkgs.hyprpaper}/bin/hyprpaper init"
         # "syshud"
         "[pin] waybar"
         # "[pin] nwg-dock-hyprland -r -i 35 -ml 12 -mr 12 -mb 12 -nolauncher -x -l bottom"
         # "[pin] nwg-dock-hyprland -a 'start' -p 'left' -c 'nwggrid' -d -f -i 36 -lp start -o 'DP-1' -w 10"
         "[workspace current silent] swaync"
+        "[workspace current silent] nwg-drawer -r -c 8 -nofs"
         # "[workspace current silent] kando"
         # "[workspace current silent] nm-applet --indicator"
         # "${pkgs.hyprsunset}"
         "[workspace current silent] hypridle"
-        # "[workspace current silent] zen"
-        "[workspace current silent] hyprshell run &"
-        "[workspace current silent] vesktop"
-        "[workspace current silent] beeper --disable-gpu"
+        "[workspace 1 silent] io.elementary.files"
+        "[workspace 2 silent] fooyin"
+        "[workspace 3 silent] zen-beta --name zen-beta "
+        "[workspace 7 silent] obsidian"
+        "[workspace 8 silent] vesktop"
+        "[workspace 8 silent] beeper --no-sandbox --disable-gpu"
+        "[workspace 9 silent] thunderbird --name thunderbird"
+        # "[workspace 9 silent] geary"
+        "[workspace 9 silent] io.gitlab.news_flash.NewsFlash"
+        "[workspace 10 silent] qbittorrent"
       ];
 
       # exec = [
@@ -408,22 +327,20 @@ in {
       ${extraMonitorSettings}
    '';
   };
-  programs.hyprshell = {
-    enable = true;
-    systemd.args = "-v";
-    settings = {
-      launcher = {
-        max_items = 6;
-        plugins.websearch = {
-          enable = true;
-          engines = [{
-              name = "Unduck";
-              url = "https://unduck.link?q=%s";
-              key = "d";
-          }];
-        };
-      };
-      # window.switcher.enable = false;
-    };
+  xdg.configFile = with config.lib.stylix.colors.withHashtag; {
+    "nwg-drawer/drawer.css".text = ''
+        window {
+          color = ${base06};
+          background-color: ${base00};
+        }
+        button {
+          color: ${base04};
+          background-color: ${base00};
+        }
+        button:hover {
+          color: ${base04};
+          background-color: ${base01};
+        }
+    '';
   };
 }

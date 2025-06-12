@@ -7,6 +7,8 @@
 {
   imports = [
     ./hyprland.nix
+    ./plugins.nix
+    ./hyprshell.nix
     ./binds.nix
     ./windowrules.nix
     ./hyprlock.nix

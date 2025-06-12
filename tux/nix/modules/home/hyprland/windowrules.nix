@@ -141,6 +141,9 @@
       "rounding 0, floating:0, plugin:hyprbars:nobar, onworkspace:w[tv1]"
       "bordersize 0, floating:0, plugin:hyprbars:nobar, onworkspace:f[1]"
       "rounding 0, floating:0, plugin:hyprbars:nobar, onworkspace:f[1]"
+
+      "float, class:nwg-drawer"
+      "pin, class:nwg-drawer"
     ];
     workspace = [
     #   # Note: Won't work while hyprbars enabled
