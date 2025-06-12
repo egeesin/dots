@@ -134,14 +134,14 @@ lib,
   # }
 
   # QT Fonts
-      # fixed="${cfg.fonts.monospace.name},${toString cfg.fonts.sizes.applications},-1,5,50,0,0,0,0,0,Condensed"
-      # general="${cfg.fonts.sansSerif.name},${toString cfg.fonts.sizes.applications},-1,5,50,0,0,0,0,0,Condensed"
+      # fixed="${cfg.fonts.monospace.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"
+      # general="${cfg.fonts.sansSerif.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"
   xdg.configFile = let
     cfg = config.stylix;
     qt5fontConf = ''
       [Fonts]
-      fixed="${cfg.fonts.monospace.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"
-      general="${cfg.fonts.sansSerif.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"
+      fixed="${cfg.fonts.monospace.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,Regular"
+      general="${cfg.fonts.sansSerif.name},${toString cfg.fonts.sizes.applications},-1,5,400,0,0,0,0,0,Regular"
       '';
     qt6fontConf = ''
       [Fonts]
