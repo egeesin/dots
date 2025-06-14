@@ -2,7 +2,7 @@
   inputs,
   host,
   config,
-  # lib,
+  lib,
   pkgs,
   pkgs-unstable,
   ...
@@ -24,10 +24,21 @@ in {
     hyprpaper # Wallpaper utility
     hyprsunset # hyprsunset -t 3000 https://wiki.hyprland.org/Hypr-Ecosystem/hyprsunset/
     # grim # Grab images from Wayland compositor (replaced with grim-hyprland)
-    (pkgs.writeShellScriptBin "grim-hyprland" ''
+    (pkgs.writeShellScriptBin "grim" ''
       exec -a $0 ${inputs.grim-hyprland.packages.${pkgs.system}.default}/bin/grim "$@"
     '')
     wf-recorder # a utility program for screen recording of wlroots-based compositors | Usage: https://github.com/ammen99/wf-recorder#usage
+    (pkgs.writeShellScriptBin "recorder-start" ''
+      # case "$(printf "yes\\nno\\n" | bemenu -l 2 -i -p "Start recording?")" in
+          # "yes")
+        notify-send -t 5000 "Started recording" && wf-recorder -g "$(slurp)" -a -f ''$(xdg-user-dir PICTURES)/Screenshots/recording-$(date +"%Y-%m-%d-%H-%M-%S.mp4")
+          # "no") exit 0 ;;
+      # esac
+    '')
+    (pkgs.writeShellScriptBin "recorder-end" ''
+      killall -s SIGINT wf-recorder
+      notify-send -t 5000 "Stopped recording"
+    '')
     slurp # Select a region
     # peek # Simple animated GIF screen recorder with an easy to use interface # Doesn't support Wayland natively, need GDK_BACKEND=x11 instead
     kooha # Elegantly record your screen
@@ -328,9 +339,9 @@ in {
    '';
   };
   xdg.configFile = with config.lib.stylix.colors.withHashtag; {
-    "nwg-drawer/drawer.css".text = ''
+    "nwg-drawer/drawer.css".text = lib.mkDefault ''
         window {
-          color = ${base06};
+          color: ${base06};
           background-color: ${base00};
         }
         button {

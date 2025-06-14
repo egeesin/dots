@@ -1,6 +1,6 @@
-{ inputs, config, ... }:
+{ lib, inputs, config, ... }:
 {
-  import = [
+  imports = [
     inputs.hyprshell.homeModules.hyprshell
   ];
   programs.hyprshell = {
@@ -13,9 +13,9 @@
         max_items = 6;
         animate_launch_ms = 0;
         # show_when_empty = false;
-        plugins.applications = {
-          show_actions_submenu = true;
-        };
+        # plugins.applications = {
+          # show_actions_submenu = true;
+        # };
         plugins.websearch = {
           enable = true;
           engines = [{
@@ -25,19 +25,19 @@
           }];
         };
       };
+      # windows = {
+      #   enable = true;
+      #   scale = 6; # Float between 0 and 15
+      #   overview.open.key = "super";
+      #   navigate = "tab";
+        # switch = {
+        #   enable = true;
+        #   open = "alt";
+          # navigate = "tab";
+        # };
+      # };
     };
-    windows = {
-      enable = true;
-      scale = 6; # Float between 0 and 15
-      overview.open.key = "super";
-      navigate = "tab";
-      switch = {
-        enable = true;
-        open = "alt";
-        navigate = "tab";
-      };
-    };
-    styleFile = ''
+    styleFile = lib.mkDefault ''
     --border-color: #${ config.lib.stylix.colors.base00 };
     --border-color-active: #${ config.lib.stylix.colors.base01 };
 

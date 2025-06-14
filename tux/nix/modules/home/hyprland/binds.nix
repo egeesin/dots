@@ -216,11 +216,14 @@ in {
         "$mod+SHIFT+CTRL, S, exec, grim -w \"$(hyprctl activewindow -j | jq -r '.address')\""
         # "$mod SHIFT,Print,exec,grim -g \"$(slurp -o -r -c '##ff0000ff')\" -t ppm - | satty --filename - --fullscreen --output-filename $(xdg-user-dir PICTURES)/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png"
 
+        "$mod+SHIFT, R, exec recorder-start"
+        "$mod+SHIFT, escape, exec recorder-end"
+
         # Tsoding's zoom tool that works in Wayland
-        "$mod, Z, exec, ${pkgs.woomer}/bin/woomer"
+        "$mod, Z, exec, [workspace current] ${pkgs.woomer}/bin/woomer"
 
         # Color picker that copies hex code (requires hyperpicker)
-        "$mod SHIFT, C, exec, ${pkgs.hyprpicker}/bin/hyprpicker -an"
+        "$mod SHIFT, C, exec, [pin] ${pkgs.hyprpicker}/bin/hyprpicker -an"
 
         # Global Keybinds (https://wiki.hyprland.org/Configuring/Binds/#global-keybinds)
         # $ hyprctl globalshortcuts # To list all global shortcuts.

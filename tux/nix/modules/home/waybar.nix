@@ -34,16 +34,18 @@ in
       # monitor1 = createBar primaryBar "DP-1" "bottom";
       # monitor2 = createBar secondaryBar "HDMI-A-1" "bottom";
       {
+        # https://github.com/Alexays/Waybar/wiki/Configuration#bar-config
         mod = "dock";
-        exclusive = true;
         gtk-layer-shell = true;
         height = 36;
         # height = 41;
         layer = "bottom";
+        exclusive = true;
         margin-bottom = -1;
         passthrough = false;
         position = "bottom";
         fixed-center = false;
+        reload_style_on_change = true;
 
         modules-left = [
           "group/boot"
@@ -346,8 +348,9 @@ in
           # format-muted = "";
           # format-muted = "";
           format-muted = " {volume}";
-          on-click = "sleep 0.1 && helvum";
-          on-click-right = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+          on-click-middle = "sleep 0.1 && helvum";
+          on-click = "sleep 0.1 && easyeffects";
+          on-click-right = "sleep 0.1 && wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
           max-volume = 150;
           scroll-step = 5;
           format-icons = [ "" "" "" ];
@@ -521,8 +524,6 @@ in
           format = "{icon} {percent}";
           interval = 3;
         	format-icons = [ "󰹐 " "󱩎 " "󱩏 " "󱩐 " "󱩑 " "󱩒 " "󱩓 " "󱩔 " "󱩕 " "󱩖 " ];
-        	# on-scroll-down = "brightnessctl set 1%- && $HOME/.scripts/progressbar.sh --brightness 'eDP-1'";
-        	# on-scroll-up = "brightnessctl set +1% && $HOME/.scripts/progressbar.sh --brightness 'eDP-1'";
         	on-scroll-down = "${lib.getExe pkgs.brightnessctl} set 5%-";
         	on-scroll-up = "${lib.getExe pkgs.brightnessctl} set +5%";
         	tooltip = false;

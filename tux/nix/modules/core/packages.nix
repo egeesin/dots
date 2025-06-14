@@ -6,7 +6,6 @@
    ...
 }: {
   # Tip: $ realpath $(which <pkgname>) # to find path of package
-
   programs = {
     # fish.enable = true; # I'm fine with bash for now.
     git.enable = true;
@@ -136,7 +135,8 @@
     eza # A modern replacement for ls.
     zoxide # a smarter cd command, inspired by z and autojump.
 
-    skim # Command-line fuzzy finder written in Rust
+    television # Blazingly fast general purpose fuzzy finder TUI
+    nix-search-tv # Fuzzy search for Nix packages
     ripgrep # Utility that combines the usability of The Silver Searcher with the raw speed of grep
     ripgrep-all # Ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, and more
 
@@ -150,10 +150,15 @@
 
     brightnessctl # read and control device brightness
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
-    i2c-tools
+    v4l-utils # v4l2loopback GUI utilities
+    i2c-tools # Set of I2C tools for Linux
     helvum # GTK patchbay for pipewire
 
-    btop # Monitor of resources
+    btop # Monitor of resources with cool visuals/graphs
+    atop # Another monitor of resources but more simple and precise
+    # bmon # bandwidth monitor and rate estmator
+    kmon # Linux Kernel Manager and Activity Monitor
+    bandwhich # CLI utility for displaying current network utilization
     cpu-x # Free software that gathers information on CPU, motherboard and more
     # hardinfo2 # System information and benchmarks for Linux systems
     mangojuice # Convenient alternative to GOverlay for setting up MangoHud
@@ -162,6 +167,8 @@
     qdirstat # Graphical disk usage analyzer
     # usbutils # Tools for working with USB devices, such as lsusb
     cyme # List system USB buses and devices. A modern cross-platform lsusb that attempts to maintain compatibility with, but also add new features 
+    # kdePackages.kdf # Displays available storage devices and information about their usage
+    tuptime # Total uptime & downtime statistics utility
 
     # drm_info # Small utility to dump info about DRM devices
     # vulkan-tools
@@ -184,7 +191,6 @@
 
     zellij # Terminal workspace with batteries included (tmux but better)
 
-    # kdePackages.kservice 
     pantheon.elementary-files
     filezilla # Graphical FTP, FTPS and SFTP client
     ffmpegthumbnailer # Lightweight video thumbnailer
@@ -196,7 +202,9 @@
     uv # Extremely fast Python package installer and resolver, written in Rust
     wget # Tool for retrieving files using HTTP, HTTPS, and FTP
     # asdf-vm # Extendable version manager with support for Ruby, Node.js, Erlang & more
-    nodejs # latest LTS https://nixos.wiki/wiki/Node.js
+    # nodejs # latest LTS https://nixos.wiki/wiki/Node.js
+    fnm # https://archive.is/20250326081937/https://medium.com/thelinux/managing-node-js-versions-on-nixos-a-comprehensive-guide-0b452e194a1b
+    cargo
     # $ npm set prefix ~/.npm-global
     pnpm # faster and better alternative to npm
 
@@ -205,6 +213,7 @@
     bitwarden-desktop # Secure and free password manager for all of your devices
 
     wmctrl # CLI tool to interact with EWMH/NetWM compatible X Window Managers
+
 
     # kdePackages.xwaylandvideobridge # Utility to allow streaming Wayland windows to X applications
     # Summons a white unknown window at startup in Hyprland. Probably it's for Plasma?
@@ -228,17 +237,17 @@
     ffmpeg # Complete, cross-platform solution to record, convert and stream audio and video
     # haruna # Open source video player built with Qt/QML and libmpv
     # vlc # Cross-platform media player and streaming server
+    handbrake # Tool for converting video files and ripping DVDs
 
     # spotify # unfree but adfree ->  $ bash <(curl -sSL https://raw.githubusercontent.com/SpotX-Official/SpotX-Bash/main/spotx.sh)
     quodlibet # GTK-based audio player written in Python, using the Mutagen tagging library
-    qmmp # Qt-based audio player that looks like Winamp
+    # qmmp # Qt-based audio player that looks like Winamp
+    # musikcube # A cross-platform terminal-based music player
+    # termusic # Music Player TUI written in Rust
     fooyin # A customizable music player
     # sayonara # music client
     # kdePackages.elisa
-    handbrake # Tool for converting video files and ripping DVDs
-    # wf-recorder # a utility program for screen recording of wlroots-based compositors | Usage: https://github.com/ammen99/wf-recorder#usage
-    # peek # Simple animated GIF screen recorder with an easy to use interface # Doesn't support Wayland natively, need GDK_BACKEND=x11 instead
-    kooha # Elegantly record your screen
+    # kdePackages.minuet # Music education software
 
     qview # lightweight image viewer
     # feh
@@ -251,6 +260,7 @@
     meld # Diff client
     # kdiff3 # Compares and merges 2 or 3 files or directories
     kdePackages.kcalc # Calculator GUI
+    bcal # Bits, bytes and address calculator
     # hyprcursor # https://wiki.hyprland.org/FAQ/#how-do-i-change-me-mouse-cursor
     # kdePackages.kcolorpicker
     # hyprland-qt-support # couldn't find
@@ -266,24 +276,47 @@
     # kdePackages.qt6gtk2 # gtk+2.0 integration plugins for qt6
     kdePackages.koi # Scheduling LIGHT/DARK Theme Converter for the KDE Plasma Desktop
 
-    # kdePackages.kdf # Displays available storage devices and information about their usage
-    # kdePackages.kmix # nixos says it's broken
+    # kdePackages.kmix # Volume control program but nixos says it's broken
     kdePackages.kmouth # Type-and-say front end for speech synthesizers
     kdePackages.krdc # Remote Desktop Client
     kdePackages.krdp # Library and examples for creating an RDP server
     # kdePackages.kruler
-    # kdePackages.kteatime
-    kdePackages.ktimer # 
+    mpris-timer # timer app
     # kdePackages.ktorrent
     qbittorrent-enhanced # Unofficial enhanced version of qBittorrent, a BitTorrent client
-    # kdePackages.kwave # nixos says it's broken
     # kdePackages.kwayland
-    # kdePackages.minuet
 
     kdePackages.partitionmanager # Manage the disk devices, partitions and file systems on your computer
-    kdePackages.wacomtablet # GUI for Wacom Linux drivers that supports different button/pen layout profiles
+    caligula # A user-friendly, lightweight TUI for disk imaging. Far better than dd 
+
+    wacomtablet # GUI for Wacom Linux drivers that supports different button/pen layout profiles
+    # kdePackages.wacomtablet # GUI for Wacom Linux drivers that supports different button/pen layout profiles
 
     kdePackages.kolourpaint # Easy-to-use paint program
+
+    # pkgs.mkShell = {
+    #   nativeBuildInputs = with pkgs; [
+        pkg-config
+        gobject-introspection
+        cargo
+        cargo-tauri
+        nodejs
+      # ];
+      # buildInputs = with pkgs; [
+        at-spi2-atk
+        atkmm
+        cairo
+        gdk-pixbuf
+        glib
+        gtk3
+        harfbuzz
+        librsvg
+        libsoup_3
+        pango
+        webkitgtk_4_1
+        openssl
+    #   ];
+    # };
 
     # yubikey-manager    
     # 
@@ -291,7 +324,10 @@
     gimp3-with-plugins # only available in unstable atm
     simple-completion-language-server # available in 25.05/unstable
   ]) ++ (with pkgs-unstable; [
-    kando # Cross-Platform Pie Menu
+    # input-leap # Open-source KVM (Keyboard, video, mouse) software
+
+    # kando # Cross-Platform Pie Menu
+
     alejandra # uncompromising nix code formatter
     # nil # lsp for nix
     nixd # lsp for nix but newer
@@ -313,6 +349,12 @@
     wineWowPackages.waylandFull
     winetricks
   ]);
+
+  imports = [
+    # inputs.minesddm.nixosModules.default
+    inputs.minegrub-theme.nixosModules.default
+    inputs.stylix.nixosModules.stylix
+  ];
 
   nixpkgs = {
     config.allowUnfree = true; 

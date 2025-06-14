@@ -18,9 +18,6 @@
     ./xserver.nix
     ./xdg.nix
     ./flatpak.nix # depends on xdg
-    # inputs.minesddm.nixosModules.default
-    inputs.minegrub-theme.nixosModules.default
-    inputs.stylix.nixosModules.stylix
     ./theming.nix
   ];
 }

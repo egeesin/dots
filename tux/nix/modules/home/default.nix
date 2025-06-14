@@ -10,6 +10,7 @@
     ./btop.nix
     ./direnv.nix
     ./helix.nix
+    ./nix-index.nix
     # ./xdg.nix # Adds preconfigured read-only mime file
     ./alacritty.nix
     ./darkman.nix
@@ -48,5 +49,6 @@
     inputs.zen-browser.packages."${system}".beta
     inputs.nix-software-center.packages.${system}.nix-software-center
     inputs.nixos-conf-editor.packages.${system}.nixos-conf-editor
+    inputs.tuime.defaultPackage.${system}
   ];
 }

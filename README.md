@@ -78,7 +78,7 @@ I highly recommend to backup your machine, creating a system restore point befor
 ```bash
 nix-shell -p git curl
 
-sh -c “`curl -fsSL https://github.com/egeesin/dots/raw/master/remote-install.sh`”
+sh -c “`curl -fsSL https://github.com/egeesin/dots/raw/master/tux/setup-nix.sh`”
 ```
 For manual steps, go ahead to [ZaneyOS README](https://gitlab.com/Zaney/zaneyos#installation) as its setup shell based on it.
 

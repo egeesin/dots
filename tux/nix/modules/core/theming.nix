@@ -35,6 +35,9 @@
   #   ${lib.getExe pkgs.graphicsmagick} convert -size 1920x1920 xc:$COLOR $out
   # '';
 in {
+  environment.systemPackages = with pkgs; [
+    gowall
+  ];
   # Default font settings
   fonts = {
     fontDir.enable = true; # For exposing fonts dirs to Flatpak apps.

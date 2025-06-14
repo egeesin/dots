@@ -5,7 +5,6 @@
   username,
   host,
   profile,
-  hyprland,
   ...
 }: let
   inherit (import ../../hosts/${host}/variables.nix) gitUsername;

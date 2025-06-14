@@ -13,10 +13,11 @@
     };
 
     # openrazer.enable = true;
-    opentabletdriver = {
-      enable = true;
-      daemon.enable = true;
-    };
+    # opentabletdriver = {
+    #   enable = true;
+    #   daemon.enable = true;
+    # };
+
     # fancontrol = {
     #   enable = true;
     #   config = {

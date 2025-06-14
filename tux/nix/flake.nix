@@ -32,40 +32,13 @@
     # };
     fancontrol-gui.url = "github:JaysFreaky/fancontrol-gui";
 
-    # nix-index-database = {
-    #   url = github:nix-community/nix-index-database;
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    tuime.url = "github:nthnd/tuime";
 
-    # nix-index = {
-    #   url = github:gvolpe/nix-index;
-    #   inputs.nix-index-database.follows = "nix-index-database";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    # Fast nix search client
-    # nix-search = {
-    #   url = github:diamondburned/nix-search;
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
-    # Nix linter
-    # fenix = {
-    #   url = github:nix-community/fenix;
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
-    # statix = {
-    #   url = github:nerdypepper/statix;
-    #   inputs.fenix.follows = "fenix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    #
-    # nwg-drawer = {
-    #   url = "github:caffeine01/nwg-drawer?ref=nix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    #   inputs.systems.url = "github:nix-systems/default-linux";
-    # };
      
     nix-software-center.url = "github:snowfallorg/nix-software-center";
     nixos-conf-editor.url = "github:snowfallorg/nixos-conf-editor";

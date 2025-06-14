@@ -26,11 +26,6 @@
       };
     };
 
-    # For Bluetooth and adding OBS Virtual Cam
-    extraModprobeConfig = ''
-    options bluetooth disable_ertm=1
-    '';
-    # options v4l2loopback devices=1 video_nr=1 card_label="OBS Video Source" exclusive_caps=1
 
     # Appimage Support
     # binfmt.registrations.appimage = {
@@ -63,13 +58,19 @@
     consoleLogLevel = 0;
     initrd.verbose = false;
     kernelParams = [
-      "quiet"
+      "quiet" # #tell the kernel to not be verbose
       "splash"
       "boot.shell_on_fail"
-      "loglevel=3" #
+      "loglevel=3" # kernel log message level  # 1: system is unusable | 3: error condition | 7: very verbose
+      # disable systemd status messages
+      # rd prefix means systemd-udev will be used instead of initrd
+      "systemd.show_status=false" 
       "rd.systemd.show_status=false" 
       # "rd.systemd.show_status=auto" 
-      "udev.log_priority=3"
+      "udev.log_priority=3" # udev log message level
+      "rd.udev.log_level=3" # lower the udev log level to show only errors or worse
+      # disable the cursor in vt to get a black screen during intermissions
+      "vt.global_cursor_default=0"
     ];
     # Hide the OS choice for bootloaders.
     # It's still possible to open the bootloader list by pressing any key

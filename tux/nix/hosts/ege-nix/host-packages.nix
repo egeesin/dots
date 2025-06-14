@@ -6,11 +6,17 @@ pkgs-unstable,
     shopify-cli
 
     eartag
+    tageditor
     picard # music tag editor
     cava # Cross-platform Audio Visualizer
 
     nvtopPackages.full
-    nvfancontrol
+    nvitop # Interactive NVIDIA-GPU process viewer, the one-stop solution for GPU process management
+    sysz # fzf terminal UI for systemctl
+    isd # TUI to interactively work with systemd units
+    lazyjournal # TUI for journalctl, file system logs, as well as Docker and Podman containers
+    tzupdate # Set the system timezone based on IP geolocation
+    lemmeknow # Tool to indentify anything
 
     kdePackages.kdenlive
 
@@ -84,6 +90,7 @@ pkgs-unstable,
     # penpot-desktop
     kdePackages.kolourpaint # Easy-to-use paint program
     krita # Free and open source painting application
+    pastel # Command-line tool to generate, analyze, convert and manipulate colors
 
     syncplay # Free software that synchronises media players
     yt-dlp # video downloader
@@ -94,6 +101,10 @@ pkgs-unstable,
 
     libreoffice-qt6 # office suite
     scribus # indesign alternative press publishing tool
+    pandoc # Conversion between documentation formats
+    sc-im # Spreadsheet Calculator Improvised -- An ncurses spreadsheet program for terminal
+    bagels # Powerful expense tracker that lives in your terminal
+    # moneyterm # TUI expense and budget tracker
 
     genesys # Family tree generator
     
@@ -101,26 +112,46 @@ pkgs-unstable,
     warpd # Modal keyboard driven interface for mouse manipulation
     # cmatrix
 
-    neo # Simulates the digital rain from "The Matrix"
+    graphviz # Graph visualization tools
+    scc # Very fast accurate code counter with complexity calculations and COCOMO estimates written in pure Go
+    qrtool # A utility for encoding or decoding QR codes
+    # textual-paint # TUI image editor inspired by MS Paint # build error
+    upiano # Piano in your terminal
+
+    calcure # Modern TUI calendar and task manager with minimal and customizable UI
+    clock-rs # Digital clock that runs in terminal. Rust rewrite of tty-clock
+    # mapscii # a Braille & ASCII world map renderer for your console. # build error
+    tz # Time zone helper
+    git-who # Git blame for file trees
+    fork-cleaner # Quickly clean up unused forks on your GitHub account
+    bcal # Storage conversion and expression calculator
+    fend # Arbitrary-precision unit-aware calculator
+
     cowsay # Program which generates ASCII pictures of a cow with a message
     fortune # Program that displays a pseudorandom message from a database of quotations
     fortune-kind # Kinder, curated fortune, written in rust
-    clolcat # Much faster lolcat -> Rainbow version of cat
     taoup # Tao of Unix Programming
-    vitetris # Terminal-based Tetris clone by Victor Nilsson
-    bsdgames # Ports of all the games from NetBSD-current that are free
-    typespeed # Curses based typing game
-    cbonsai # Grow bonsai trees in your terminal
-    nbsdgames # A package of 18 text-based modern games
+    clolcat # Much faster lolcat -> Rainbow version of cat
+    terminaltexteffects # A collection of visual effects that can be applied to terminal piped stdin text
+
+    sl # Steam Locomotive runs across your terminal when you type 'sl'. Ultimate joke command by Masashi Toyoda.
+    neo # Simulates the digital rain from "The Matrix"
     pipes # Animated pipes terminal screensaver
+    sssnake # Snake that plays itself in terminal
+    cbonsai # Grow bonsai trees in your terminal
     figlet # Program for making large letters out of ordinary text
-    linuxwave # Generate music from the entropy of Linux
     dwt1-shell-color-scripts # Collection of shell color scripts collected by Derek Taylor
+    linuxwave # Generate music from the entropy of Linux
+
+    ttyper
+    typioca # Cozy typing speed tester in terminal
+
   ]) ++ ( with pkgs-unstable; [
     davinci-resolve # Professional video editing, color, effects and audio post-processing
 
     halloy # IRC application
     vesktop # Alternate client for Discord with Vencord built-in (Has screensharing bug fixes for Wayland systems)
+    jmusicbot # A Discord music bot that's easy to set up and run yourself
     # zoom-us
     # Note: don't forget to add { "SKIP_HOST_UPDATE": true } in ~/.config/discord (or vencord maybe)/settings.json
     # dorion # Tiny alternative Discord client (Will try this later, but won't open with nix-shell for some reason, might be related to misconfigured desktop portal.)

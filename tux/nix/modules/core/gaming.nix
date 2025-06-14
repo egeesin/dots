@@ -23,6 +23,29 @@ pkgs-unstable,
     prismlauncher # Free, open source launcher for Minecraft
     mcaselector
 
+    # vitetris
+    nsnake # ncurses based snake game for the terminal
+    tetris # A terminal interface for Tetris
+    shtris # Pure shell script (sh) that implements the Tetris game following the Tetris Guideline (2009)
+    bastet # Tetris clone with 'bastard' block-choosing AI because I don't love myself.
+    ninvaders # Space Invaders clone based on ncurses
+    n2048 # Console implementation of 2048 game
+    typespeed # Curses based typing game
+    chess-tui
+    gambit-chess
+    pokete # Terminal based Pokemon like game
+    cl-wordle # Wordle TUI in Rust
+    # bsdgames # Ports of all the games from NetBSD-current that are free
+    nbsdgames # A package of 18 text-based modern games
+    # Type `nbsdgames` to list all games
+    # sudoku mines reversi checkers battleship rabbithole sos pipes fifteen
+    # memoblocks fisher muncher miketron redsquare darrt snakeduel
+    # tugow revenge sjump trsr
+
+    raylib-games # Collection of games made with raylib
+
+    flitter # A LiveSplit-inspired speedrunning split timer for Linux/macOS terminal. Supports global hotkeys.
+
     # rare # GUI for Legendary, an Epic Games Launcher open source alternative
     steamtinkerlaunch # Linux wrapper tool for use with the Steam client for custom launch options and 3rd party programs
     
@@ -78,6 +101,7 @@ pkgs-unstable,
     ]))
 
     input-remapper
+    sc-controller # User-mode driver and GTK3 based GUI for game controllers, including but not limited to Steam Controller
     rivalcfg # Mapping is still missing in SS Prime https://flozz.github.io/rivalcfg/devices/prime.html
   # ] ++ with pkgs-unstable; [
   ];
@@ -105,11 +129,11 @@ pkgs-unstable,
         };
 
         # Warning: GPU optimisations have the potential to damage hardware
-        gpu = {
-          apply_gpu_optimisations = "accept-responsibility";
-          gpu_device = 0;
-          # amd_performance_level = "high";
-        };
+        # gpu = {
+        #   apply_gpu_optimisations = "accept-responsibility";
+        #   gpu_device = 0;
+        #   # amd_performance_level = "high";
+        # };
 
         custom = {
           start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";

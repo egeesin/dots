@@ -23,7 +23,4 @@ in {
     excludePackages = [ pkgs.xterm ];
     
   };
-  services.libinput = {
-    touchpad.disableWhileTyping = true;
-  };    
 }

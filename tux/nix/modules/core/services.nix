@@ -48,7 +48,10 @@
   
   # Services to start
   services = {
-    libinput.enable = true; # Input Handling (touchpad support)
+    libinput = {
+      enable = true; # Input Handling (touchpad support)
+      touchpad.disableWhileTyping = true;
+    };
     fstrim.enable = true; # SSD Optimizer
     gvfs.enable = true; # For mounting USB, adding Trash support in Nautilus & more
     fwupd.enable = true; # Firmware updater (How to use: https://github.com/fwupd/fwupd#basic-usage-flow-command-line)
@@ -59,10 +62,12 @@
     # https://nixos.org/manual/nixos/stable/index.html#module-services-flatpak
 
     # rustdesk-server = {
+    # https://search.nixos.org/options?channel=25.05&show=services.rustdesk-server.relay.extraArgs&from=0&size=50&sort=relevance&type=packages&query=rustdesk-server
     #   enable = true;
     #   openFirewall = true;
+    #   # relay = 
+    #   # requires relay server arg
     # };
-
 
     # displayManager = {
     #   # defaultSession = "";
