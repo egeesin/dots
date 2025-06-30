@@ -23,7 +23,7 @@ modulesPath,
        "usb_storage"
        "sd_mod"
       ];
-      kernelModules = [ ]; 
+      kernelModules = []; 
     };
     # $ nix repl # List Linux kernels
     # kernelPackages = pkgs.linuxPackages_latest; # This acts funny when you try to install Nvidia driver

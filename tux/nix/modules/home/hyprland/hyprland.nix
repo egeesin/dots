@@ -29,11 +29,7 @@ in {
     '')
     wf-recorder # a utility program for screen recording of wlroots-based compositors | Usage: https://github.com/ammen99/wf-recorder#usage
     (pkgs.writeShellScriptBin "recorder-start" ''
-      # case "$(printf "yes\\nno\\n" | bemenu -l 2 -i -p "Start recording?")" in
-          # "yes")
-        notify-send -t 5000 "Started recording" && wf-recorder -g "$(slurp)" -a -f ''$(xdg-user-dir PICTURES)/Screenshots/recording-$(date +"%Y-%m-%d-%H-%M-%S.mp4")
-          # "no") exit 0 ;;
-      # esac
+        notify-send -t 5000 "Started recording (Press Mod+Shift+ESC to stop.)" && wf-recorder -g "$(slurp)" -a -f $(xdg-user-dir PICTURES)/Screenshots/$(date +"%Y-%m-%d_%Hh%Mm%Ss")-recording.mp4
     '')
     (pkgs.writeShellScriptBin "recorder-end" ''
       killall -s SIGINT wf-recorder
@@ -42,7 +38,6 @@ in {
     slurp # Select a region
     # peek # Simple animated GIF screen recorder with an easy to use interface # Doesn't support Wayland natively, need GDK_BACKEND=x11 instead
     kooha # Elegantly record your screen
-    satty # Screenshot annotation tool
     wev # for testing and getting key names
     ydotool # Generic Linux command-line automation tool (no X!)
 
@@ -61,6 +56,7 @@ in {
     waycorner # Hot corners for wayland
   ]) ++ (with pkgs-unstable; [
     nwg-drawer # Application drawer for WLRoots based compositors like Sway, Hyprland
+    satty # Screenshot annotation tool
   ]);
   # Place Files Inside Home Directory
   # home.file = {
@@ -311,7 +307,8 @@ in {
         # "[workspace current silent] nm-applet --indicator"
         # "${pkgs.hyprsunset}"
         "[workspace current silent] hypridle"
-        "[workspace 1 silent] io.elementary.files"
+        "[workspace 1 silent] dolphin"
+        # "[workspace 1 silent] io.elementary.files"
         "[workspace 2 silent] fooyin"
         "[workspace 3 silent] zen-beta --name zen-beta "
         "[workspace 7 silent] obsidian"

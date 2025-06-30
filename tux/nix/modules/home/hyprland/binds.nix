@@ -1,6 +1,7 @@
 {
 host,
 pkgs,
+config,
 # lib,
 osConfig,
  ...}: let
@@ -124,9 +125,10 @@ in {
         "$mod+CTRL, W, killactive,"
         "ALT, F4, killactive," # Classic.
         "$mod+SHIFT, Q, exit,"
-        "CTRL ALT, DELETE, exit," # Another classic.
-        # "$mod SHIFT, Q, uwsm stop,"
-        # "CTRL ALT, DELETE, uwsm stop,"
+        # "CTRL+ALT, DELETE, exit," # Another classic.
+        "$mod+SHIFT+CTRL, L, exec, wlogout,"
+        # "$mod+SHIFT, Q, uwsm stop,"
+        # "CTRL+ALT, DELETE, uwsm stop,"
         "$mod, E, exec, ${fileManager}"
         "$mod, S, togglefloating,"
         "$mod, C, centerwindow,"
@@ -208,16 +210,20 @@ in {
         # "$mod, N, exec, swaync-client -rs"
         "$mod, N, exec, swaync-client -t"
 
-        # # Screenshot Keybinds (requires grim, slurpy, satty, wl-clipboard)
-        "$mod+SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
-        "$mod,Print,exec,grim -g \"$(slurp -o -r -c '##ff0000ff')\" -t ppm - | satty --filename - --fullscreen --output-filename $(xdg-user-dir PICTURES)/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png"
-        ",Print,exec,grim $(xdg-user-dir PICTURES)/Screenshots/$(date +'%Y%m%d%H%M%S_1.png') && notify-send 'Screenshot saved'"
+        # Screenshot Keybinds (requires grim, slurpy, satty, wl-clipboard)
+        # Save to clipboard and default screenshot path 
+        "$mod+SHIFT, S, exec, IMG=$(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m-%d_%Hh%Mm%Ss').png && grim -g \"$(slurp)\" $IMG && wl-copy < $IMG && notify-send 'Selection saved to clipboard and directory.'"
+        # "$mod+SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy && notify-send 'Selection saved to clipboard'"
+
+        # Save to clipboard and default screenshot path 
+        "$mod,Print,exec,grim -g \"$(slurp -o -r -c '##${config.lib.stylix.colors.base0D}ff')\" -t ppm - | satty --filename - --fullscreen --output-filename $(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m-%d_%Hh%Mm%Ss')_edited.png"
+        ",Print,exec,grim $(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m-%d_%Hh%Mm%Ss')_full.png && notify-send 'Full screenshot saved!'"
         # "$mod, Print, exec, grim -g \"$(slurp)\" - | wl-copy"
-        "$mod+SHIFT+CTRL, S, exec, grim -w \"$(hyprctl activewindow -j | jq -r '.address')\""
+        "$mod+SHIFT+CTRL, S, exec, grim -w \"$(hyprctl activewindow -j | jq -r '.address')\" $(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m-%d_%Hh%Mm%Ss')_window.png && notify-send 'Screenshot of active window is saved!'"
         # "$mod SHIFT,Print,exec,grim -g \"$(slurp -o -r -c '##ff0000ff')\" -t ppm - | satty --filename - --fullscreen --output-filename $(xdg-user-dir PICTURES)/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png"
 
-        "$mod+SHIFT, R, exec recorder-start"
-        "$mod+SHIFT, escape, exec recorder-end"
+        "$mod+SHIFT, R, exec, recorder-start"
+        "$mod+SHIFT, escape, exec, recorder-end"
 
         # Tsoding's zoom tool that works in Wayland
         "$mod, Z, exec, [workspace current] ${pkgs.woomer}/bin/woomer"

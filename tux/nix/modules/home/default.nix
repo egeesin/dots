@@ -45,10 +45,20 @@
     BROWSER = "zen-beta";
     TERMINAL = "alacritty";
   };
+
+  xdg.configFile = {
+    "television/nix_channels.toml".text = ''
+    [[cable_channel]]
+    name = "nixpkgs"
+    source_command = "nix-search-tv print"
+    preview_command = "nix-search-tv preview {}"
+    '';
+  };
+ 
   home.packages = with pkgs; [
     inputs.zen-browser.packages."${system}".beta
-    inputs.nix-software-center.packages.${system}.nix-software-center
-    inputs.nixos-conf-editor.packages.${system}.nixos-conf-editor
+    # inputs.nix-software-center.packages.${system}.nix-software-center
+    # inputs.nixos-conf-editor.packages.${system}.nixos-conf-editor
     inputs.tuime.defaultPackage.${system}
   ];
 }

@@ -2,6 +2,24 @@
 pkgs,
 pkgs-unstable,
 ...}: {
+    # (wrapOBS {
+    programs.obs-studio = {
+      enable = true;
+      plugins = with pkgs.obs-studio-plugins; [
+        wlrobs
+        input-overlay  
+        droidcam-obs
+        obs-freeze-filter 
+        obs-livesplit-one 
+        obs-replay-source
+        obs-move-transition
+        obs-transition-table
+        obs-pipewire-audio-capture
+        # obs-backgroundremoval
+        advanced-scene-switcher
+      ];
+    };
+    # })
   environment.systemPackages = ( with pkgs; [
     shopify-cli
 
@@ -56,20 +74,6 @@ pkgs-unstable,
     # obs-studio-plugins.obs-pipewire-audio-capture
     # obs-studio-plugins.advanced-scene-switcher
     #
-    (wrapOBS {
-      plugins = with pkgs.obs-studio-plugins; [
-        input-overlay  
-        droidcam-obs
-        obs-freeze-filter 
-        obs-livesplit-one 
-        obs-replay-source
-        obs-move-transition
-        obs-transition-table
-        obs-pipewire-audio-capture
-        # obs-backgroundremoval
-        advanced-scene-switcher
-      ];
-    })
 
     blender # 3D modelling tool
     blockbench # 3D modelling tool but for voxels and Minecraft

@@ -289,8 +289,8 @@
     kdePackages.partitionmanager # Manage the disk devices, partitions and file systems on your computer
     caligula # A user-friendly, lightweight TUI for disk imaging. Far better than dd 
 
-    wacomtablet # GUI for Wacom Linux drivers that supports different button/pen layout profiles
-    # kdePackages.wacomtablet # GUI for Wacom Linux drivers that supports different button/pen layout profiles
+    libwacom
+    kdePackages.wacomtablet # GUI for Wacom Linux drivers that supports different button/pen layout profiles
 
     kdePackages.kolourpaint # Easy-to-use paint program
 
@@ -349,6 +349,7 @@
     wineWowPackages.waylandFull
     winetricks
   ]);
+ 
 
   imports = [
     # inputs.minesddm.nixosModules.default

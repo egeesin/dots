@@ -40,8 +40,8 @@
     };
 
      
-    nix-software-center.url = "github:snowfallorg/nix-software-center";
-    nixos-conf-editor.url = "github:snowfallorg/nixos-conf-editor";
+    # nix-software-center.url = "github:snowfallorg/nix-software-center";
+    # nixos-conf-editor.url = "github:snowfallorg/nixos-conf-editor";
 
     home-manager = {
       # url = "github:nix-community/home-manager/release-24.11";

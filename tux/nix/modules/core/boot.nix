@@ -23,6 +23,9 @@
           background = "background_options/1.8  - [Classic Minecraft].png";
           boot-options-count = 4;
         };
+        # Automatically select last chosen OS
+        default = "saved";
+        extraEntries = "GRUB_SAVEDEFAULT=true";
       };
     };
 
