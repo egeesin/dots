@@ -39,107 +39,111 @@ if (Get-Command "scoop" -ErrorAction "Stop") {
 #    	"findutils",
 #    	"psutils",
 #    	"gawk",
-#    	"gradle",
 #    	"grep",
 #    	"lazygit",
-#    	"git-delta",
 #    	"sed",
 #    	"sudo",
 #    	"wget",
 #    	"which",
 
     # CLI
-#    	"neofetch",
+#    	"fastfetch",
 #    	"starship",
 #    	"ripgrep",
 #    	"pandoc",
-#    	"shellcheck",
-#    	"psfzf",
-#    	"fzf",
-#    	"fd",
 #    	"gotop",
 #    	"chafa",
 #    	"pastel",
 #    	"yazi",
+#    	"zoxide",
 
     # Languages
-#    	"oraclejre8",
-#    	"temurin17-jre",
-#    	"temurin-jre",
-#       "nodejs",
+#       # "nodejs",
 #       # "nodejs-lts",
-#       "pnpm",
-#    	"pyenv",
+#       "vfox",
+#       "uv",
+#       "rustup",
 
     # Hardware and Peripherals
+#    	"etcher",
+#    	# "rufus",
 #    	"nvidia-display-driver-dch-np",
 #    	"cpu-z",
 #    	"gpu-z",
 #    	"crystaldiskinfo",
 #    	"crystaldiskmark",
-#    	"rufus",
-#    	#"windirstat",
-#        "wiztree",
+#       "wiztree",
 #    	"openhardwaremonitor",
+#    	"openrgb",
 #    	"autohotkey",
 #    	"sharpkeys",
 #    	"flow-launcher",
 #    	"windhawk",
 #    	"powertoys",
+#    	"text-grab",
 #        "processhacker",
 #        "eartrumpet",
 #       "magpie",
 #    	"glogg", # log explorer
 #       "rustdesk",
-#       "opentabletdriver"
+#       # "opentabletdriver"
 
     # Essentials
 #       "pwsh",  
 #    	"firefox",
+#    	"thunderbird",
 #    	"bitwarden",
-#        "authy",
+#    	"syncthing",
 #    	"winrar",
 #    	"sumatrapdf",
 #        "vcredist2022", "cmake", "zig", "mingw", "netcat"
 #        # ^ dep of nvim
-#    	"neovim",
-#    	"neovide",
-#    	"sublime-text",
+#    	"helix",
+#    	"lua-language-server",
+#    	"marksman",
+#    	"shellcheck",
+#    	"television",
+#    	"zed",
+#    	"kate",
+#    	"krita",
 #    	"obsidian",
 #        "libreoffice",
-#    	"alacritty",
+#    	# "alacritty",
+#    	"wezterm",
 #    	"putty",
 #    	"winscp",
 #    	"ccleaner",
 #    	"sharex",
-#       "rssguard",
-#    	"advancedrenamer",
-#        "shutup10",
+#       "shutup10",
 #    #    "pureref", no longer has 2.0 versions, might be unmantained
 #    	"localsend",
+#    	"deskflow",
 
     # Media
 #    	"yt-dlp",
-#    	"imageglass",
+#    	"qview",
 #    	"mpv",
 #    	"syncplay",
+#    	"musicbee",
 #    	"quodlibet",
 #    	"qbittorrent-enhanced",
 #        "jackett",
 #    	"ffmpeg",
-#    	"imagemagick",
+#    	"lmms",
+#    	"kdenlive",
+#    	# "imagemagick",
+#    	"graphicsmagick",
 #       "rawtherapee",
-#        "streamlink",
+#       "streamlink",
 #    	"handbrake",
 #    	"jexiftoolgui",
 #    	"fork",
 #    	"ungoogled-chromium",
 #        "mp3tag",
-#        # "mpd",
 #    	"f3d",
 
     # Communication
-#        "element",
+#       "element",
 #    	"microsoft-teams",
 #    	"telegram",
 #    	"zoom",
@@ -147,7 +151,6 @@ if (Get-Command "scoop" -ErrorAction "Stop") {
     # Streaming
 #    	"obs-studio",
 #    	"livesplit",
-#    	# "chatterino",
 #    	"chatterino7",
 
     # Games, Game Development, Helpers
@@ -159,15 +162,16 @@ if (Get-Command "scoop" -ErrorAction "Stop") {
 #       "blockbench",
 #        "amulet-map-editor",
 #    	"godot",
+#    	"blender",
 #    	"rcedit", # for exporting Windows build in Godot
 #    	# "betterjoy",
 
     # Misc
+#        "act",
 #        "vtm",
 #        "gifsicle",
 #        "iographica",
-#        # "mypaint", # maybe it'd be good for linux instead?
-#        # "workplacer", # i3-like window manager, might not work perfect, requires learning curve
+#        # "workspacer", # i3-like window manager, might not work perfect, requires learning curve
 #
     	"msys2"
 
@@ -178,12 +182,14 @@ if (Get-Command "scoop" -ErrorAction "Stop") {
     # debain wsl (uwp)
     # xbox (uwp)
     # minecraft for w10 (uwp)
+    # nodejs installation from vfox
     )
     ForEach( $app in $apps ) {
         scoop install $app
     }
 
     # cleanup Scoop cache
+    scoop cleanup *
     scoop cache rm *
 
     Write-Output "Packages from Scoop -> Done!" -ForegroundColor "Green"
