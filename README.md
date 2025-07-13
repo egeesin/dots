@@ -1,4 +1,4 @@
-![dots ASCII Art](dots.png)
+![dots ASCII Art](img/dots.png)
 
 > Personal configurations of CLI/GUI softwares, package lists and settings for Win11, macOS, NixOS, Arch Linux.
 
@@ -6,7 +6,7 @@
 
 - NixOS-related files should be operative.
 - Windows scripts not properly tested yet.
-- Not tested on any Apple Silicon device yet! Tested on macOS 10.14+ with x86_64 (Intel) architecture, 
+- Not tested on any Apple Silicon device yet! Tested on macOS 10.14+ with x86_64 (Intel) architecture,
 - It's been over 7 years on Arch Linux stuff, some of the packages and configurations might be deprecated.
 
 ## Installation
@@ -24,6 +24,7 @@ Recommended to cherry-pick on a specific configs.
 - Execute noninvolved `~/.extra/install.sh` file if exists. (Not mandatory)
 
 ### For UNIX (macOS, GNU/Linux):
+
 ```sh
 # Clone the repository to your local machine.
 git clone https://github.com/egeesin/dots ~/.dots
@@ -37,6 +38,7 @@ chmod +x ./install.sh ./link.sh bin/*
 # Begin the installation.
 ./install.sh
 ```
+
 #### Remote Installation
 
 ```sh
@@ -75,11 +77,13 @@ Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://raw.
 I highly recommend to backup your machine, creating a system restore point before executing whole initial setup process in an administrative level.
 
 ### For NixOS
+
 ```bash
 nix-shell -p git curl
 
 sh -c “`curl -fsSL https://github.com/egeesin/dots/raw/master/tux/setup-nix.sh`”
 ```
+
 For manual steps, go ahead to [ZaneyOS README](https://gitlab.com/Zaney/zaneyos#installation) as its setup shell based on it.
 
 ## CLI Helper Usage

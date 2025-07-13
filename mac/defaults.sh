@@ -40,10 +40,10 @@ defaults write com.apple.loginwindow PowerButtonSleepsSystem -bool false
 sudo nvram SystemAudioVolume=" "
 
 # # Disable audio feedback when volume is changed
-defaults write com.apple.sound.beep.feedback -bool true
+# defaults write com.apple.sound.beep.feedback -bool true
 
 # Enable auto-hide menu bar
-defaults write NSGlobalDomain _HIHideMenuBar -bool true
+# defaults write NSGlobalDomain _HIHideMenuBar -bool true
 
 # Enable Dark mode
 # osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
@@ -764,4 +764,3 @@ done
 echo "█▓▒░░ macOS defaults -> Written!"
 echo
 echo "Some of these changes require a logout/restart to take effect."
-

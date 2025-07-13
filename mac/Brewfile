@@ -1,3 +1,5 @@
+# Go to https://formulae.brew.sh to search Brews and Casks
+
 tap "homebrew/bundle"
 tap "homebrew/services"
 
@@ -18,6 +20,7 @@ brew "lazygit" # Simple terminal UI for git commands
 # brew "zsh", args: ["with-unicode9"]
 brew "zsh"
 brew "zsh-completions"
+brew "carapace"
 brew "starship"
 brew "gettext"
 brew "gnupg"
@@ -25,8 +28,6 @@ brew "pass"
 brew "openssl"
 brew "openvpn"
 
-tap "localsend/localsend"
-brew "localsend" # An open-source cross-platform alternative to AirDrop
 
 # brew "pnpm" # setup/nodejs.sh should've installed pnpm already
 
@@ -178,10 +179,13 @@ tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 brew "cask"
 
+cask "localsend" # An open-source cross-platform alternative to AirDrop
+cask "bitwarden"
 cask "appcleaner"
 cask "keybase"
 cask "the-unarchiver"
-cask "alacritty"
+cask "wezterm"
+# cask "alacritty"
 cask "wacom-tablet"
 cask "stats"
 cask "macs-fan-control"
@@ -189,15 +193,17 @@ cask "monitorcontrol"
 brew "terminal-notifier"
 cask "dropbox"
 cask "scroll-reverser"
-cask "firefox"
-# cask "eloston-chromium"
-cask "netnewswire"
+cask "zen"
+cask "ungoogled-chromium"
+# cask "netnewswire"
 cask "obsidian"
 cask "iina"
 # cask "spotify"
 # tap "khanhas/tap"
 # brew "spicetify-cli"
 # cask "bluestacks"
+cask "beeper"
+cask "signal"
 cask "discord"
 cask "element" # Matrix collaboration client
 cask "handbrake"
@@ -211,12 +217,10 @@ cask "exifrenamer"
 cask "karabiner-elements"
 cask "penc"
 # cask "soundflower"
-# cask "java11"
-cask "java"
+cask "inkscape"
 cask "imageoptim"
-cask "polymc"
-# cask "multimc"
-# cask "minecraft"
+cask "prismlauncher"
+cask "steam"
 cask "qlcolorcode"
 cask "qlstephen"
 cask "qlmarkdown"
@@ -236,12 +240,11 @@ cask "f3d" # Fast and minimalist 3D viewer
 
 cask "sensiblesidebuttons"
 
-cask "signal"
 cask "c0re100-qbittorrent"
 
+cask "rustdesk"
+
 # brew "mas"
-# mas "1Password"
-cask "bitwarden"
 # mas "Affinity Designer"
 # mas "Affinity Photo"
 # mas "Clear"
