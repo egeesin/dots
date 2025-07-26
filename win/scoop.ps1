@@ -81,7 +81,7 @@ if (Get-Command "scoop" -ErrorAction "Stop") {
 #    	"windhawk",
 #    	"powertoys",
 #    	"text-grab",
-#        "processhacker",
+#        "systeminformer",
 #        "eartrumpet",
 #       "magpie",
 #    	"glogg", # log explorer
