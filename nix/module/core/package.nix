@@ -2,6 +2,7 @@
   pkgs,
   pkgs-unstable,
   inputs,
+  lib,
   # username,
    ...
 }: {
@@ -294,6 +295,7 @@
     # peruse # comic book viewer
 
     kdePackages.kate # Text editor
+    zed-editor # High-performance, multiplayer code eidtor from the creators of Atom and Tree-sitter
     meld # Diff client
     # kdiff3 # Compares and merges 2 or 3 files or directories
     kdePackages.kcalc # Calculator GUI

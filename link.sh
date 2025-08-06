@@ -92,7 +92,7 @@ done < "$SYMLINKS"
 # 	echo "in about:config"
 # 	echo
 # 	mkdir -p "$MACFFP"/chrome
-# 	[ ! -L "$MACFFP/chrome/userChrome.css" ] && ln -sfv "$DOT_DIR"/config/firefoxcss_mac "$MACFFP/chrome/userChrome.css"
+# 	[ ! -L "$MACFFP/chrome/userChrome.css" ] && ln -sfv "$DOT_DIR"/config/old/ff-userchrome_mac.css "$MACFFP/chrome/userChrome.css"
 # 	[ ! -L "$MACFFP/user.js" ] && ln -sfv "$DOT_DIR"/config/firefoxuser "$MACFFP/user.js"
 # fi
 # if [ "$(uname -s)" = "Linux" ]; then
@@ -102,8 +102,8 @@ done < "$SYMLINKS"
 # 	echo "in about:config"
 # 	echo
 # 	mkdir -p "$TUXFFP"/chrome
-# 	[ ! -L "$TUXFFP/chrome/userChrome.css" ] && ln -sfv "$DOT_DIR"/config/firefoxcss_tux "$TUXFFP/chrome/userChrome.css"
-# 	[ ! -L "$MACFFP/user.js" ] && ln -sfv "$DOT_DIR"/config/firefoxuser "$MACFFP/user.js"
+# 	[ ! -L "$TUXFFP/chrome/userChrome.css" ] && ln -sfv "$DOT_DIR"/config/old/ff-userchrome_tux.css "$TUXFFP/chrome/userChrome.css"
+# 	[ ! -L "$MACFFP/user.js" ] && ln -sfv "$DOT_DIR"/config/old/ff-user.js "$MACFFP/user.js"
 # fi
 
 # CFGEXCEP=2 # firefox_css configs
